@@ -278,6 +278,13 @@ select,.vinput{
 .coinout .c-form{font-size:26px;color:var(--ink);letter-spacing:1px;margin-top:4px;}
 .coinout .c-gloss{color:var(--verd);font-style:italic;margin-top:4px;min-height:22px;}
 .coinout .c-warn{color:var(--err);font-size:13px;margin-top:6px;font-style:italic;}
+.coinout .c-ipa{color:var(--ink-dim);font-family:'EB Garamond',serif;font-size:16px;margin-top:3px;min-height:20px;letter-spacing:.3px;}
+/* IPA pronunciation lines */
+.out .c-ipa{color:var(--ink-dim);font-family:'EB Garamond',serif;font-size:15px;margin-top:6px;letter-spacing:.3px;}
+.entry .e-ipa{color:var(--ink-dim);font-family:'EB Garamond',serif;font-size:13px;opacity:.8;margin-top:1px;}
+.entry .e-au.copyable{cursor:pointer;}
+.entry .e-au.copyable:hover{text-decoration:underline dotted;}
+.btn.mini{font-size:9px;padding:6px 10px;letter-spacing:1px;}
 .stack{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:42px;padding:10px;border:1px dashed var(--line);border-radius:4px;margin:6px 0 14px;}
 .stack:empty::before{content:"Click roots below to build a word\2026";color:#5a5266;font-style:italic;font-size:14px;align-self:center;margin:auto;}
 .piece{background:var(--gold-dim);border:1px solid var(--gold);color:var(--gold);border-radius:3px;padding:5px 10px;font-size:14px;cursor:pointer;transition:.15s;}
@@ -349,6 +356,7 @@ a{color:var(--gold-soft);}
           <li><b>Native script</b> shows the result in the Audalad writing system; <b>Word breakdown</b> shows what each word maps to and any grammar notes. Toggle either off if you don't need it.</li>
           <li><b>Social rank</b> (English&rarr;Audalad only): set how each person is ranked relative to you &mdash; <i>Ascended (Ori')</i>, <i>Greater (Itu')</i>, <i>Equal</i> (no marker), or <i>Lesser (Ke')</i>. Pick separately for "I/we", "you", and "they/it".</li>
           <li>Words not in the dictionary appear <span style="color:var(--err)">in red</span> &mdash; nothing is invented.</li>
+          <li>Below the result you'll see the <b>pronunciation</b> in IPA. <b>Copy</b> grabs the text; <b>&#8595; Script PNG</b> saves the native script as an image for signs, books, and banners.</li>
         </ul>
       </details>
 
@@ -378,6 +386,7 @@ a{color:var(--gold-soft);}
           <li><b>Pronoun</b>: choose a rank and point of view, toggle possessive/plural, and it builds the pronoun. A full reference chart sits below.</li>
           <li><b>Derive</b>: take any word and apply a plural, possessive, negation, ordinal, tense, and more.</li>
           <li><b>Generate root</b>: roll fresh, valid-sounding roots from scratch when no existing root fits.</li>
+          <li><b>Number</b>: type any number (0&ndash;999999) and get it written in Audalad words, native script, and pronunciation &mdash; with an ordinal toggle.</li>
           <li><b>Analyze</b>: paste any Audalad word to break it back into its roots and affixes &mdash; great for checking your own words.</li>
           <li><b>Forged this session</b>: everything you make collects here. Hit <b>&uarr; Lexicon</b> to add a word to your dictionary, then it's translatable and searchable.</li>
         </ul>
@@ -419,6 +428,8 @@ a{color:var(--gold-soft);}
     <div class="toolbar">
       <label class="toggle"><input type="checkbox" id="nativeToggle" checked><span class="dot"></span>Native script</label>
       <label class="toggle"><input type="checkbox" id="glossToggle" checked><span class="dot"></span>Word breakdown</label>
+      <button class="btn ghost mini" id="copyOut" title="Copy the translation text">Copy</button>
+      <button class="btn ghost mini" id="pngOut" title="Save the native script as a PNG (for signs, books, banners)">&#8595; Script PNG</button>
     </div>
 
     <div class="rankbar" id="rankbar">
@@ -482,6 +493,7 @@ a{color:var(--gold-soft);}
         <button class="subtab" data-fview="derive">Derive</button>
         <button class="subtab" data-fview="regal">Regal name</button>
         <button class="subtab" data-fview="generate">Generate root</button>
+        <button class="subtab" data-fview="number">Number</button>
         <button class="subtab" data-fview="analyze">Analyze</button>
       </div>
 
@@ -629,10 +641,26 @@ a{color:var(--gold-soft);}
         <div class="note"><b>Reverse forge.</b> Peels off tense prefixes, plurals, possessive, negation, ordinal, the <i>Elsakat-</i> and <i>&Acirc;</i> markers and the cluster <i>'</i>, then segments the remaining stem into known roots. Multiple segmentations can exist; this shows the cleanest one it finds.</div>
       </div>
 
-      <div class="authorbar">
-        <label for="authorName">Your name <small>(tagged on words you add, for credit)</small></label>
-        <input id="authorName" class="vinput" placeholder="e.g. Phillip Brewtaker" autocomplete="off">
+      <!-- number -->
+      <div class="fview" id="f-number">
+        <div class="builder">
+          <div class="coinout">
+            <div class="c-native" id="numNative"></div>
+            <div class="c-form" id="numForm"></div>
+            <div class="c-ipa" id="numIpa"></div>
+            <div class="c-gloss" id="numBreak"></div>
+          </div>
+          <div class="flabel">Enter a number (0&ndash;999999)</div>
+          <div class="frow">
+            <input class="vinput" id="numInput" type="number" min="0" max="999999" step="1" placeholder="e.g. 256">
+            <label class="toggle"><input type="checkbox" id="numOrd"><span class="dot"></span>Ordinal (-diret)</label>
+            <button class="btn ghost" id="numCopy">Copy</button>
+            <button class="btn ghost" id="numPng" title="Save the native script as a PNG">&#8595; PNG</button>
+          </div>
+        </div>
+        <div class="note"><b>Built from the documented number words</b> &mdash; units, the tens (<i>Dinasemi</i>&hellip;<i>Senesemi</i>), <i>Hamdekali</i> (100) and <i>Numoral</i> (1000), largest part first. The document doesn't specify how the parts join, so this uses a plain additive layout; treat multi-part numbers as a sensible default rather than canon.</div>
       </div>
+
 
       <div class="flabel" style="text-align:center">Forged this session</div>
       <div class="frow" style="justify-content:center;margin-bottom:12px">
@@ -699,6 +727,62 @@ function toNative(s){
     .replace(/[\u2019'\u02bc]/g,'')   // drop apostrophes
     .replace(/[CWcw]/g,'')            // font has no glyph for c/w — drop from the script
     .replace(/[^A-Za-z .?\n]/g,'');   // keep only mappable glyphs
+}
+
+/* ---------- romanization -> IPA (from the documented phonetic inventory) ---------- */
+function toIPA(s){
+  let t = (s||'').toLowerCase()
+    .replace(/š/g,'sh').replace(/ž/g,'zh').replace(/ō/g,'o')
+    .replace(/[\u2019\u02bc]/g,"'")
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,''); // accents are stress only -> base vowel
+  const multi={iy:'ɨ',au:'ɒ',ae:'ɪ',th:'θ',sh:'ʂ',zh:'ʐ',ts:'t͡s'};
+  const single={b:'b',d:'d',g:'g',k:'k',h:'χ',j:'d͡ʑ',l:'ɭ',m:'m',n:'n',p:'p',r:'ɾ',s:'s',t:'t',v:'β',z:'z',f:'ɸ',y:'ʎ',x:'x',c:'k',
+                i:'i',u:'u',a:'a',o:'o',e:'ɛ',"'":'ʔ'};
+  let out='', i=0;
+  while(i<t.length){
+    const two=t.substr(i,2);
+    if(multi[two]){ out+=multi[two]; i+=2; continue; }
+    const ch=t[i];
+    if(ch===' '){ out+=' '; i++; continue; }
+    if(single[ch]!==undefined) out+=single[ch];
+    i++; // unknown chars (e.g. w) are dropped
+  }
+  return out.trim();
+}
+function ipaText(s){ const p=toIPA(s); return p?('/'+p+'/'):''; }
+
+/* ---------- clipboard ---------- */
+function copyText(text, btn){
+  if(!text) return;
+  const done=()=>{ if(btn){ const o=btn.textContent; btn.textContent='Copied!'; setTimeout(()=>{btn.textContent=o;},1100); } };
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(done); }
+  else { try{ const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done(); }catch(e){} }
+}
+
+/* ---------- native-script PNG export ---------- */
+async function exportNativePNG(romanText, filenameBase){
+  const native=toNative(romanText||'');
+  if(!native.trim()) return false;
+  try{ await document.fonts.load("96px 'AudaladScript'"); await document.fonts.ready; }catch(e){}
+  const fontPx=96, padX=48, padY=40;
+  const meas=document.createElement('canvas').getContext('2d');
+  meas.font="96px 'AudaladScript'";
+  const lines=native.split('\n');
+  let maxW=0; lines.forEach(l=>{ maxW=Math.max(maxW, meas.measureText(l).width); });
+  const lineH=Math.ceil(fontPx*1.5);
+  const c=document.createElement('canvas');
+  c.width=Math.ceil(maxW)+padX*2;
+  c.height=lineH*lines.length+padY*2;
+  const ctx=c.getContext('2d');
+  ctx.font="96px 'AudaladScript'";
+  ctx.textBaseline='middle';
+  ctx.fillStyle='#d4af52';
+  lines.forEach((l,idx)=>{ ctx.fillText(l, padX, padY+lineH*idx+lineH/2); });
+  await new Promise(res=>c.toBlob(b=>{
+    if(b){ const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=(filenameBase||'audalad')+'.png'; a.click(); URL.revokeObjectURL(a.href); }
+    res();
+  },'image/png'));
+  return true;
 }
 
 /* ---------- custom words (forged + imported), persisted ---------- */
@@ -793,18 +877,33 @@ const IRREG_EN = {
   feet:['foot','plural'], teeth:['tooth','plural'], people:['person','plural'], lives:['life','plural']
 };
 function tensePrefix(au, pre){ return pre + au.charAt(0).toLowerCase() + au.slice(1); }
-function applyMorph(rec, kind){
+const ANIMATE_RE=/\b(person|people|man|men|woman|women|child|children|baby|friend|brother|sister|mother|father|parent|noble|citizen|slave|servant|vassal|judge|defender|assassin|builder|scribe|advisor|adviser|student|prophet|ruler|sovereign|monarch|governor|oracle|herald|envoy|counsel(?:l)?or|enemy|ally|god|goddess|spirit|creature|beast|animal|cat|dog|bird|fish|bee|fox|rodent|wanderer|king|queen|emperor|empress|duke|duchess|count|countess|baron|baroness|prince|princess|knight|soldier)\b/;
+function isPersonified(rec){
+  if(rec.pos==='title') return true;
+  return ANIMATE_RE.test((rec.full||rec.en||'').toLowerCase());
+}
+function pluralForm(rec){
+  // documented rule: personified -> -ae ; non-personified -> Yi-
+  return isPersonified(rec)
+    ? {au:rec.au+'ae', note:'plural'}
+    : {au:'Yi'+rec.au.charAt(0).toLowerCase()+rec.au.slice(1), note:'plural (Yi-)'};
+}
+function applyMorph(rec, kind, opts){
   const au=rec.au, pos=rec.pos, en=rec.full;
-  if(kind==='plural') return pos==='n' ? {au:au+'ae', en, note:'plural'} : {au, en, note:null};
+  if(kind==='plural'){
+    if(pos!=='n' && pos!=='title') return {au, en, note:null};
+    if(opts && opts.afterNumber) return {au, en, note:'plural (counted)'}; // number already marks it
+    const p=pluralForm(rec); return {au:p.au, en, note:p.note};
+  }
   if(kind==='past')   return pos==='v' ? {au:tensePrefix(au,'Ásar'), en, note:'past'} : {au, en, note:null};
   if(kind==='cont')   return pos==='v' ? {au:tensePrefix(au,'Zhé'), en, note:'continuous'} : {au, en, note:null};
   if(kind==='present')return {au, en, note: pos==='v'?'present':null};
   return {au, en, note:null};
 }
-function resolveEng(w){
+function resolveEng(w, opts){
   w=w.toLowerCase();
-  if(enToAu[w]) return applyMorph(enToAu[w][0], null);
-  if(IRREG_EN[w]){ const [lemma,kind]=IRREG_EN[w]; if(enToAu[lemma]) return applyMorph(enToAu[lemma][0], kind); }
+  if(enToAu[w]) return applyMorph(enToAu[w][0], null, opts);
+  if(IRREG_EN[w]){ const [lemma,kind]=IRREG_EN[w]; if(enToAu[lemma]) return applyMorph(enToAu[lemma][0], kind, opts); }
   const tries=[]; // [stem, suffixType]
   if(w.length>4 && w.endsWith('ies')) tries.push([w.slice(0,-3)+'y','s']);
   if(w.length>3 && w.endsWith('es'))  tries.push([w.slice(0,-2),'s']);
@@ -815,9 +914,9 @@ function resolveEng(w){
   for(const [stem,suf] of tries){
     if(enToAu[stem]){
       const rec=enToAu[stem][0];
-      if(suf==='s')   return rec.pos==='n' ? applyMorph(rec,'plural') : rec.pos==='v' ? applyMorph(rec,'present') : applyMorph(rec,null);
-      if(suf==='ed')  return applyMorph(rec,'past');
-      if(suf==='ing') return applyMorph(rec,'cont');
+      if(suf==='s')   return (rec.pos==='n'||rec.pos==='title') ? applyMorph(rec,'plural',opts) : rec.pos==='v' ? applyMorph(rec,'present',opts) : applyMorph(rec,null,opts);
+      if(suf==='ed')  return applyMorph(rec,'past',opts);
+      if(suf==='ing') return applyMorph(rec,'cont',opts);
     }
   }
   return null;
@@ -830,6 +929,7 @@ function translateEnToAu(text){
   const words = raw.match(/[A-Za-z']+|[.,!?;:]/g) || [];
   const out = [];
   let i = 0;
+  let prevWasNumber = false;
   while(i < words.length){
     const w = words[i];
     if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); i++; continue; }
@@ -849,10 +949,12 @@ function translateEnToAu(text){
         rnote = RANK_LABEL[pronRank[pcat]];
       }
       out.push({src:srcText, au:auForm, en:matched.full, note:rnote});
+      prevWasNumber = (matched.pos==='num' || matched.pos==='ord');
     } else {
-      const r = resolveEng(w);
+      const r = resolveEng(w, {afterNumber: prevWasNumber});
       if(r){ out.push({src:srcText, au:r.au, en:r.en, note:r.note}); }
       else { out.push({src:srcText, au:null}); }
+      prevWasNumber = false;
     }
     i += span;
   }
@@ -928,12 +1030,14 @@ const outputEl = document.getElementById('output');
 const glossEl = document.getElementById('gloss');
 const nativeToggle = document.getElementById('nativeToggle');
 const glossToggle = document.getElementById('glossToggle');
+let lastOutText='', lastNativeText='';
 
 function render(){
   const text = inputEl.value;
   const res = dir==='en2au' ? translateEnToAu(text) : translateAuToEn(text);
   glossEl.innerHTML='';
   if(!res.tokens.length){
+    lastOutText=''; lastNativeText='';
     outputEl.innerHTML='<div class="placeholder">Translation appears here&hellip;</div>';
     return;
   }
@@ -962,10 +1066,14 @@ function render(){
     let nstr='';
     nparts.forEach(p=>{ if(/^[.,!?;:]$/.test(p)) nstr=nstr.replace(/\s$/,'')+p+' '; else nstr+=p+' '; });
     nstr=nstr.trim();
+    lastOutText=str; lastNativeText=nstr;
+    const ipa=ipaText(nstr);
     outputEl.innerHTML =
       '<div class="roman">'+escapeHtml(str)+'</div>'+
-      '<div class="native">'+escapeHtml(toNative(nstr))+'</div>';
+      '<div class="native">'+escapeHtml(toNative(nstr))+'</div>'+
+      (ipa?'<div class="c-ipa">'+escapeHtml(ipa)+'</div>':'');
   } else {
+    lastOutText=str; lastNativeText='';
     outputEl.innerHTML = '<div class="roman">'+escapeHtml(str)+'</div>';
   }
   // gloss
@@ -989,6 +1097,14 @@ inputEl.addEventListener('input', render);
 glossToggle.addEventListener('change', render);
 nativeToggle.addEventListener('change', ()=>{
   outputEl.classList.toggle('show-native', nativeToggle.checked && dir==='en2au');
+});
+document.getElementById('copyOut').addEventListener('click', e=>copyText(lastOutText, e.currentTarget));
+document.getElementById('pngOut').addEventListener('click', async e=>{
+  const b=e.currentTarget;
+  if(!lastNativeText){ const o=b.textContent; b.textContent='Translate first'; setTimeout(()=>{b.textContent=o;},1200); return; }
+  const o=b.textContent; b.textContent='Saving\u2026';
+  await exportNativePNG(lastNativeText,'audalad-script');
+  b.textContent=o;
 });
 
 /* social rank controls */
@@ -1065,31 +1181,34 @@ function renderDict(){
   countEl.textContent=items.length+' of '+all.length+' entries'+
     (offCount?' \u00b7 '+offCount+' community':'')+(customCount?' \u00b7 '+customCount+' forged':'');
   dictlist.innerHTML='';
+  const head=(au,badge)=>'<div><span class="e-au copyable" data-copy="'+escapeHtml(au)+'" title="Click to copy">'+escapeHtml(au)+'</span><span class="e-native">'+escapeHtml(toNative(au))+'</span>'+(badge||'')+'</div>'+
+    (ipaText(au)?'<div class="e-ipa">'+escapeHtml(ipaText(au))+'</div>':'');
   items.forEach(d=>{
     const e=document.createElement('div');
     if(d.custom){
       e.className='entry custom';
       const ci=customWords.indexOf(d);
       const by=d.by?'<div class="e-by">proposed by '+escapeHtml(d.by)+'</div>':'';
-      e.innerHTML='<div><span class="e-au">'+escapeHtml(d.au)+'</span><span class="e-native">'+escapeHtml(toNative(d.au))+'</span><span class="badge">forged</span></div>'+
+      e.innerHTML=head(d.au,'<span class="badge">forged</span>')+
         '<input class="e-edit" value="'+escapeHtml(d.en)+'" data-ci="'+ci+'" title="Edit meaning">'+
         by+
         '<div class="e-foot"><select class="e-pos-sel" data-ci="'+ci+'">'+posOptions(d.pos)+'</select><button class="e-del" data-ci="'+ci+'" title="Delete">&times;</button></div>';
     } else if(d.official){
       e.className='entry community';
       const by=d.by?'<div class="e-by">proposed by '+escapeHtml(d.by)+'</div>':'';
-      e.innerHTML='<div><span class="e-au">'+escapeHtml(d.au)+'</span><span class="e-native">'+escapeHtml(toNative(d.au))+'</span><span class="badge community">community</span></div>'+
+      e.innerHTML=head(d.au,'<span class="badge community">community</span>')+
         '<div class="e-en">'+escapeHtml(d.en)+'</div>'+by+
         '<div class="e-pos">'+(POS_LABEL[d.pos]||d.pos)+'</div>';
     } else {
       e.className='entry';
-      e.innerHTML='<div><span class="e-au">'+escapeHtml(d.au)+'</span><span class="e-native">'+escapeHtml(toNative(d.au))+'</span></div>'+
+      e.innerHTML=head(d.au,'')+
         '<div class="e-en">'+escapeHtml(d.en)+'</div>'+
         '<div class="e-pos">'+(POS_LABEL[d.pos]||d.pos)+'</div>';
     }
     dictlist.appendChild(e);
   });
   // wire custom controls
+  dictlist.querySelectorAll('.copyable').forEach(el=>el.addEventListener('click',()=>copyText(el.dataset.copy)));
   dictlist.querySelectorAll('.e-edit').forEach(inp=>inp.addEventListener('change',()=>{
     const c=customWords[+inp.dataset.ci]; if(c){ c.en=inp.value.trim()||'(unglossed)'; lexiconChanged(); }
   }));
@@ -1210,6 +1329,72 @@ document.getElementById('coinDownload').addEventListener('click',()=>{
   if(!coinages.length) return;
   const blob=new Blob([coinText()+'\n'],{type:'text/plain'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='audalad_coinages.txt';a.click();URL.revokeObjectURL(a.href);
+});
+
+/* --- numeral composer --- */
+const NUM_UNITS=['Hortu','Nen','Din','Virid','Tarad','Shumi','Karun','Muso','Semi',"Sene'"];
+const NUM_TEN="Se'din";
+const NUM_TENS={2:'Dinasemi',3:'Viridasemi',4:'Taradasemi',5:'Shumiasemi',6:'Karunasemi',7:'Musosemi',8:'Harasemi',9:'Senesemi'};
+const NUM_HUNDRED='Hamdekali', NUM_THOUSAND='Numoral';
+function composeNumber(n){
+  n=Math.floor(n);
+  if(n===0) return {parts:[['Hortu','0']], roman:'Hortu'};
+  let parts=[]; // [audalad, glossPiece]
+  if(n>=1000){
+    const th=Math.floor(n/1000);
+    parts.push([th===1?NUM_THOUSAND:composeNumber(th).roman+' '+NUM_THOUSAND, (th===1?'':th+'\u00d7')+'1000']);
+    n=n%1000;
+  }
+  if(n>=100){
+    const h=Math.floor(n/100);
+    parts.push([h===1?NUM_HUNDRED:NUM_UNITS[h]+' '+NUM_HUNDRED, (h===1?'':h+'\u00d7')+'100']);
+    n=n%100;
+  }
+  if(n>=20){
+    const t=Math.floor(n/10);
+    parts.push([NUM_TENS[t], (t*10)+'']);
+    n=n%10;
+    if(n>0) parts.push([NUM_UNITS[n], n+'']);
+  } else if(n>=11){
+    parts.push([NUM_TEN,'10']); parts.push([NUM_UNITS[n-10],(n-10)+'']);
+  } else if(n===10){
+    parts.push([NUM_TEN,'10']);
+  } else if(n>0){
+    parts.push([NUM_UNITS[n], n+'']);
+  }
+  return {parts, roman:parts.map(p=>p[0]).join(' ')};
+}
+function renderNumber(){
+  const inp=document.getElementById('numInput');
+  const nat=document.getElementById('numNative'), form=document.getElementById('numForm'),
+        ipa=document.getElementById('numIpa'), brk=document.getElementById('numBreak');
+  const raw=inp.value.trim();
+  if(raw===''){ nat.textContent=''; form.textContent=''; ipa.textContent=''; brk.textContent='Enter a number above.'; window.__numRoman=''; return; }
+  let n=Math.max(0, Math.min(999999, Math.floor(Number(raw)||0)));
+  const c=composeNumber(n);
+  let roman=c.roman;
+  if(document.getElementById('numOrd').checked){
+    // ordinal -diret attaches to the final word
+    const toks=roman.split(' ');
+    toks[toks.length-1]=toks[toks.length-1].replace(/['\u2019]/g,'')+'diret';
+    roman=toks.join(' ');
+  }
+  window.__numRoman=roman;
+  form.textContent=roman;
+  nat.textContent=toNative(roman);
+  ipa.textContent=ipaText(roman);
+  brk.innerHTML = n+' = '+c.parts.map(p=>'<b>'+escapeHtml(p[0])+'</b> <span style="opacity:.6">('+p[1]+')</span>').join(' + ');
+}
+['numInput','numOrd'].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener('input',renderNumber); el.addEventListener('change',renderNumber);
+});
+document.getElementById('numCopy').addEventListener('click',e=>copyText(window.__numRoman||'', e.currentTarget));
+document.getElementById('numPng').addEventListener('click',async e=>{
+  const b=e.currentTarget; if(!window.__numRoman) return;
+  const o=b.textContent; b.textContent='Saving\u2026';
+  await exportNativePNG(window.__numRoman,'audalad-number');
+  b.textContent=o;
 });
 
 /* sub-tab switching */
