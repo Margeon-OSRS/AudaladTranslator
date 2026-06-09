@@ -702,6 +702,7 @@ function toNative(s){
   return s.normalize('NFD')
     .replace(/[\u0300-\u036f]/g,'')   // strip combining accents
     .replace(/[\u2019'\u02bc]/g,'')   // drop apostrophes
+    .replace(/[CWcw]/g,'')            // font has no glyph for c/w — drop from the script
     .replace(/[^A-Za-z .?\n]/g,'');   // keep only mappable glyphs
 }
 
@@ -781,6 +782,52 @@ function lexiconChanged(){
 }
 
 /* ---------- EN -> AU ---------- */
+/* ---------- English lemmatizer for EN -> AU ---------- */
+const IRREG_EN = {
+  knew:['know','past'], saw:['see','past'], went:['go','past'], gave:['give','past'],
+  took:['take','past'], made:['make','past'], said:['say','past'], told:['tell','past'],
+  came:['come','past'], ran:['run','past'], ate:['eat','past'], drank:['drink','past'],
+  spoke:['speak','past'], broke:['break','past'], brought:['bring','past'], thought:['think','past'],
+  heard:['hear','past'], held:['hold','past'], left:['leave','past'], felt:['feel','past'],
+  kept:['keep','past'], built:['build','past'], understood:['understand','past'],
+  rose:['rise','past'], fell:['fall','past'], slept:['sleep','past'], found:['find','past'],
+  began:['begin','past'], won:['win','past'], lost:['lose','past'], sold:['sell','past'],
+  flew:['fly','past'], grew:['grow','past'], gone:['go','past'], done:['do','past'],
+  has:['have','present'],
+  children:['child','plural'], men:['man','plural'], women:['woman','plural'],
+  feet:['foot','plural'], teeth:['tooth','plural'], people:['person','plural'], lives:['life','plural']
+};
+function tensePrefix(au, pre){ return pre + au.charAt(0).toLowerCase() + au.slice(1); }
+function applyMorph(rec, kind){
+  const au=rec.au, pos=rec.pos, en=rec.full;
+  if(kind==='plural') return pos==='n' ? {au:au+'ae', en, note:'plural'} : {au, en, note:null};
+  if(kind==='past')   return pos==='v' ? {au:tensePrefix(au,'Ásar'), en, note:'past'} : {au, en, note:null};
+  if(kind==='cont')   return pos==='v' ? {au:tensePrefix(au,'Zhé'), en, note:'continuous'} : {au, en, note:null};
+  if(kind==='present')return {au, en, note: pos==='v'?'present':null};
+  return {au, en, note:null};
+}
+function resolveEng(w){
+  w=w.toLowerCase();
+  if(enToAu[w]) return applyMorph(enToAu[w][0], null);
+  if(IRREG_EN[w]){ const [lemma,kind]=IRREG_EN[w]; if(enToAu[lemma]) return applyMorph(enToAu[lemma][0], kind); }
+  const tries=[]; // [stem, suffixType]
+  if(w.length>4 && w.endsWith('ies')) tries.push([w.slice(0,-3)+'y','s']);
+  if(w.length>3 && w.endsWith('es'))  tries.push([w.slice(0,-2),'s']);
+  if(w.length>2 && w.endsWith('s') && !w.endsWith('ss')) tries.push([w.slice(0,-1),'s']);
+  if(w.length>4 && w.endsWith('ied')) tries.push([w.slice(0,-3)+'y','ed']);
+  if(w.length>3 && w.endsWith('ed')){ tries.push([w.slice(0,-2),'ed']); tries.push([w.slice(0,-1),'ed']); if(/([bcdfghjklmnpqrstvwxz])\1ed$/.test(w)) tries.push([w.slice(0,-3),'ed']); }
+  if(w.length>4 && w.endsWith('ing')){ tries.push([w.slice(0,-3),'ing']); tries.push([w.slice(0,-3)+'e','ing']); if(/([bcdfghjklmnpqrstvwxz])\1ing$/.test(w)) tries.push([w.slice(0,-4),'ing']); }
+  for(const [stem,suf] of tries){
+    if(enToAu[stem]){
+      const rec=enToAu[stem][0];
+      if(suf==='s')   return rec.pos==='n' ? applyMorph(rec,'plural') : rec.pos==='v' ? applyMorph(rec,'present') : applyMorph(rec,null);
+      if(suf==='ed')  return applyMorph(rec,'past');
+      if(suf==='ing') return applyMorph(rec,'cont');
+    }
+  }
+  return null;
+}
+
 function translateEnToAu(text){
   const raw = text.replace(/\s+/g,' ').trim();
   if(!raw) return {tokens:[]};
@@ -808,14 +855,9 @@ function translateEnToAu(text){
       }
       out.push({src:srcText, au:auForm, en:matched.full, note:rnote});
     } else {
-      // try simple plural: trailing s
-      let base = w.toLowerCase();
-      if(base.length>3 && base.endsWith('s') && enToAu[base.slice(0,-1)]){
-        const m = enToAu[base.slice(0,-1)][0];
-        out.push({src:srcText, au:m.au+'-ae', en:m.full, note:'plural'});
-      } else {
-        out.push({src:srcText, au:null});
-      }
+      const r = resolveEng(w);
+      if(r){ out.push({src:srcText, au:r.au, en:r.en, note:r.note}); }
+      else { out.push({src:srcText, au:null}); }
     }
     i += span;
   }
@@ -916,9 +958,18 @@ function render(){
   str=str.trim();
 
   if(dir==='en2au'){
+    // native line shows ONLY translated Audalad words — never untranslated English fallback
+    let nparts=[];
+    res.tokens.forEach(t=>{
+      if(t.punct){ nparts.push(t.punct); return; }
+      if(t.au!=null) nparts.push(t.au);
+    });
+    let nstr='';
+    nparts.forEach(p=>{ if(/^[.,!?;:]$/.test(p)) nstr=nstr.replace(/\s$/,'')+p+' '; else nstr+=p+' '; });
+    nstr=nstr.trim();
     outputEl.innerHTML =
       '<div class="roman">'+escapeHtml(str)+'</div>'+
-      '<div class="native">'+escapeHtml(toNative(str))+'</div>';
+      '<div class="native">'+escapeHtml(toNative(nstr))+'</div>';
   } else {
     outputEl.innerHTML = '<div class="roman">'+escapeHtml(str)+'</div>';
   }
