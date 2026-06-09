@@ -230,6 +230,43 @@ select,.vinput{
 .entry.community{border-color:var(--verd);box-shadow:inset 0 0 0 1px rgba(111,154,134,0.14);}
 .badge{font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;background:var(--gold-dim);color:var(--gold);padding:2px 6px;border-radius:10px;margin-left:8px;vertical-align:middle;}
 .badge.community{background:rgba(111,154,134,0.2);color:var(--verd);}
+
+/* ---------- grammar reference page ---------- */
+.gram{max-width:760px;margin:0 auto;}
+.gram .lede{font-style:italic;color:var(--ink-dim);font-size:17px;line-height:1.65;text-align:center;max-width:600px;margin:0 auto 30px;}
+.gram section.g-sec{margin-bottom:30px;}
+.gram h2{font-family:'Cinzel',serif;font-weight:700;letter-spacing:3px;text-transform:uppercase;font-size:14px;color:var(--gold);margin:0 0 4px;display:flex;align-items:center;gap:12px;}
+.gram h2::before{content:"\2756";color:var(--gold-soft);font-size:12px;}
+.gram .h-sub{font-style:italic;color:var(--ink-dim);font-size:14px;margin:0 0 14px 26px;}
+.gram p.body{color:var(--ink);font-size:16px;line-height:1.65;margin:0 0 12px;}
+.gram p.body b,.gram li b{color:var(--gold-soft);font-weight:500;}
+.gram .card{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:5px;padding:16px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.03);}
+.gram table{width:100%;border-collapse:collapse;font-size:15px;}
+.gram table.tight{font-size:14px;}
+.gram th{font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-soft);text-align:left;padding:6px 10px;border-bottom:1px solid var(--line);font-weight:400;}
+.gram td{padding:7px 10px;border-bottom:1px solid rgba(58,49,69,0.5);color:var(--ink-dim);vertical-align:top;}
+.gram tr:last-child td{border-bottom:none;}
+.gram .au{color:var(--gold);font-size:16px;}
+.gram .scr{font-family:'AudaladScript';color:var(--gold);font-size:22px;text-shadow:0 0 12px rgba(212,175,82,0.15);}
+.gram .ipa{color:var(--verd);font-size:13px;font-family:'Cinzel',serif;letter-spacing:.5px;}
+.gram .en{color:var(--ink);}
+.gram .formula{text-align:center;font-size:18px;color:var(--ink);margin:14px 0;letter-spacing:.5px;}
+.gram .formula .au{font-size:19px;}
+.gram .formula .op{color:var(--ink-dim);margin:0 6px;}
+.gram ul.clean{margin:6px 0 0;padding:0 0 0 4px;list-style:none;}
+.gram ul.clean li{color:var(--ink-dim);font-size:15px;line-height:1.6;margin-bottom:9px;padding-left:20px;position:relative;}
+.gram ul.clean li::before{content:"\203A";color:var(--gold);position:absolute;left:0;top:-1px;font-size:17px;}
+.gram .ex{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:3px;padding:2px 8px;margin:2px 3px 2px 0;font-size:14px;}
+.gram .ex .au{font-size:15px;}
+.gram .ex .arrow{color:var(--ink-dim);margin:0 5px;}
+.gram .sounds{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:7px;}
+.gram .snd{background:var(--panel2);border:1px solid var(--line);border-radius:3px;padding:8px 10px;text-align:center;}
+.gram .snd .s-lett{color:var(--gold);font-size:17px;}
+.gram .snd .s-scr{font-family:'AudaladScript';color:var(--ink);font-size:18px;margin-left:6px;}
+.gram .snd .s-ipa{color:var(--verd);font-size:13px;font-family:'Cinzel',serif;margin-top:2px;}
+.gram .note{font-size:13px;color:var(--ink-dim);font-style:italic;margin-top:10px;}
+.gram .crosslink{color:var(--gold-soft);text-decoration:none;border-bottom:1px dotted var(--gold-dim);cursor:pointer;}
+.gram .crosslink:hover{color:var(--gold);}
 .e-by{color:var(--ink-dim);font-size:11px;font-style:italic;margin-top:3px;}
 .authorbar{max-width:420px;margin:0 auto 22px;display:flex;flex-direction:column;gap:6px;}
 .authorbar label{font-size:12px;color:var(--ink-dim);}
@@ -342,6 +379,7 @@ a{color:var(--gold-soft);}
     <button class="tab" data-view="dict">Lexicon</button>
     <button class="tab" data-view="conj">Conjugate</button>
     <button class="tab" data-view="forge">Forge</button>
+    <button class="tab" data-view="grammar">Grammar</button>
   </div>
 
   <details class="guide">
@@ -668,6 +706,187 @@ a{color:var(--gold-soft);}
         <button class="btn ghost" id="coinDownload">Download .txt</button>
       </div>
       <div class="coinlist" id="coinList"><div class="emptyhint">Nothing forged yet. Words you create appear here.</div></div>
+    </div>
+  </section>
+
+  <!-- GRAMMAR / THE LANGUAGE -->
+  <section class="view" id="grammar">
+    <div class="gram">
+      <p class="lede">Everything that makes Audalad work, gathered in one place &mdash; how it sounds, how it's written, and how words bend to carry tense, number, possession, and rank. Every rule and form below is exactly what the tools on the other tabs run on.</p>
+
+      <section class="g-sec">
+        <h2>The writing system</h2>
+        <p class="h-sub">A bespoke script &mdash; Audalad v1 (juno)</p>
+        <div class="card">
+          <p class="body">Audalad is written in its own alphabet, shown throughout the app in <span class="scr">gold</span>. The roman spelling you type is just a transcription; the native glyphs are the real thing.</p>
+          <ul class="clean">
+            <li>The script has a glyph for each base letter <b>a&ndash;z</b>. It has no sign for <b>c</b> or <b>w</b>, and the apostrophe is not drawn &mdash; these are silent in the written form.</li>
+            <li>The accent marks on <b>&aacute;</b>, <b>&eacute;</b>, <b>&uacute;</b> mark <b>stress only</b>. They don't change the vowel and aren't separately written; <span class="au">Zh&eacute;ar</span> and <span class="au">zhear</span> are the same syllable, just stressed.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="g-sec">
+        <h2>Sounds</h2>
+        <p class="h-sub">The documented phonetic inventory</p>
+        <div class="card">
+          <p class="body" style="margin-bottom:8px;"><b>Vowels</b> &mdash; accents are stress, not new sounds.</p>
+          <div class="sounds">
+            <div class="snd"><div class="s-lett">a<span class="s-scr">a</span></div><div class="s-ipa">/a/</div></div>
+            <div class="snd"><div class="s-lett">e<span class="s-scr">e</span></div><div class="s-ipa">/&#603;/</div></div>
+            <div class="snd"><div class="s-lett">i<span class="s-scr">i</span></div><div class="s-ipa">/i/</div></div>
+            <div class="snd"><div class="s-lett">o<span class="s-scr">o</span></div><div class="s-ipa">/o/</div></div>
+            <div class="snd"><div class="s-lett">u<span class="s-scr">u</span></div><div class="s-ipa">/u/</div></div>
+            <div class="snd"><div class="s-lett">iy</div><div class="s-ipa">/&#616;/</div></div>
+            <div class="snd"><div class="s-lett">ae</div><div class="s-ipa">/&#618;/</div></div>
+            <div class="snd"><div class="s-lett">au</div><div class="s-ipa">/&#594;/</div></div>
+          </div>
+          <p class="body" style="margin:16px 0 8px;"><b>Consonants &amp; digraphs</b></p>
+          <div class="sounds">
+            <div class="snd"><div class="s-lett">b<span class="s-scr">b</span></div><div class="s-ipa">/b/</div></div>
+            <div class="snd"><div class="s-lett">d<span class="s-scr">d</span></div><div class="s-ipa">/d/</div></div>
+            <div class="snd"><div class="s-lett">f<span class="s-scr">f</span></div><div class="s-ipa">/&#632;/</div></div>
+            <div class="snd"><div class="s-lett">g<span class="s-scr">g</span></div><div class="s-ipa">/g/</div></div>
+            <div class="snd"><div class="s-lett">h<span class="s-scr">h</span></div><div class="s-ipa">/&#967;/</div></div>
+            <div class="snd"><div class="s-lett">j<span class="s-scr">j</span></div><div class="s-ipa">/d&#865;&#657;/</div></div>
+            <div class="snd"><div class="s-lett">k<span class="s-scr">k</span></div><div class="s-ipa">/k/</div></div>
+            <div class="snd"><div class="s-lett">l<span class="s-scr">l</span></div><div class="s-ipa">/&#621;/</div></div>
+            <div class="snd"><div class="s-lett">m<span class="s-scr">m</span></div><div class="s-ipa">/m/</div></div>
+            <div class="snd"><div class="s-lett">n<span class="s-scr">n</span></div><div class="s-ipa">/n/</div></div>
+            <div class="snd"><div class="s-lett">p<span class="s-scr">p</span></div><div class="s-ipa">/p/</div></div>
+            <div class="snd"><div class="s-lett">r<span class="s-scr">r</span></div><div class="s-ipa">/&#638;/</div></div>
+            <div class="snd"><div class="s-lett">s<span class="s-scr">s</span></div><div class="s-ipa">/s/</div></div>
+            <div class="snd"><div class="s-lett">t<span class="s-scr">t</span></div><div class="s-ipa">/t/</div></div>
+            <div class="snd"><div class="s-lett">v<span class="s-scr">v</span></div><div class="s-ipa">/&#946;/</div></div>
+            <div class="snd"><div class="s-lett">x<span class="s-scr">x</span></div><div class="s-ipa">/x/</div></div>
+            <div class="snd"><div class="s-lett">y<span class="s-scr">y</span></div><div class="s-ipa">/&#653;/</div></div>
+            <div class="snd"><div class="s-lett">z<span class="s-scr">z</span></div><div class="s-ipa">/z/</div></div>
+            <div class="snd"><div class="s-lett">th</div><div class="s-ipa">/&#952;/</div></div>
+            <div class="snd"><div class="s-lett">sh</div><div class="s-ipa">/&#642;/</div></div>
+            <div class="snd"><div class="s-lett">zh</div><div class="s-ipa">/&#656;/</div></div>
+            <div class="snd"><div class="s-lett">ts</div><div class="s-ipa">/t&#865;s/</div></div>
+            <div class="snd"><div class="s-lett">&rsquo;</div><div class="s-ipa">/&#660;/</div></div>
+          </div>
+          <p class="note">The apostrophe is a glottal stop in speech, even though it isn't drawn in the script. Every result on the Translate tab shows this pronunciation in IPA.</p>
+        </div>
+      </section>
+
+      <section class="g-sec">
+        <h2>Roots &amp; clusterification</h2>
+        <p class="h-sub">How compound words are built</p>
+        <div class="card">
+          <p class="body">New concepts are made by stacking roots into a single <b>cluster word</b>, joined by the <b>&rsquo;</b> clusterification mark. The seam is then smoothed so the cluster reads cleanly as one word.</p>
+          <div class="ex"><span class="au">Utal</span> <span class="en">house</span> <span class="arrow">+</span> <span class="au">veludad</span> <span class="arrow">&rarr;</span> <span class="au">Utal&rsquo;veludad</span> <span class="en">library / university</span></div>
+          <div class="ex"><span class="au">Ka&rsquo;akar</span> <span class="en">cat</span></div>
+          <p class="note">The Forge &rarr; Compound tool stacks roots for you and adds the &rsquo; mark automatically.</p>
+        </div>
+      </section>
+
+      <section class="g-sec">
+        <h2>Number, possession &amp; pronouns</h2>
+        <p class="h-sub">The core suffixes that bend any word</p>
+        <div class="card">
+          <p class="body"><b>Plural</b> depends on whether a thing is <i>personified</i> (people, titles, creatures) or not:</p>
+          <ul class="clean">
+            <li>Personified &rarr; suffix <b>-ae</b>. <span class="ex"><span class="au">Nadu</span> <span class="en">noble</span> <span class="arrow">&rarr;</span> <span class="au">Naduae</span> <span class="en">nobles</span></span></li>
+            <li>Non-personified &rarr; prefix <b>Yi-</b>. <span class="ex"><span class="au">Utal</span> <span class="en">house</span> <span class="arrow">&rarr;</span> <span class="au">Yiutal</span> <span class="en">houses</span></span></li>
+          </ul>
+          <p class="body" style="margin-top:14px;"><b>Possessive / adjective</b> &mdash; suffix <b>-ad</b> ("of the&hellip;"): <span class="ex"><span class="au">Shur</span> <span class="en">gold</span> <span class="arrow">&rarr;</span> <span class="au">Shurad</span> <span class="en">golden / of gold</span></span></p>
+          <p class="body" style="margin:18px 0 8px;"><b>Pronouns</b> start from four bases and take the same <b>-ad</b> (possessive) and <b>-ae</b> (plural) endings:</p>
+          <table class="tight">
+            <tr><th>Person</th><th>Base</th><th>Possessive&nbsp;(-ad)</th><th>Plural&nbsp;(-ae)</th></tr>
+            <tr><td class="en">1st &mdash; I / me</td><td><span class="au">In</span></td><td><span class="au">Inad</span> <span class="en">my</span></td><td><span class="au">Inae</span> <span class="en">we</span></td></tr>
+            <tr><td class="en">2nd &mdash; you</td><td><span class="au">Ir</span></td><td><span class="au">Irad</span> <span class="en">your</span></td><td><span class="au">Irae</span> <span class="en">you all</span></td></tr>
+            <tr><td class="en">3rd &mdash; he / she / they</td><td><span class="au">Enu</span></td><td><span class="au">Enuad</span> <span class="en">his/her</span></td><td><span class="au">Enuae</span> <span class="en">they</span></td></tr>
+            <tr><td class="en">3rd inanimate &mdash; it</td><td><span class="au">Ki</span></td><td><span class="au">Kiad</span> <span class="en">its</span></td><td><span class="au">Kiae</span> <span class="en">they</span></td></tr>
+          </table>
+          <p class="note">Possessive and plural stack: <span class="au">Inadae</span> = our / ours.</p>
+        </div>
+      </section>
+
+      <section class="g-sec">
+        <h2>Social rank</h2>
+        <p class="h-sub">Honorific prefixes on pronouns</p>
+        <div class="card">
+          <p class="body">Audalad encodes how each person stands relative to you. A rank prefix is added to the front of a pronoun. Equal rank takes no marker.</p>
+          <table>
+            <tr><th>Rank</th><th>Prefix</th><th>Used for</th><th>Example</th></tr>
+            <tr><td class="en">Ascended</td><td><span class="au">Ori&rsquo;</span></td><td class="en">the divine / the dynasty</td><td><span class="au">Ori&rsquo;Enu</span></td></tr>
+            <tr><td class="en">Greater</td><td><span class="au">Itu&rsquo;</span></td><td class="en">someone above you</td><td><span class="au">Itu&rsquo;Ir</span></td></tr>
+            <tr><td class="en">Equal</td><td><span class="en">&mdash; none &mdash;</span></td><td class="en">a peer</td><td><span class="au">Enu</span></td></tr>
+            <tr><td class="en">Lesser</td><td><span class="au">Ke&rsquo;</span></td><td class="en">someone below you / humble self</td><td><span class="au">Ke&rsquo;In</span></td></tr>
+          </table>
+          <p class="note">On Translate, the <b>Social rank</b> controls apply these automatically &mdash; set rank separately for "I/we", "you", and "they/it".</p>
+        </div>
+      </section>
+
+      <section class="g-sec">
+        <h2>Verbs &mdash; tense</h2>
+        <p class="h-sub">Tense is a prefix; negation is a suffix</p>
+        <div class="card">
+          <p class="body">A verb's tense is carried by a <b>prefix</b> on the front. Audalad splits time finely, with separate near and far past/future plus a continuous.</p>
+          <table class="tight">
+            <tr><th>Tense</th><th>Prefix</th><th>Sense</th><th><span class="au">Zharin</span> &middot; to love</th></tr>
+            <tr><td class="en">Far-past</td><td><span class="au">&Aacute;s-</span></td><td class="en">I used to&hellip;</td><td><span class="au">&Aacute;szharin</span></td></tr>
+            <tr><td class="en">Near-past</td><td><span class="au">&Aacute;sar-</span></td><td class="en">I&hellip;ed</td><td><span class="au">&Aacute;sarzharin</span></td></tr>
+            <tr><td class="en">Present</td><td><span class="au">Zh&eacute;ar-</span></td><td class="en">I&hellip;</td><td><span class="au">Zh&eacute;arzharin</span></td></tr>
+            <tr><td class="en">Continuous</td><td><span class="au">Zh&eacute;-</span></td><td class="en">I am&hellip;ing</td><td><span class="au">Zh&eacute;zharin</span></td></tr>
+            <tr><td class="en">Near-future</td><td><span class="au">L&uacute;ar-</span></td><td class="en">I will soon&hellip;</td><td><span class="au">L&uacute;arzharin</span></td></tr>
+            <tr><td class="en">Far-future</td><td><span class="au">L&uacute;-</span></td><td class="en">I will eventually&hellip;</td><td><span class="au">L&uacute;zharin</span></td></tr>
+          </table>
+          <p class="body" style="margin-top:14px;"><b>Negation / inverse</b> &mdash; suffix <b>-ir</b>: <span class="ex"><span class="au">Zh&eacute;arzharin</span> <span class="arrow">&rarr;</span> <span class="au">Zh&eacute;arzharinir</span> <span class="en">I do not love</span></span></p>
+          <p class="note">The <span class="crosslink" onclick="document.querySelector('.tab[data-view=&quot;conj&quot;]').click()">Conjugate</span> tab lays out all six tenses plus the negated form for any verb.</p>
+        </div>
+      </section>
+
+      <section class="g-sec">
+        <h2>Verbs &mdash; action class</h2>
+        <p class="h-sub">The final vowel says what kind of action it is</p>
+        <div class="card">
+          <p class="body">A verb's <b>final vowel</b> classifies the action &mdash; physical, emotional, abstract, and so on. Forging a verb means choosing this ending.</p>
+          <table class="tight">
+            <tr><th>Ending</th><th>Class</th><th>Ending</th><th>Class</th></tr>
+            <tr><td><span class="au">-i</span></td><td class="en">abstract</td><td><span class="au">-l</span></td><td class="en">revealing</td></tr>
+            <tr><td><span class="au">-u</span></td><td class="en">physical</td><td><span class="au">-r</span></td><td class="en">selfish</td></tr>
+            <tr><td><span class="au">-a</span></td><td class="en">emotional</td><td><span class="au">-d</span></td><td class="en">neutral</td></tr>
+            <tr><td><span class="au">-iy</span> <span class="ipa">/&#616;/</span></td><td class="en">existential</td><td><span class="au">-k</span></td><td class="en">completory</td></tr>
+          </table>
+          <p class="body" style="margin-top:14px;"><b>Adverbs</b> are built from a verb with <b>-esha</b>: <span class="ex"><span class="au">Velrak</span> <span class="en">to run</span> <span class="arrow">&rarr;</span> <span class="au">Velrakesha</span></span></p>
+          <p class="note">Build these on <span class="crosslink" onclick="document.querySelector('.tab[data-view=&quot;forge&quot;]').click()">Forge &rarr; Verb</span>.</p>
+        </div>
+      </section>
+
+      <section class="g-sec">
+        <h2>Counting</h2>
+        <p class="h-sub">Numbers and ordinals</p>
+        <div class="card">
+          <table class="tight">
+            <tr><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>
+            <tr>
+              <td><span class="au">Hortu</span></td><td><span class="au">Nen</span></td><td><span class="au">Din</span></td>
+              <td><span class="au">Virid</span></td><td><span class="au">Tarad</span></td><td><span class="au">Shumi</span></td>
+              <td><span class="au">Karun</span></td><td><span class="au">Muso</span></td><td><span class="au">Semi</span></td><td><span class="au">Sene&rsquo;</span></td>
+            </tr>
+          </table>
+          <ul class="clean" style="margin-top:14px;">
+            <li><b>Ten</b> is <span class="au">Se&rsquo;din</span>. <b>11&ndash;19</b> = ten + the unit: <span class="ex"><span class="au">Se&rsquo;din Nen</span> <span class="en">11</span></span></li>
+            <li><b>Tens</b> have their own words &mdash; <span class="au">Dinasemi</span> (20), <span class="au">Viridasemi</span> (30), <span class="au">Taradasemi</span> (40), <span class="au">Shumiasemi</span> (50), <span class="au">Karunasemi</span> (60), <span class="au">Musosemi</span> (70), <span class="au">Harasemi</span> (80), <span class="au">Senesemi</span> (90). <span class="ex"><span class="au">Dinasemi Virid</span> <span class="en">23</span></span></li>
+            <li><b>Hundred</b> is <span class="au">Hamdekali</span>; <b>thousand</b> is <span class="au">Numoral</span>.</li>
+            <li><b>Ordinals</b> add <b>-dir</b> ("the&hellip;th"); common ones are also set in the lexicon (<span class="au">Nendiret</span> first, <span class="au">Dindiret</span> second&hellip;).</li>
+          </ul>
+          <p class="note">Forge &rarr; Number writes any value 0&ndash;999999 in full, with script and pronunciation.</p>
+        </div>
+      </section>
+
+      <section class="g-sec">
+        <h2>Putting it together</h2>
+        <div class="card">
+          <p class="body">Most words follow one pattern: a <b>root</b>, optionally clustered with others by <b>&rsquo;</b>, then endings stacked on &mdash; tense prefix &rarr; root &rarr; class vowel &rarr; <b>-ad</b> / <b>-ae</b> / <b>-ir</b> as needed, with a rank prefix on pronouns.</p>
+          <div class="formula"><span class="au">Zh&eacute;ar-</span><span class="op">+</span><span class="au">zharin</span><span class="op">+</span><span class="au">-ir</span> <span class="op">=</span> <span class="au">Zh&eacute;arzharinir</span> <span class="en">&nbsp;I do not love</span></div>
+          <p class="note">The <span class="crosslink" onclick="document.querySelector('.tab[data-view=&quot;forge&quot;]').click()">Forge &rarr; Analyze</span> tool runs this in reverse &mdash; paste any word to break it back into roots and affixes. Nothing in these tools is invented; every form comes from the rules above.</p>
+        </div>
+      </section>
+
     </div>
   </section>
 
