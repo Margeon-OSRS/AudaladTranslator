@@ -209,7 +209,13 @@ select,.vinput{
 .btn.danger{}
 .btn.ghost.danger:hover{border-color:var(--err);color:var(--err);}
 .entry.custom{border-color:var(--gold-dim);box-shadow:inset 0 0 0 1px rgba(212,175,82,0.12);}
+.entry.community{border-color:var(--verd);box-shadow:inset 0 0 0 1px rgba(111,154,134,0.14);}
 .badge{font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;background:var(--gold-dim);color:var(--gold);padding:2px 6px;border-radius:10px;margin-left:8px;vertical-align:middle;}
+.badge.community{background:rgba(111,154,134,0.2);color:var(--verd);}
+.e-by{color:var(--ink-dim);font-size:11px;font-style:italic;margin-top:3px;}
+.authorbar{max-width:420px;margin:0 auto 22px;display:flex;flex-direction:column;gap:6px;}
+.authorbar label{font-size:12px;color:var(--ink-dim);}
+.authorbar label small{font-style:italic;opacity:.8;}
 .e-edit{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:3px;color:var(--ink);padding:5px 8px;font-family:'EB Garamond',serif;font-size:14px;outline:none;margin:4px 0;}
 .e-edit:focus{border-color:var(--gold-dim);}
 .e-foot{display:flex;gap:8px;align-items:center;justify-content:space-between;}
@@ -360,14 +366,15 @@ a{color:var(--gold-soft);}
       <input id="search" type="text" placeholder="Search English or Audalad&hellip;">
     </div>
     <div class="lexbar">
-      <button class="btn ghost" id="lexExport" title="Download every word you've forged as a JSON file you can keep or share">Export forged (JSON)</button>
-      <button class="btn ghost" id="lexImport" title="Load a previously exported JSON file and merge those words back in">Import JSON</button>
-      <button class="btn ghost" id="lexCsv" title="Download the whole dictionary (built-in + forged) as a CSV for spreadsheets">Export all (CSV)</button>
-      <button class="btn ghost danger" id="lexClear" title="Permanently delete all the words you've forged. Export them first if you want to keep them.">Clear forged</button>
-      <input type="file" id="lexFile" accept="application/json,.json" style="display:none">
+      <button class="btn ghost" id="lexExport" title="Download the words you've added as a JSON file to keep or send to the maintainer">Export forged (JSON)</button>
+      <button class="btn ghost" id="lexImport" title="Load one or more JSON files and merge those words in (select several at once to batch submissions)">Import JSON</button>
+      <button class="btn ghost" id="lexPublish" title="Save your reviewed words as lexicon.json to commit alongside index.html — everyone visiting the site then sees them">Publish &rarr; lexicon.json</button>
+      <button class="btn ghost" id="lexCsv" title="Download the whole dictionary (built-in + community + forged) as a CSV for spreadsheets">Export all (CSV)</button>
+      <button class="btn ghost danger" id="lexClear" title="Permanently delete the words you've added here. Export or publish first if you want to keep them.">Clear forged</button>
+      <input type="file" id="lexFile" accept="application/json,.json" multiple style="display:none">
     </div>
     <div class="lexhelp">
-      <b>Forged words</b> are the ones you create in the Forge tab and add to the lexicon. <b>Export forged</b> saves them to a file; <b>Import</b> merges a saved file back; <b>Export all</b> dumps the full dictionary as CSV. <b>Clear forged</b> permanently removes every word you've added &mdash; built-in words are never touched, but your additions can't be recovered unless you exported them first.
+      <b>Curated workflow.</b> Anyone can forge words and <b>Export forged</b> to send you their JSON. As maintainer, <b>Import</b> one or many submissions at once, review and edit them here, delete what you don't want, then <b>Publish &rarr; lexicon.json</b> and commit that file next to <code>index.html</code> in your repo. The site auto-loads <code>lexicon.json</code>, so approved words show for <b>everyone</b> as <span class="badge community">community</span> entries. Personal <span class="badge">forged</span> words stay private to each browser until you publish them.
     </div>
     <div class="lexstatus" id="lexStatus"></div>
     <div class="posfilter" id="posfilter"></div>
@@ -550,6 +557,11 @@ a{color:var(--gold-soft);}
         <div class="note"><b>Reverse forge.</b> Peels off tense prefixes, plurals, possessive, negation, ordinal, the <i>Elsakat-</i> and <i>&Acirc;</i> markers and the cluster <i>'</i>, then segments the remaining stem into known roots. Multiple segmentations can exist; this shows the cleanest one it finds.</div>
       </div>
 
+      <div class="authorbar">
+        <label for="authorName">Your name <small>(tagged on words you add, for credit)</small></label>
+        <input id="authorName" class="vinput" placeholder="e.g. Phillip Brewtaker" autocomplete="off">
+      </div>
+
       <div class="flabel" style="text-align:center">Forged this session</div>
       <div class="frow" style="justify-content:center;margin-bottom:12px">
         <button class="btn ghost" id="coinCopy">Copy all</button>
@@ -618,7 +630,9 @@ function toNative(s){
 
 /* ---------- custom words (forged + imported), persisted ---------- */
 const LS_KEY = 'audalad_custom_v1';
+const LS_AUTHOR = 'audalad_author_v1';
 let customWords = [];
+let officialWords = [];   // loaded from ./lexicon.json (the curated community set), read-only
 let storageOK = true;
 function loadCustom(){
   try{
@@ -631,7 +645,25 @@ function saveCustom(){
   catch(e){ storageOK = false; }
   updateLexStatus();
 }
-function lex(){ return DATA.concat(customWords); }
+function currentAuthor(){
+  try{ return (localStorage.getItem(LS_AUTHOR)||'').trim(); }catch(e){ return ''; }
+}
+function setAuthor(name){
+  try{ localStorage.setItem(LS_AUTHOR, name); }catch(e){}
+}
+/* fetch the curated community lexicon committed next to index.html (works on a hosted site) */
+async function loadOfficial(){
+  try{
+    const r = await fetch('lexicon.json', {cache:'no-store'});
+    if(!r.ok) return;
+    const arr = await r.json();
+    if(Array.isArray(arr)){
+      officialWords = arr.filter(x=>x&&x.au).map(x=>({au:String(x.au), en:String(x.en||'(unglossed)'), pos:x.pos||'n', by:x.by||'', official:true}));
+      rebuildMaps(); renderDict(); buildVerbList(); fillWordDatalists(); updateLexStatus();
+    }
+  }catch(e){ /* no lexicon.json present, or opened from disk — fine */ }
+}
+function lex(){ return DATA.concat(officialWords, customWords); }
 
 /* ---------- build lookup maps (rebuilt whenever the lexicon changes) ---------- */
 let auToEn = {};   // lowercased audalad -> {au,en,pos}
@@ -897,24 +929,37 @@ function buildPosFilter(){
 }
 function renderDict(){
   const q=searchEl.value.trim().toLowerCase();
-  const all=lex();
+  // dedupe by au: custom (editable) wins over official, which wins over built-in
+  const byAu={};
+  lex().forEach(d=>{ byAu[d.au.toLowerCase()]=d; });
+  const all=Object.values(byAu);
   const items=all.filter(d=>{
     if(activePos!=='all' && d.pos!==activePos) return false;
     if(!q) return true;
     return d.au.toLowerCase().includes(q)||d.en.toLowerCase().includes(q);
   }).sort((a,b)=>a.en.localeCompare(b.en));
-  const customCount=customWords.length;
-  countEl.textContent=items.length+' of '+all.length+' entries'+(customCount?' \u00b7 '+customCount+' forged':'');
+  const customCount=customWords.length, offCount=officialWords.length;
+  countEl.textContent=items.length+' of '+all.length+' entries'+
+    (offCount?' \u00b7 '+offCount+' community':'')+(customCount?' \u00b7 '+customCount+' forged':'');
   dictlist.innerHTML='';
   items.forEach(d=>{
     const e=document.createElement('div');
-    e.className='entry'+(d.custom?' custom':'');
     if(d.custom){
+      e.className='entry custom';
       const ci=customWords.indexOf(d);
+      const by=d.by?'<div class="e-by">proposed by '+escapeHtml(d.by)+'</div>':'';
       e.innerHTML='<div><span class="e-au">'+escapeHtml(d.au)+'</span><span class="e-native">'+escapeHtml(toNative(d.au))+'</span><span class="badge">forged</span></div>'+
         '<input class="e-edit" value="'+escapeHtml(d.en)+'" data-ci="'+ci+'" title="Edit meaning">'+
+        by+
         '<div class="e-foot"><select class="e-pos-sel" data-ci="'+ci+'">'+posOptions(d.pos)+'</select><button class="e-del" data-ci="'+ci+'" title="Delete">&times;</button></div>';
+    } else if(d.official){
+      e.className='entry community';
+      const by=d.by?'<div class="e-by">proposed by '+escapeHtml(d.by)+'</div>':'';
+      e.innerHTML='<div><span class="e-au">'+escapeHtml(d.au)+'</span><span class="e-native">'+escapeHtml(toNative(d.au))+'</span><span class="badge community">community</span></div>'+
+        '<div class="e-en">'+escapeHtml(d.en)+'</div>'+by+
+        '<div class="e-pos">'+(POS_LABEL[d.pos]||d.pos)+'</div>';
     } else {
+      e.className='entry';
       e.innerHTML='<div><span class="e-au">'+escapeHtml(d.au)+'</span><span class="e-native">'+escapeHtml(toNative(d.au))+'</span></div>'+
         '<div class="e-en">'+escapeHtml(d.en)+'</div>'+
         '<div class="e-pos">'+(POS_LABEL[d.pos]||d.pos)+'</div>';
@@ -1003,6 +1048,7 @@ function promoteCoinage(i){
   const c=coinages[i]; if(!c||c.promoted) return;
   // clusterification apostrophe stays in the stored form; that's canonical
   const entry={au:c.form, en:c.mean||'(unglossed)', pos:KIND_POS[c.kind]||'n', custom:true};
+  const by=currentAuthor(); if(by) entry.by=by;
   customWords.push(entry);
   c.promoted=true;
   lexiconChanged();
@@ -1276,6 +1322,7 @@ function initForge(){
 function updateLexStatus(){
   const el=document.getElementById('lexStatus'); if(!el) return;
   let msg = customWords.length ? customWords.length+' forged word'+(customWords.length===1?'':'s')+' added to your lexicon.' : 'No forged words added yet.';
+  if(officialWords.length) msg = officialWords.length+' community word'+(officialWords.length===1?'':'s')+' loaded. '+msg;
   if(!storageOK) msg += ' \u26a0 Storage is blocked here \u2014 changes are session-only, so export to keep them.';
   else if(customWords.length) msg += ' Saved in this browser.';
   el.textContent=msg;
@@ -1284,42 +1331,56 @@ function downloadFile(name, text, type){
   const blob=new Blob([text],{type:type||'text/plain'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);
 }
+function cleanForExport(arr){
+  return arr.map(c=>{ const o={au:c.au, en:c.en, pos:c.pos}; if(c.by) o.by=c.by; return o; });
+}
 document.getElementById('lexExport').addEventListener('click',()=>{
   if(!customWords.length){ flashStatus('Nothing forged to export yet.'); return; }
-  downloadFile('audalad_forged.json', JSON.stringify(customWords,null,2), 'application/json');
+  downloadFile('audalad_forged.json', JSON.stringify(cleanForExport(customWords),null,2), 'application/json');
+});
+document.getElementById('lexPublish').addEventListener('click',()=>{
+  if(!customWords.length){ flashStatus('Forge or import some words first, then publish.'); return; }
+  downloadFile('lexicon.json', JSON.stringify(cleanForExport(customWords),null,2), 'application/json');
+  flashStatus('Saved lexicon.json \u2014 commit it next to index.html to publish for everyone.');
 });
 document.getElementById('lexCsv').addEventListener('click',()=>{
-  const rows=[['audalad','english','pos','forged']];
-  lex().forEach(d=>rows.push([d.au,d.en,d.pos,d.custom?'yes':'']));
+  const rows=[['audalad','english','pos','source','proposed_by']];
+  const seen={};
+  lex().forEach(d=>{ seen[d.au.toLowerCase()]=d; });
+  Object.values(seen).forEach(d=>rows.push([d.au,d.en,d.pos,d.custom?'forged':d.official?'community':'built-in',d.by||'']));
   const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
   downloadFile('audalad_lexicon.csv', csv, 'text/csv');
 });
 document.getElementById('lexImport').addEventListener('click',()=>document.getElementById('lexFile').click());
 document.getElementById('lexFile').addEventListener('change',e=>{
-  const file=e.target.files[0]; if(!file) return;
-  const r=new FileReader();
-  r.onload=()=>{
-    try{
-      const arr=JSON.parse(r.result);
-      if(!Array.isArray(arr)) throw 0;
-      let added=0;
-      arr.forEach(x=>{
-        if(!x||!x.au) return;
-        const au=String(x.au);
-        if(customWords.some(c=>c.au.toLowerCase()===au.toLowerCase())) return;
-        customWords.push({au, en:String(x.en||'(unglossed)'), pos:x.pos||'n', custom:true});
-        added++;
-      });
-      lexiconChanged();
-      flashStatus('Imported '+added+' word'+(added===1?'':'s')+'.');
-    }catch(err){ flashStatus('Could not read that file \u2014 expected a JSON array.'); }
-  };
-  r.readAsText(file);
+  const files=Array.from(e.target.files||[]); if(!files.length) return;
+  let added=0, dupes=0, pending=files.length;
+  files.forEach(file=>{
+    const r=new FileReader();
+    r.onload=()=>{
+      try{
+        const arr=JSON.parse(r.result);
+        if(Array.isArray(arr)) arr.forEach(x=>{
+          if(!x||!x.au) return;
+          const au=String(x.au);
+          if(customWords.some(c=>c.au.toLowerCase()===au.toLowerCase())){ dupes++; return; }
+          const entry={au, en:String(x.en||'(unglossed)'), pos:x.pos||'n', custom:true};
+          if(x.by) entry.by=String(x.by);
+          customWords.push(entry); added++;
+        });
+      }catch(err){ /* skip unreadable file */ }
+      if(--pending===0){
+        lexiconChanged();
+        flashStatus('Imported '+added+' word'+(added===1?'':'s')+(dupes?' \u00b7 skipped '+dupes+' duplicate'+(dupes===1?'':'s'):'')+'.');
+      }
+    };
+    r.readAsText(file);
+  });
   e.target.value='';
 });
 document.getElementById('lexClear').addEventListener('click',()=>{
   if(!customWords.length) return;
-  if(confirm('Remove all '+customWords.length+' forged words from your lexicon? Export first if you want to keep them.')){
+  if(confirm('Remove all '+customWords.length+' forged words from your lexicon? Export or publish first if you want to keep them.')){
     customWords=[]; lexiconChanged();
   }
 });
@@ -1328,7 +1389,7 @@ function flashStatus(msg){
   const el=document.getElementById('lexStatus'); if(!el) return;
   el.textContent=msg;
   clearTimeout(statusTimer);
-  statusTimer=setTimeout(updateLexStatus,2600);
+  statusTimer=setTimeout(updateLexStatus,4000);
 }
 
 /* ---------- ANALYZE (reverse forge) ---------- */
@@ -1532,6 +1593,11 @@ function initForge2(){
   updateLexStatus();
   renderAnalyze();
   renderPrButtons();renderPronoun();renderPrGrid();
+  const an=document.getElementById('authorName');
+  if(an){
+    an.value=currentAuthor();
+    an.addEventListener('input',()=>setAuthor(an.value.trim()));
+  }
 }
 
 /* init */
@@ -1544,6 +1610,7 @@ initForge2();
 initRankControls();
 updateRankbarVisibility();
 render();
+loadOfficial();
 </script>
 </body>
 </html>
