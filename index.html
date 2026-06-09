@@ -80,6 +80,26 @@ h1{
 .tab:hover{color:var(--ink);border-color:var(--gold-dim);}
 .tab.active{color:var(--bg);background:var(--gold);border-color:var(--gold);font-weight:700;}
 
+/* collapsible guide */
+.guide{max-width:680px;margin:0 auto 26px;background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+.guide>summary{list-style:none;cursor:pointer;padding:13px 18px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-soft);display:flex;align-items:center;gap:10px;user-select:none;transition:color .18s;}
+.guide>summary::-webkit-details-marker{display:none;}
+.guide>summary:hover{color:var(--gold);}
+.guide .g-mark{color:var(--gold);font-size:13px;transition:transform .25s;display:inline-block;}
+.guide[open]>summary .g-mark{transform:rotate(180deg);}
+.guide-body{padding:4px 18px 16px;border-top:1px solid var(--line);}
+.g-intro{color:var(--ink-dim);font-size:15px;line-height:1.6;margin:14px 0 16px;}
+.g-page{border:1px solid var(--line);border-radius:5px;margin-bottom:8px;background:rgba(255,255,255,0.015);}
+.g-page>summary{list-style:none;cursor:pointer;padding:11px 14px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:1px;color:var(--ink);display:flex;align-items:center;gap:8px;user-select:none;}
+.g-page>summary::-webkit-details-marker{display:none;}
+.g-page>summary::before{content:"\203A";color:var(--gold);font-size:18px;transition:transform .2s;display:inline-block;}
+.g-page[open]>summary::before{transform:rotate(90deg);}
+.g-page>summary:hover{color:var(--gold-soft);}
+.g-page ul{margin:0;padding:2px 18px 14px 34px;}
+.g-page li{color:var(--ink-dim);font-size:14px;line-height:1.6;margin-bottom:7px;}
+.g-page li b{color:var(--ink);font-weight:500;}
+.g-page .badge{margin-left:0;margin-right:2px;}
+
 .view{display:none;animation:fade .35s ease;}
 .view.active{display:block;}
 @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
@@ -319,6 +339,63 @@ a{color:var(--gold-soft);}
     <button class="tab" data-view="forge">Forge</button>
   </div>
 
+  <details class="guide">
+    <summary><span class="g-mark">&#10070;</span> How to use this &mdash; tap to open the guide</summary>
+    <div class="guide-body">
+      <p class="g-intro">A complete toolkit for the Audalad language: translate in both directions, browse the dictionary, conjugate verbs, and forge brand-new words from real roots. Here's what each page does.</p>
+
+      <details class="g-page">
+        <summary>Translate</summary>
+        <ul>
+          <li>Type in either language and read the result below. Use the round <b>&#8646;</b> button to switch between <b>English &rarr; Audalad</b> and <b>Audalad &rarr; English</b>.</li>
+          <li><b>Native script</b> shows the result in the Audalad writing system; <b>Word breakdown</b> shows what each word maps to and any grammar notes. Toggle either off if you don't need it.</li>
+          <li><b>Social rank</b> (English&rarr;Audalad only): set how each person is ranked relative to you &mdash; <i>Ascended (Ori')</i>, <i>Greater (Itu')</i>, <i>Equal</i> (no marker), or <i>Lesser (Ke')</i>. Pick separately for "I/we", "you", and "they/it".</li>
+          <li>Words not in the dictionary appear <span style="color:var(--err)">in red</span> &mdash; nothing is invented.</li>
+        </ul>
+      </details>
+
+      <details class="g-page">
+        <summary>Lexicon</summary>
+        <ul>
+          <li>Search in English or Audalad, and filter by part of speech with the pills.</li>
+          <li>Three kinds of entries: plain <b>built-in</b> words (the core dictionary), <span class="badge community">community</span> words (published additions everyone shares), and your own <span class="badge">forged</span> words (private to your browser, and editable &mdash; fix the meaning or type, or delete them).</li>
+          <li>Each word is shown in roman letters and native script.</li>
+        </ul>
+      </details>
+
+      <details class="g-page">
+        <summary>Conjugate</summary>
+        <ul>
+          <li>Pick a verb from the list or type any Audalad verb root.</li>
+          <li>See all six tenses plus the negated form, each in roman and native script. Tense is a <i>prefix</i> (Zh&eacute;ar-, L&uacute;-, &Aacute;sar-&hellip;) and negation is the suffix <i>-ir</i>.</li>
+        </ul>
+      </details>
+
+      <details class="g-page">
+        <summary>Forge &mdash; make new words</summary>
+        <ul>
+          <li><b>Your name</b>: enter it once so any word you add is credited to you.</li>
+          <li><b>Compound</b>: click roots to stack them into a cluster word. The final form is editable (smooth it for sound), and the <i>'</i> clusterification mark is added for you.</li>
+          <li><b>Verb</b>: type a stem and choose an action type &mdash; that sets the final vowel (physical <i>-u</i>, emotional <i>-a</i>, abstract <i>-i</i>&hellip;). It also shows the adverb form.</li>
+          <li><b>Pronoun</b>: choose a rank and point of view, toggle possessive/plural, and it builds the pronoun. A full reference chart sits below.</li>
+          <li><b>Derive</b>: take any word and apply a plural, possessive, negation, ordinal, tense, and more.</li>
+          <li><b>Generate root</b>: roll fresh, valid-sounding roots from scratch when no existing root fits.</li>
+          <li><b>Analyze</b>: paste any Audalad word to break it back into its roots and affixes &mdash; great for checking your own words.</li>
+          <li><b>Forged this session</b>: everything you make collects here. Hit <b>&uarr; Lexicon</b> to add a word to your dictionary, then it's translatable and searchable.</li>
+        </ul>
+      </details>
+
+      <details class="g-page">
+        <summary>Sharing &amp; the community dictionary</summary>
+        <ul>
+          <li>Words you forge are <b>private to your browser</b>. To propose them, add them to your Lexicon, hit <b>Export forged (JSON)</b>, and send the file in for review.</li>
+          <li>Approved words get published and then show up for <b>everyone</b> as <span class="badge community">community</span> entries, credited to whoever proposed them.</li>
+          <li><b>Export all (CSV)</b> downloads the whole dictionary for a spreadsheet. <b>Clear forged</b> removes your private additions (export first if you want to keep them).</li>
+        </ul>
+      </details>
+    </div>
+  </details>
+
   <!-- TRANSLATE -->
   <section class="view active" id="translate">
     <div class="dirbar">
@@ -374,7 +451,7 @@ a{color:var(--gold-soft);}
       <input type="file" id="lexFile" accept="application/json,.json" multiple style="display:none">
     </div>
     <div class="lexhelp">
-      <b>Curated workflow.</b> Anyone can forge words and <b>Export forged</b> to send you their JSON. As maintainer, <b>Import</b> one or many submissions at once, review and edit them here, delete what you don't want, then <b>Publish &rarr; lexicon.json</b> and commit that file next to <code>index.html</code> in your repo. The site auto-loads <code>lexicon.json</code>, so approved words show for <b>everyone</b> as <span class="badge community">community</span> entries. Personal <span class="badge">forged</span> words stay private to each browser until you publish them.
+      <b>Adding words.</b> Make words in the <b>Forge</b> tab (put your name in first so you get credit), hit <b>&uarr; Lexicon</b> on each, then <b>Export forged (JSON)</b> and send the file in to be reviewed. Approved words appear here for <b>everyone</b> as <span class="badge community">community</span> entries. Your own <span class="badge">forged</span> words stay private to this browser until then. Full details are in the guide at the top of the page.
     </div>
     <div class="lexstatus" id="lexStatus"></div>
     <div class="posfilter" id="posfilter"></div>
