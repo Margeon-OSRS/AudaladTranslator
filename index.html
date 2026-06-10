@@ -198,6 +198,20 @@ textarea::placeholder{color:#5a5266;font-style:italic;}
 .entry .e-en{color:var(--ink);font-size:15px;}
 .entry .e-pos{color:var(--ink-dim);font-style:italic;font-size:12px;}
 .count{text-align:center;color:var(--ink-dim);font-size:13px;margin-bottom:16px;font-style:italic;}
+.contribs{margin:-6px auto 18px;max-width:760px;border:1px solid var(--line);border-radius:6px;background:rgba(212,175,82,0.03);}
+.contribs[open]{padding-bottom:6px;}
+.contribs>summary{cursor:pointer;list-style:none;padding:9px 14px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-soft);}
+.contribs>summary::-webkit-details-marker{display:none;}
+.contribs>summary::before{content:'\25B8 ';color:var(--gold-dim);}
+.contribs[open]>summary::before{content:'\25BE ';}
+.contribs>summary:hover{color:var(--gold);}
+.contribrow{display:flex;flex-wrap:wrap;gap:7px;padding:4px 14px 10px;}
+.contribchip{display:inline-flex;align-items:baseline;gap:7px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:4px 12px;font-size:13px;color:var(--ink);}
+.contribchip .cc-n{color:var(--gold);}
+.contribchip .cc-c{color:var(--ink-dim);font-size:12px;}
+.contribchip .cc-merit{font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;background:var(--gold-dim);color:var(--gold);padding:2px 6px;border-radius:10px;}
+.contribchip .cc-merit.nerd{background:rgba(111,154,134,0.2);color:var(--verd);}
+.contribnote{padding:0 14px 8px;color:var(--ink-dim);font-size:11px;font-style:italic;}
 
 /* conjugate */
 .conjwrap{max-width:560px;margin:0 auto;}
@@ -313,6 +327,9 @@ select,.vinput{
 .coinout{text-align:center;padding:14px 10px 6px;}
 .coinout .c-native{font-family:'AudaladScript';font-size:46px;color:var(--gold);line-height:1.4;text-shadow:0 0 22px rgba(212,175,82,0.22);min-height:46px;}
 .coinout .c-form{font-size:26px;color:var(--ink);letter-spacing:1px;margin-top:4px;}
+.coinout .c-form:not(:empty){cursor:pointer;position:relative;display:inline-block;}
+.coinout .c-form:not(:empty):hover{text-decoration:underline dotted;text-underline-offset:5px;}
+.coinout .c-form.copied::after{content:'Copied!';position:absolute;left:50%;bottom:-15px;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);white-space:nowrap;}
 .coinout .c-gloss{color:var(--verd);font-style:italic;margin-top:4px;min-height:22px;}
 .coinout .c-warn{color:var(--err);font-size:13px;margin-top:6px;font-style:italic;}
 .coinout .c-ipa{color:var(--ink-dim);font-family:'EB Garamond',serif;font-size:16px;margin-top:3px;min-height:20px;letter-spacing:.3px;}
@@ -374,7 +391,7 @@ a{color:var(--gold-soft);}
   <header>
     <div class="crest">Audalad</div>
     <h1>AUDALAD</h1>
-    <div class="sub">Tongue of the water-land &mdash; translator &amp; lexicon</div>
+    <div class="sub">Tongue of the water-land: translator &amp; lexicon</div>
     <div class="rule"></div>
   </header>
 
@@ -387,7 +404,7 @@ a{color:var(--gold-soft);}
   </div>
 
   <details class="guide">
-    <summary><span class="g-mark">&#10070;</span> How to use this &mdash; tap to open the guide</summary>
+    <summary><span class="g-mark">&#10070;</span> How to use this: tap to open the guide</summary>
     <div class="guide-body">
       <p class="g-intro">A complete toolkit for the Audalad language: translate in both directions, browse the dictionary, conjugate verbs, and forge brand-new words from real roots. Here's what each page does.</p>
 
@@ -396,8 +413,8 @@ a{color:var(--gold-soft);}
         <ul>
           <li>Type in either language and read the result below. Use the round <b>&#8646;</b> button to switch between <b>English &rarr; Audalad</b> and <b>Audalad &rarr; English</b>.</li>
           <li><b>Native script</b> shows the result in the Audalad writing system; <b>Word breakdown</b> shows what each word maps to and any grammar notes. Toggle either off if you don't need it.</li>
-          <li><b>Social rank</b> (English&rarr;Audalad only): set how each person is ranked relative to you &mdash; <i>Ascended (Ori')</i>, <i>Greater (Itu')</i>, <i>Equal</i> (no marker), or <i>Lesser (Ke')</i>. Pick separately for "I/we", "you", and "they/it".</li>
-          <li>Words not in the dictionary appear <span style="color:var(--err)">in red</span> &mdash; nothing is invented.</li>
+          <li><b>Social rank</b> (English&rarr;Audalad only): set how each person is ranked relative to you: <i>Ascended (Ori')</i>, <i>Greater (Itu')</i>, <i>Equal</i> (no marker), or <i>Lesser (Ke')</i>. Pick separately for "I/we", "you", and "they/it".</li>
+          <li>Words not in the dictionary appear <span style="color:var(--err)">in red</span>. Nothing is invented.</li>
           <li>Below the result you'll see the <b>pronunciation</b> in IPA. <b>Copy</b> grabs the text; <b>&#8595; Script PNG</b> saves the native script as an image for signs, books, and banners.</li>
         </ul>
       </details>
@@ -406,7 +423,7 @@ a{color:var(--gold-soft);}
         <summary>Lexicon</summary>
         <ul>
           <li>Search in English or Audalad, and filter by part of speech with the pills.</li>
-          <li>Three kinds of entries: plain <b>built-in</b> words (the core dictionary), <span class="badge community">community</span> words (published additions everyone shares), and your own <span class="badge">forged</span> words (private to your browser, and editable &mdash; fix the meaning or type, or delete them).</li>
+          <li>Three kinds of entries: plain <b>built-in</b> words (the core dictionary), <span class="badge community">community</span> words (published additions everyone shares), and your own <span class="badge">forged</span> words (private to your browser, and editable, fix the meaning or type, or delete them).</li>
           <li>Each word is shown in roman letters and native script.</li>
         </ul>
       </details>
@@ -420,16 +437,16 @@ a{color:var(--gold-soft);}
       </details>
 
       <details class="g-page">
-        <summary>Forge &mdash; make new words</summary>
+        <summary>Forge: make new words</summary>
         <ul>
           <li><b>Your name</b>: enter it once so any word you add is credited to you.</li>
           <li><b>Compound</b>: click roots to stack them into a cluster word. The final form is editable (smooth it for sound), and the <i>'</i> clusterification mark is added for you.</li>
-          <li><b>Verb</b>: type a stem &mdash; or pick a documented root from the list below it &mdash; and choose an action type, which sets the final vowel (physical <i>-u</i>, emotional <i>-a</i>, abstract <i>-i</i>&hellip;). The gloss names the root when it recognizes one, shows the adverb form, and warns if the verb already exists. Switch the list to <i>Coined verbs</i> to reuse the stem of an existing verb.</li>
+          <li><b>Verb</b>: type a stem, or pick a documented root from the list below it, and choose an action type, which sets the final vowel (physical <i>-u</i>, emotional <i>-a</i>, abstract <i>-i</i>&hellip;). The gloss names the root when it recognizes one, shows the adverb form, and warns if the verb already exists. Switch the list to <i>Coined verbs</i> to reuse the stem of an existing verb.</li>
           <li><b>Pronoun</b>: choose a rank and point of view, toggle possessive/plural, and it builds the pronoun. A full reference chart sits below.</li>
           <li><b>Derive</b>: take any word and apply a plural, possessive, negation, ordinal, tense, and more.</li>
           <li><b>Generate root</b>: roll fresh, valid-sounding roots from scratch when no existing root fits.</li>
-          <li><b>Number</b>: type any number (0&ndash;999999) and get it written in Audalad words, native script, and pronunciation &mdash; with an ordinal toggle.</li>
-          <li><b>Analyze</b>: paste any Audalad word to break it back into its roots and affixes &mdash; great for checking your own words.</li>
+          <li><b>Number</b>: type any number (0&ndash;999999) and get it written in Audalad words, native script, and pronunciation, with an ordinal toggle.</li>
+          <li><b>Analyze</b>: paste any Audalad word to break it back into its roots and affixes, great for checking your own words.</li>
           <li><b>Forged this session</b>: everything you make collects here. Hit <b>&uarr; Lexicon</b> to add a word to your dictionary, then it's translatable and searchable.</li>
         </ul>
       </details>
@@ -484,7 +501,7 @@ a{color:var(--gold-soft);}
     </div>
 
     <div class="note">
-      <b>How it reads.</b> Translation is word-by-word (Audalad is SVO, like English). The engine handles tense prefixes, plurals (<i>-ae</i>), negation (<i>-ir</i>), possessives (<i>-ad</i>) and the non-personified plural (<i>Yi-</i>). <b>Social rank</b> sets the honorific prefix on pronouns &mdash; <i>Ori'</i> ascended/divine, <i>Itu'</i> greater, equal (none), <i>Ke'</i> lesser. Words it can't find are marked in red.
+      <b>How it reads.</b> Translation is word-by-word (Audalad is SVO, like English). The engine handles tense prefixes, plurals (<i>-ae</i>), negation (<i>-ir</i>), possessives (<i>-ad</i>) and the non-personified plural (<i>Yi-</i>). <b>Social rank</b> sets the honorific prefix on pronouns: <i>Ori'</i> ascended/divine, <i>Itu'</i> greater, equal (none), <i>Ke'</i> lesser. Words it can't find are marked in red.
     </div>
   </section>
 
@@ -496,7 +513,7 @@ a{color:var(--gold-soft);}
     <div class="lexbar">
       <button class="btn ghost" id="lexExport" title="Download the words you've added as a JSON file to keep or send to the maintainer">Export forged (JSON)</button>
       <button class="btn ghost" id="lexImport" title="Load one or more JSON files and merge those words in (select several at once to batch submissions)">Import JSON</button>
-      <button class="btn ghost" id="lexPublish" title="Save your reviewed words as lexicon.json to commit alongside index.html — everyone visiting the site then sees them">Publish &rarr; lexicon.json</button>
+      <button class="btn ghost" id="lexPublish" title="Save your reviewed words as lexicon.json to commit alongside index.html, everyone visiting the site then sees them">Publish &rarr; lexicon.json</button>
       <button class="btn ghost" id="lexCsv" title="Download the whole dictionary (built-in + community + forged) as a CSV for spreadsheets">Export all (CSV)</button>
       <button class="btn ghost danger" id="lexClear" title="Permanently delete the words you've added here. Export or publish first if you want to keep them.">Clear forged</button>
       <input type="file" id="lexFile" accept="application/json,.json" multiple style="display:none">
@@ -504,6 +521,7 @@ a{color:var(--gold-soft);}
     <div class="lexstatus" id="lexStatus"></div>
     <div class="posfilter" id="posfilter"></div>
     <div class="count" id="count"></div>
+    <details class="contribs" id="contribs"></details>
     <div class="dictlist" id="dictlist"></div>
   </section>
 
@@ -550,17 +568,17 @@ a{color:var(--gold-soft);}
           </div>
           <div class="stack" id="cmpStack"></div>
           <div class="frow">
-            <input class="vinput" id="cmpFinal" placeholder="Final form (editable \u2014 smooth it for euphony)">
+            <input class="vinput" id="cmpFinal" placeholder="Final form (editable, smooth it for euphony)">
           </div>
           <div class="frow" style="margin-top:10px">
             <input class="vinput" id="cmpMean" placeholder="What does it mean?">
             <button class="btn" id="cmpSave">Forge word</button>
           </div>
         </div>
-        <div class="flabel">Roots &amp; morphemes &mdash; click to add</div>
+        <div class="flabel">Roots &amp; morphemes: click to add</div>
         <input class="morphsearch" id="morphSearch" placeholder="Filter roots by form or meaning\u2026">
         <div class="morphgrid" id="morphGrid"></div>
-        <div class="note"><b>Cluster rule.</b> New cluster words are built from original Audalad roots, and an apostrophe (<i>'</i>) is added at the end to mark that clusterification was used. The final form is editable so you can drop a vowel or soften a cluster &mdash; Audalad favors soft sounds and avoids harsh clusters.</div>
+        <div class="note"><b>Cluster rule.</b> New cluster words are built from original Audalad roots, and an apostrophe (<i>'</i>) is added at the end to mark that clusterification was used. The final form is editable so you can drop a vowel or soften a cluster. Audalad favors soft sounds and avoids harsh clusters.</div>
       </div>
 
       <!-- verb -->
@@ -573,16 +591,17 @@ a{color:var(--gold-soft);}
             <div class="c-warn" id="vbWarn"></div>
           </div>
           <div class="flabel">Verb stem</div>
-          <input class="vinput" id="vbStem" placeholder="e.g. sar, nerg, zhav\u2026 \u2014 or pick a root below">
+          <input class="vinput" id="vbStem" placeholder="e.g. sar, nerg, zhav\u2026 or pick a root below">
           <div class="flabel">Action type (sets the final vowel)</div>
           <div class="typegrid" id="vbTypes"></div>
           <div class="frow">
             <input class="vinput" id="vbMean" placeholder="Meaning (e.g. to ponder)">
+            <button class="btn ghost" id="vbConj" title="Open this verb in the Conjugate tab">Conjugate</button>
             <button class="btn" id="vbSave">Forge verb</button>
           </div>
         </div>
         <div class="flabel" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between">
-          <span id="vbPickTitle">Roots to build a stem from &mdash; click to use</span>
+          <span id="vbPickTitle">Roots to build a stem from (click to use)</span>
           <span class="pickseg">
             <button class="seg active" id="vbModeRoots">Roots</button>
             <button class="seg" id="vbModeVerbs">Coined verbs</button>
@@ -590,7 +609,7 @@ a{color:var(--gold-soft);}
         </div>
         <input class="morphsearch" id="vbSearch" placeholder="Filter roots by form or meaning\u2026">
         <div class="morphgrid" id="vbPickGrid"></div>
-        <div class="note"><b>Verb typing.</b> A verb's final vowel encodes the <i>kind</i> of action &mdash; physical <i>-u</i>, emotional <i>-a</i>, abstract <i>-i</i>, existential <i>-&#616;</i>, revealing <i>-l</i>, selfish <i>-r</i>, neutral <i>-d</i>, completory <i>-k</i>. The adverb form adds <i>-esha</i> (shown above the result). Pick a documented root for the stem or type your own &mdash; the gloss confirms the root when it recognizes one, and warns if the verb already exists.</div>
+        <div class="note"><b>Verb typing.</b> A verb's final vowel encodes the <i>kind</i> of action: physical <i>-u</i>, emotional <i>-a</i>, abstract <i>-i</i>, existential <i>-&#616;</i>, revealing <i>-l</i>, selfish <i>-r</i>, neutral <i>-d</i>, completory <i>-k</i>. The adverb form adds <i>-esha</i> (shown above the result). Pick a documented root for the stem or type your own. The gloss confirms the root when it recognizes one, and warns if the verb already exists.</div>
       </div>
 
       <!-- pronoun -->
@@ -600,6 +619,7 @@ a{color:var(--gold-soft);}
             <div class="c-native" id="pnNative"></div>
             <div class="c-form" id="pnForm"></div>
             <div class="c-gloss" id="pnGloss"></div>
+            <div class="c-warn" id="pnWarn"></div>
           </div>
           <div class="flabel">Rank (relative to you)</div>
           <div class="typegrid" id="pnRanks"></div>
@@ -615,7 +635,7 @@ a{color:var(--gold-soft);}
         </div>
         <div class="flabel" style="text-align:center">Full reference chart</div>
         <div id="pnGrid" class="gridscroll"></div>
-        <div class="note"><b>Formula:</b> (Rank)'(PoV)(Possessive)(Plurality). Rank is relative &mdash; <i>Ori'</i> is reserved for the &Acirc;udalad dynasty and gods; <i>Itu'</i> is greater, <i>Ke'</i> lesser, and equal rank takes no marker. Add <i>-ad</i> for possessive, <i>-ae</i> for plural (in that order).</div>
+        <div class="note"><b>Formula:</b> (Rank)'(PoV)(Possessive)(Plurality). Rank is relative: <i>Ori'</i> is reserved for the &Acirc;udalad dynasty and gods; <i>Itu'</i> is greater, <i>Ke'</i> lesser, and equal rank takes no marker. Add <i>-ad</i> for possessive, <i>-ae</i> for plural (in that order).</div>
       </div>
 
       <!-- derive -->
@@ -625,6 +645,7 @@ a{color:var(--gold-soft);}
             <div class="c-native" id="drNative"></div>
             <div class="c-form" id="drForm"></div>
             <div class="c-gloss" id="drGloss"></div>
+            <div class="c-warn" id="drWarn"></div>
           </div>
           <div class="flabel">Base word</div>
           <input class="vinput" id="drBase" list="allWords" placeholder="Type or pick any Audalad word\u2026">
@@ -646,6 +667,7 @@ a{color:var(--gold-soft);}
             <div class="c-native" id="rgNative"></div>
             <div class="c-form" id="rgForm"></div>
             <div class="c-gloss" id="rgGloss"></div>
+            <div class="c-warn" id="rgWarn"></div>
           </div>
           <div class="flabel">Source word</div>
           <input class="vinput" id="rgBase" list="allWords2" placeholder="A dictionary word to adapt\u2026">
@@ -660,7 +682,7 @@ a{color:var(--gold-soft);}
             <button class="btn" id="rgSave">Forge name</button>
           </div>
         </div>
-        <div class="note"><b>Regal &amp; divine names.</b> A dictionary word is taken and changed, then an <i>&Acirc;</i> is added to mark that it is a non-literal, regal and divine name &mdash; as in the <i>&Acirc;udalad</i> dynasty. <i>Ori</i> is reserved for the dynasty and gods.</div>
+        <div class="note"><b>Regal &amp; divine names.</b> A dictionary word is taken and changed, then an <i>&Acirc;</i> is added to mark that it is a non-literal, regal and divine name, as in the <i>&Acirc;udalad</i> dynasty. <i>Ori</i> is reserved for the dynasty and gods.</div>
       </div>
 
       <!-- generate -->
@@ -669,6 +691,7 @@ a{color:var(--gold-soft);}
           <div class="coinout">
             <div class="c-native" id="gnNative"></div>
             <div class="c-form" id="gnForm"></div>
+            <div class="c-warn" id="gnWarn"></div>
           </div>
           <div class="frow" style="justify-content:center">
             <button class="btn" id="gnRoll">Cast new roots</button>
@@ -710,7 +733,7 @@ a{color:var(--gold-soft);}
             <button class="btn ghost" id="numPng" title="Save the native script as a PNG">&#8595; PNG</button>
           </div>
         </div>
-        <div class="note"><b>Built from the documented number words</b> &mdash; units, the tens (<i>Dinasemi</i>&hellip;<i>Senesemi</i>), <i>Hamdekali</i> (100) and <i>Numoral</i> (1000), largest part first. The document doesn't specify how the parts join, so this uses a plain additive layout; treat multi-part numbers as a sensible default rather than canon.</div>
+        <div class="note"><b>Built from the documented number words</b>: units, the tens (<i>Dinasemi</i>&hellip;<i>Senesemi</i>), <i>Hamdekali</i> (100) and <i>Numoral</i> (1000), largest part first. The document doesn't specify how the parts join, so this uses a plain additive layout; treat multi-part numbers as a sensible default rather than canon.</div>
       </div>
 
 
@@ -726,15 +749,15 @@ a{color:var(--gold-soft);}
   <!-- GRAMMAR / THE LANGUAGE -->
   <section class="view" id="grammar">
     <div class="gram">
-      <p class="lede">Everything that makes Audalad work, gathered in one place &mdash; how it sounds, how it's written, and how words bend to carry tense, number, possession, and rank. Every rule and form below is exactly what the tools on the other tabs run on.</p>
+      <p class="lede">Everything that makes Audalad work, gathered in one place: how it sounds, how it's written, and how words bend to carry tense, number, possession, and rank. Every rule and form below is exactly what the tools on the other tabs run on.</p>
 
       <section class="g-sec">
         <h2>The writing system</h2>
-        <p class="h-sub">A bespoke script &mdash; Audalad v1 (juno)</p>
+        <p class="h-sub">A bespoke script: Audalad v1 (juno)</p>
         <div class="card">
           <p class="body">Audalad is written in its own alphabet, shown throughout the app in <span class="scr">gold</span>. The roman spelling you type is just a transcription; the native glyphs are the real thing.</p>
           <ul class="clean">
-            <li>The script has a glyph for each base letter <b>a&ndash;z</b>. It has no sign for <b>c</b> or <b>w</b>, and the apostrophe is not drawn &mdash; these are silent in the written form.</li>
+            <li>The script has a glyph for each base letter <b>a&ndash;z</b>. It has no sign for <b>c</b> or <b>w</b>, and the apostrophe is not drawn. These are silent in the written form.</li>
             <li>The accent marks on <b>&aacute;</b>, <b>&eacute;</b>, <b>&uacute;</b> mark <b>stress only</b>. They don't change the vowel and aren't separately written; <span class="au">Zh&eacute;ar</span> and <span class="au">zhear</span> are the same syllable, just stressed.</li>
           </ul>
         </div>
@@ -744,7 +767,7 @@ a{color:var(--gold-soft);}
         <h2>Sounds</h2>
         <p class="h-sub">The documented phonetic inventory</p>
         <div class="card">
-          <p class="body" style="margin-bottom:8px;"><b>Vowels</b> &mdash; accents are stress, not new sounds.</p>
+          <p class="body" style="margin-bottom:8px;"><b>Vowels</b>: accents are stress, not new sounds.</p>
           <div class="sounds">
             <div class="snd"><div class="s-lett">a<span class="s-scr">a</span></div><div class="s-ipa">/a/</div></div>
             <div class="snd"><div class="s-lett">e<span class="s-scr">e</span></div><div class="s-ipa">/&#603;/</div></div>
@@ -805,14 +828,14 @@ a{color:var(--gold-soft);}
             <li>Personified &rarr; suffix <b>-ae</b>. <span class="ex"><span class="au">Nadu</span> <span class="en">noble</span> <span class="arrow">&rarr;</span> <span class="au">Naduae</span> <span class="en">nobles</span></span></li>
             <li>Non-personified &rarr; prefix <b>Yi-</b>. <span class="ex"><span class="au">Utal</span> <span class="en">house</span> <span class="arrow">&rarr;</span> <span class="au">Yiutal</span> <span class="en">houses</span></span></li>
           </ul>
-          <p class="body" style="margin-top:14px;"><b>Possessive / adjective</b> &mdash; suffix <b>-ad</b> ("of the&hellip;"): <span class="ex"><span class="au">Shur</span> <span class="en">gold</span> <span class="arrow">&rarr;</span> <span class="au">Shurad</span> <span class="en">golden / of gold</span></span></p>
+          <p class="body" style="margin-top:14px;"><b>Possessive / adjective</b>: suffix <b>-ad</b> ("of the&hellip;"): <span class="ex"><span class="au">Shur</span> <span class="en">gold</span> <span class="arrow">&rarr;</span> <span class="au">Shurad</span> <span class="en">golden / of gold</span></span></p>
           <p class="body" style="margin:18px 0 8px;"><b>Pronouns</b> start from four bases and take the same <b>-ad</b> (possessive) and <b>-ae</b> (plural) endings:</p>
           <table class="tight">
             <tr><th>Person</th><th>Base</th><th>Possessive&nbsp;(-ad)</th><th>Plural&nbsp;(-ae)</th></tr>
-            <tr><td class="en">1st &mdash; I / me</td><td><span class="au">In</span></td><td><span class="au">Inad</span> <span class="en">my</span></td><td><span class="au">Inae</span> <span class="en">we</span></td></tr>
-            <tr><td class="en">2nd &mdash; you</td><td><span class="au">Ir</span></td><td><span class="au">Irad</span> <span class="en">your</span></td><td><span class="au">Irae</span> <span class="en">you all</span></td></tr>
-            <tr><td class="en">3rd &mdash; he / she / they</td><td><span class="au">Enu</span></td><td><span class="au">Enuad</span> <span class="en">his/her</span></td><td><span class="au">Enuae</span> <span class="en">they</span></td></tr>
-            <tr><td class="en">3rd inanimate &mdash; it</td><td><span class="au">Ki</span></td><td><span class="au">Kiad</span> <span class="en">its</span></td><td><span class="au">Kiae</span> <span class="en">they</span></td></tr>
+            <tr><td class="en">1st: I / me</td><td><span class="au">In</span></td><td><span class="au">Inad</span> <span class="en">my</span></td><td><span class="au">Inae</span> <span class="en">we</span></td></tr>
+            <tr><td class="en">2nd: you</td><td><span class="au">Ir</span></td><td><span class="au">Irad</span> <span class="en">your</span></td><td><span class="au">Irae</span> <span class="en">you all</span></td></tr>
+            <tr><td class="en">3rd: he / she / they</td><td><span class="au">Enu</span></td><td><span class="au">Enuad</span> <span class="en">his/her</span></td><td><span class="au">Enuae</span> <span class="en">they</span></td></tr>
+            <tr><td class="en">3rd inanimate: it</td><td><span class="au">Ki</span></td><td><span class="au">Kiad</span> <span class="en">its</span></td><td><span class="au">Kiae</span> <span class="en">they</span></td></tr>
           </table>
           <p class="note">Possessive and plural stack: <span class="au">Inadae</span> = our / ours.</p>
         </div>
@@ -827,15 +850,15 @@ a{color:var(--gold-soft);}
             <tr><th>Rank</th><th>Prefix</th><th>Used for</th><th>Example</th></tr>
             <tr><td class="en">Ascended</td><td><span class="au">Ori&rsquo;</span></td><td class="en">the divine / the dynasty</td><td><span class="au">Ori&rsquo;Enu</span></td></tr>
             <tr><td class="en">Greater</td><td><span class="au">Itu&rsquo;</span></td><td class="en">someone above you</td><td><span class="au">Itu&rsquo;Ir</span></td></tr>
-            <tr><td class="en">Equal</td><td><span class="en">&mdash; none &mdash;</span></td><td class="en">a peer</td><td><span class="au">Enu</span></td></tr>
+            <tr><td class="en">Equal</td><td><span class="en">(none)</span></td><td class="en">a peer</td><td><span class="au">Enu</span></td></tr>
             <tr><td class="en">Lesser</td><td><span class="au">Ke&rsquo;</span></td><td class="en">someone below you / humble self</td><td><span class="au">Ke&rsquo;In</span></td></tr>
           </table>
-          <p class="note">On Translate, the <b>Social rank</b> controls apply these automatically &mdash; set rank separately for "I/we", "you", and "they/it".</p>
+          <p class="note">On Translate, the <b>Social rank</b> controls apply these automatically, set rank separately for "I/we", "you", and "they/it".</p>
         </div>
       </section>
 
       <section class="g-sec">
-        <h2>Verbs &mdash; tense</h2>
+        <h2>Verbs: tense</h2>
         <p class="h-sub">Tense is a prefix; negation is a suffix</p>
         <div class="card">
           <p class="body">A verb's tense is carried by a <b>prefix</b> on the front. Audalad splits time finely, with separate near and far past/future plus a continuous.</p>
@@ -848,16 +871,16 @@ a{color:var(--gold-soft);}
             <tr><td class="en">Near-future</td><td><span class="au">L&uacute;ar-</span></td><td class="en">I will soon&hellip;</td><td><span class="au">L&uacute;arzharin</span></td></tr>
             <tr><td class="en">Far-future</td><td><span class="au">L&uacute;-</span></td><td class="en">I will eventually&hellip;</td><td><span class="au">L&uacute;zharin</span></td></tr>
           </table>
-          <p class="body" style="margin-top:14px;"><b>Negation / inverse</b> &mdash; suffix <b>-ir</b>: <span class="ex"><span class="au">Zh&eacute;arzharin</span> <span class="arrow">&rarr;</span> <span class="au">Zh&eacute;arzharinir</span> <span class="en">I do not love</span></span></p>
+          <p class="body" style="margin-top:14px;"><b>Negation / inverse</b>: suffix <b>-ir</b>: <span class="ex"><span class="au">Zh&eacute;arzharin</span> <span class="arrow">&rarr;</span> <span class="au">Zh&eacute;arzharinir</span> <span class="en">I do not love</span></span></p>
           <p class="note">The <span class="crosslink" onclick="document.querySelector('.tab[data-view=&quot;conj&quot;]').click()">Conjugate</span> tab lays out all six tenses plus the negated form for any verb.</p>
         </div>
       </section>
 
       <section class="g-sec">
-        <h2>Verbs &mdash; action class</h2>
+        <h2>Verbs: action class</h2>
         <p class="h-sub">The final vowel says what kind of action it is</p>
         <div class="card">
-          <p class="body">A verb's <b>final vowel</b> classifies the action &mdash; physical, emotional, abstract, and so on. Forging a verb means choosing this ending.</p>
+          <p class="body">A verb's <b>final vowel</b> classifies the action: physical, emotional, abstract, and so on. Forging a verb means choosing this ending.</p>
           <table class="tight">
             <tr><th>Ending</th><th>Class</th><th>Ending</th><th>Class</th></tr>
             <tr><td><span class="au">-i</span></td><td class="en">abstract</td><td><span class="au">-l</span></td><td class="en">revealing</td></tr>
@@ -884,7 +907,7 @@ a{color:var(--gold-soft);}
           </table>
           <ul class="clean" style="margin-top:14px;">
             <li><b>Ten</b> is <span class="au">Se&rsquo;din</span>. <b>11&ndash;19</b> = ten + the unit: <span class="ex"><span class="au">Se&rsquo;din Nen</span> <span class="en">11</span></span></li>
-            <li><b>Tens</b> have their own words &mdash; <span class="au">Dinasemi</span> (20), <span class="au">Viridasemi</span> (30), <span class="au">Taradasemi</span> (40), <span class="au">Shumiasemi</span> (50), <span class="au">Karunasemi</span> (60), <span class="au">Musosemi</span> (70), <span class="au">Harasemi</span> (80), <span class="au">Senesemi</span> (90). <span class="ex"><span class="au">Dinasemi Virid</span> <span class="en">23</span></span></li>
+            <li><b>Tens</b> have their own words: <span class="au">Dinasemi</span> (20), <span class="au">Viridasemi</span> (30), <span class="au">Taradasemi</span> (40), <span class="au">Shumiasemi</span> (50), <span class="au">Karunasemi</span> (60), <span class="au">Musosemi</span> (70), <span class="au">Harasemi</span> (80), <span class="au">Senesemi</span> (90). <span class="ex"><span class="au">Dinasemi Virid</span> <span class="en">23</span></span></li>
             <li><b>Hundred</b> is <span class="au">Hamdekali</span>; <b>thousand</b> is <span class="au">Numoral</span>.</li>
             <li><b>Ordinals</b> add <b>-dir</b> ("the&hellip;th"); common ones are also set in the lexicon (<span class="au">Nendiret</span> first, <span class="au">Dindiret</span> second&hellip;).</li>
           </ul>
@@ -895,9 +918,9 @@ a{color:var(--gold-soft);}
       <section class="g-sec">
         <h2>Putting it together</h2>
         <div class="card">
-          <p class="body">Most words follow one pattern: a <b>root</b>, optionally clustered with others by <b>&rsquo;</b>, then endings stacked on &mdash; tense prefix &rarr; root &rarr; class vowel &rarr; <b>-ad</b> / <b>-ae</b> / <b>-ir</b> as needed, with a rank prefix on pronouns.</p>
+          <p class="body">Most words follow one pattern: a <b>root</b>, optionally clustered with others by <b>&rsquo;</b>, then endings stacked on: tense prefix &rarr; root &rarr; class vowel &rarr; <b>-ad</b> / <b>-ae</b> / <b>-ir</b> as needed, with a rank prefix on pronouns.</p>
           <div class="formula"><span class="au">Zh&eacute;ar-</span><span class="op">+</span><span class="au">zharin</span><span class="op">+</span><span class="au">-ir</span> <span class="op">=</span> <span class="au">Zh&eacute;arzharinir</span> <span class="en">&nbsp;I do not love</span></div>
-          <p class="note">The <span class="crosslink" onclick="document.querySelector('.tab[data-view=&quot;forge&quot;]').click()">Forge &rarr; Analyze</span> tool runs this in reverse &mdash; paste any word to break it back into roots and affixes. Nothing in these tools is invented; every form comes from the rules above.</p>
+          <p class="note">The <span class="crosslink" onclick="document.querySelector('.tab[data-view=&quot;forge&quot;]').click()">Forge &rarr; Analyze</span> tool runs this in reverse, paste any word to break it back into roots and affixes. Nothing in these tools is invented; every form comes from the rules above.</p>
         </div>
       </section>
 
@@ -958,7 +981,7 @@ function toNative(s){
   return s.normalize('NFD')
     .replace(/[\u0300-\u036f]/g,'')   // strip combining accents
     .replace(/[\u2019'\u02bc]/g,'')   // drop apostrophes
-    .replace(/[CWcw]/g,'')            // font has no glyph for c/w — drop from the script
+    .replace(/[CWcw]/g,'')            // font has no glyph for c/w, drop from the script
     .replace(/[^A-Za-z .?\n]/g,'');   // keep only mappable glyphs
 }
 
@@ -990,6 +1013,19 @@ function copyText(text, btn){
   const done=()=>{ if(btn){ const o=btn.textContent; btn.textContent='Copied!'; setTimeout(()=>{btn.textContent=o;},1100); } };
   if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(done); }
   else { try{ const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done(); }catch(e){} }
+}
+function enableForgeCopy(){
+  document.querySelectorAll('.coinout .c-form').forEach(el=>{
+    el.title='Click to copy';
+    el.addEventListener('click',()=>{
+      const txt=el.textContent.trim();
+      if(!txt) return;
+      copyText(txt);
+      el.classList.add('copied');
+      clearTimeout(el.__cpT);
+      el.__cpT=setTimeout(()=>el.classList.remove('copied'),1100);
+    });
+  });
 }
 
 /* ---------- native-script PNG export ---------- */
@@ -1051,7 +1087,7 @@ async function loadOfficial(){
       officialWords = arr.filter(x=>x&&x.au).map(x=>({au:String(x.au), en:String(x.en||'(unglossed)'), pos:x.pos||'n', by:x.by||'', official:true}));
       rebuildMaps(); renderDict(); buildVerbList(); fillWordDatalists(); updateLexStatus();
     }
-  }catch(e){ /* no lexicon.json present, or opened from disk — fine */ }
+  }catch(e){ /* no lexicon.json present, or opened from disk, fine */ }
 }
 function lex(){ return DATA.concat(officialWords, customWords); }
 
@@ -1290,7 +1326,7 @@ function render(){
   str=str.trim();
 
   if(dir==='en2au'){
-    // native line shows ONLY translated Audalad words — never untranslated English fallback
+    // native line shows ONLY translated Audalad words, never untranslated English fallback
     let nparts=[];
     res.tokens.forEach(t=>{
       if(t.punct){ nparts.push(t.punct); return; }
@@ -1451,6 +1487,25 @@ function renderDict(){
   dictlist.querySelectorAll('.e-del').forEach(btn=>btn.addEventListener('click',()=>{
     customWords.splice(+btn.dataset.ci,1); lexiconChanged();
   }));
+  renderContribs();
+}
+function renderContribs(){
+  const el=document.getElementById('contribs'); if(!el) return;
+  const counts={};
+  lex().forEach(d=>{ if(d.by){ const n=String(d.by).trim(); if(n) counts[n]=(counts[n]||0)+1; } });
+  const names=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]||a.localeCompare(b));
+  if(!names.length){ el.style.display='none'; el.innerHTML=''; return; }
+  el.style.display='';
+  const total=names.reduce((s,n)=>s+counts[n],0);
+  const merit=c=> c>=100?'<span class="cc-merit nerd">Nerd</span>': c>=20?'<span class="cc-merit">Lingua</span>':'';
+  let chips='';
+  names.forEach(n=>{
+    const c=counts[n];
+    chips+='<span class="contribchip"><span class="cc-n">'+escapeHtml(n)+'</span><span class="cc-c">'+c+' word'+(c===1?'':'s')+'</span>'+merit(c)+'</span>';
+  });
+  el.innerHTML='<summary>Contributors \u00b7 '+names.length+'</summary>'+
+    '<div class="contribrow">'+chips+'</div>'+
+    '<div class="contribnote">'+total+' attributed word'+(total===1?'':'s')+' \u00b7 merit tiers: Lingua at 20, Nerd at 100.</div>';
 }
 function posOptions(sel){
   return Object.keys(POS_LABEL).map(k=>'<option value="'+k+'"'+(k===sel?' selected':'')+'>'+POS_LABEL[k]+'</option>').join('');
@@ -1472,15 +1527,17 @@ function buildVerbList(){
   const dl=document.getElementById('verbList');
   dl.innerHTML='';
   lex().filter(d=>d.pos==='v').sort((a,b)=>a.au.localeCompare(b.au)).forEach(d=>{
-    const o=document.createElement('option');o.value=d.au;o.textContent=d.au+' — '+d.en;dl.appendChild(o);
+    const o=document.createElement('option');o.value=d.au;o.textContent=d.au+' · '+d.en;dl.appendChild(o);
   });
 }
+let conjHint=null; // {form, meaning} for a handed-off verb not yet in the lexicon
 function renderConj(){
   const v=verbInput.value.trim();
   conjBody.innerHTML='';
   if(!v) return;
   const rec=auToEn[v.toLowerCase()];
-  const meaning=rec?rec.en.replace(/^to /,''):v.toLowerCase();
+  let meaning=rec?rec.en.replace(/^to /,''):v.toLowerCase();
+  if(!rec && conjHint && conjHint.form===v.toLowerCase() && conjHint.meaning) meaning=conjHint.meaning;
   TENSES.forEach(([name,prefix,glossPre])=>{
     const form=prefix+v.charAt(0).toLowerCase()+v.slice(1);
     const tr=document.createElement('tr');
@@ -1497,6 +1554,14 @@ function renderConj(){
   conjBody.appendChild(tr);
 }
 verbInput.addEventListener('input',renderConj);
+function gotoConjugate(form, meaning){
+  if(!form) return;
+  conjHint = meaning ? {form:form.toLowerCase(), meaning:meaning.replace(/^to /,'').trim()} : null;
+  const tab=document.querySelector('.tab[data-view="conj"]'); if(tab) tab.click();
+  verbInput.value=form;
+  renderConj();
+  verbInput.focus();
+}
 
 /* ---------- tabs ---------- */
 document.querySelectorAll('.tab').forEach(t=>{
@@ -1513,6 +1578,21 @@ function nativeSpan(s){return '<span>'+escapeHtml(toNative(s))+'</span>';}
 function existsInLexicon(form){
   const k=form.replace(/['\u2019\u02bc]/g,'').toLowerCase();
   return lex().find(d=>d.au.replace(/['\u2019\u02bc]/g,'').toLowerCase()===k);
+}
+function knownMeaning(form){
+  // recognise a base as either a dictionary word or a documented root (exact match)
+  const f=(form||'').trim();
+  if(!f) return '';
+  const rec=auToEn[f.toLowerCase()];
+  if(rec) return 'from "'+rec.en+'"';
+  const k=f.replace(/['\u2019]/g,'').toLowerCase();
+  const r=MORPH.find(m=>m.f.replace(/['\u2019]/g,'').toLowerCase()===k);
+  if(r) return 'from root '+r.f+' \u201c'+r.m.split(/[\/,]/)[0].trim()+'\u201d';
+  return '';
+}
+function dupWarnText(form){
+  const hit=form?existsInLexicon(form):null;
+  return hit? 'Already in the lexicon: '+hit.au+' = '+hit.en : '';
 }
 
 /* coinage store (in-memory only) */
@@ -1541,7 +1621,7 @@ function renderCoins(){
       : '<button class="cr-promote" title="Add to lexicon" data-i="'+i+'">&uarr; Lexicon</button>';
     row.innerHTML='<span class="cr-native">'+escapeHtml(toNative(c.form))+'</span>'+
       '<span class="cr-form">'+escapeHtml(c.form)+'</span>'+
-      '<span class="cr-mean">'+escapeHtml(c.mean||'\u2014')+' <small>'+escapeHtml(c.kind)+(c.note?' \u00b7 '+escapeHtml(c.note):'')+'</small></span>'+
+      '<span class="cr-mean">'+escapeHtml(c.mean||'\u00b7')+' <small>'+escapeHtml(c.kind)+(c.note?' \u00b7 '+escapeHtml(c.note):'')+'</small></span>'+
       promo+
       '<button class="cr-del" title="Remove" data-i="'+i+'">&times;</button>';
     el.appendChild(row);
@@ -1550,7 +1630,7 @@ function renderCoins(){
   el.querySelectorAll('.cr-promote').forEach(b=>b.addEventListener('click',()=>promoteCoinage(+b.dataset.i)));
 }
 function coinText(){
-  return coinages.map(c=>c.form+' \u2014 '+(c.mean||'?')+'  ['+c.kind+(c.note?'; '+c.note:'')+']').join('\n');
+  return coinages.map(c=>c.form+' \u00b7 '+(c.mean||'?')+'  ['+c.kind+(c.note?'; '+c.note:'')+']').join('\n');
 }
 document.getElementById('coinCopy').addEventListener('click',()=>{
   if(!coinages.length) return;
@@ -1742,8 +1822,8 @@ function setVbMode(mode){
   document.getElementById('vbModeRoots').classList.toggle('active',mode==='roots');
   document.getElementById('vbModeVerbs').classList.toggle('active',mode==='verbs');
   document.getElementById('vbPickTitle').innerHTML = mode==='roots'
-    ? 'Roots to build a stem from &mdash; click to use'
-    : 'Verbs already coined &mdash; click to reuse the stem';
+    ? 'Roots to build a stem from (click to use)'
+    : 'Verbs already coined (click to reuse the stem)';
   document.getElementById('vbSearch').placeholder = mode==='roots'
     ? 'Filter roots by form or meaning\u2026'
     : 'Filter existing verbs\u2026';
@@ -1785,6 +1865,11 @@ document.getElementById('vbStem').addEventListener('input',updateVb);
 document.getElementById('vbSearch').addEventListener('input',e=>renderVbPick(e.target.value));
 document.getElementById('vbModeRoots').addEventListener('click',()=>setVbMode('roots'));
 document.getElementById('vbModeVerbs').addEventListener('click',()=>setVbMode('verbs'));
+document.getElementById('vbConj').addEventListener('click',()=>{
+  const form=buildVerb();
+  if(!form){ document.getElementById('vbStem').focus(); return; }
+  gotoConjugate(form, document.getElementById('vbMean').value.trim());
+});
 document.getElementById('vbSave').addEventListener('click',()=>{
   const form=buildVerb();const mean=document.getElementById('vbMean').value.trim();
   if(!form) return;
@@ -1805,23 +1890,34 @@ const AFFIXES=[
   {label:'Lúar- future',fn:b=>'Lúar'+b.toLowerCase(),note:'near-future tense'},
 ];
 let drResult=null;
+function drBaseChanged(){
+  // a new base invalidates any previously applied affix result
+  drResult=null;
+  const base=document.getElementById('drBase').value.trim();
+  document.getElementById('drForm').textContent='';
+  document.getElementById('drNative').textContent='';
+  document.getElementById('drGloss').textContent=knownMeaning(base);
+  document.getElementById('drWarn').textContent='';
+}
 function renderAffixes(){
   const g=document.getElementById('drAffixes');g.innerHTML='';
   AFFIXES.forEach(a=>{
     const b=document.createElement('button');b.className='affixbtn';b.textContent=a.label;
     b.addEventListener('click',()=>{
       const base=document.getElementById('drBase').value.trim();
-      if(!base) return;
+      if(!base){ document.getElementById('drBase').focus(); return; }
       const form=a.fn(base);
       drResult={form,note:a.note};
       document.getElementById('drForm').textContent=form;
       document.getElementById('drNative').textContent=toNative(form);
-      const rec=auToEn[base.toLowerCase()];
-      document.getElementById('drGloss').textContent=a.note+(rec?' \u00b7 from "'+rec.en+'"':'');
+      const km=knownMeaning(base);
+      document.getElementById('drGloss').textContent=a.note+(km?' \u00b7 '+km:'');
+      document.getElementById('drWarn').textContent=dupWarnText(form);
     });
     g.appendChild(b);
   });
 }
+document.getElementById('drBase').addEventListener('input',drBaseChanged);
 document.getElementById('drSave').addEventListener('click',()=>{
   if(!drResult) return;
   const mean=document.getElementById('drMean').value.trim();
@@ -1846,8 +1942,9 @@ function updateRg(){
   document.getElementById('rgForm').textContent=form;
   document.getElementById('rgNative').textContent=toNative(form);
   const base=document.getElementById('rgBase').value.trim();
-  const rec=auToEn[base.toLowerCase()];
-  document.getElementById('rgGloss').textContent= form? ('regal / divine name'+(rec?' \u00b7 adapted from "'+rec.en+'"':'')) : '';
+  const km=knownMeaning(base);
+  document.getElementById('rgGloss').textContent= form? ('regal / divine name'+(km?' \u00b7 adapted '+km:'')) : '';
+  document.getElementById('rgWarn').textContent=dupWarnText(form);
 }
 document.getElementById('rgSave').addEventListener('click',()=>{
   const form=regalForm();const mean=document.getElementById('rgMean').value.trim();
@@ -1878,6 +1975,10 @@ function genRoot(){
 let gnSelected='';
 function rollRoots(){
   const list=document.getElementById('gnList');list.innerHTML='';
+  gnSelected='';
+  document.getElementById('gnForm').textContent='';
+  document.getElementById('gnNative').textContent='';
+  document.getElementById('gnWarn').textContent='';
   const seen={};
   let n=0;
   while(n<9){
@@ -1893,6 +1994,7 @@ function rollRoots(){
       gnSelected=r;
       document.getElementById('gnForm').textContent=r;
       document.getElementById('gnNative').textContent=toNative(r);
+      document.getElementById('gnWarn').textContent=dupWarnText(r);
       list.querySelectorAll('.morphbtn').forEach(x=>x.classList.remove('typebtn','active'));
       b.classList.add('active');
     });
@@ -1914,7 +2016,7 @@ function fillWordDatalists(){
     if(!dl) return;
     dl.innerHTML='';
     lex().slice().sort((a,b)=>a.au.localeCompare(b.au)).forEach(d=>{
-      const o=document.createElement('option');o.value=d.au;o.textContent=d.au+' \u2014 '+d.en;dl.appendChild(o);
+      const o=document.createElement('option');o.value=d.au;o.textContent=d.au+' \u00b7 '+d.en;dl.appendChild(o);
     });
   });
 }
@@ -1922,6 +2024,7 @@ function fillWordDatalists(){
 function initForge(){
   renderMorphGrid('');renderCmp();
   renderVbTypes();updateVb();setVbMode('roots');
+  enableForgeCopy();
   renderAffixes();
   fillWordDatalists();
   rollRoots();
@@ -1932,7 +2035,7 @@ function updateLexStatus(){
   const el=document.getElementById('lexStatus'); if(!el) return;
   let msg = customWords.length ? customWords.length+' forged word'+(customWords.length===1?'':'s')+' added to your lexicon.' : 'No forged words added yet.';
   if(officialWords.length) msg = officialWords.length+' community word'+(officialWords.length===1?'':'s')+' loaded. '+msg;
-  if(!storageOK) msg += ' \u26a0 Storage is blocked here \u2014 changes are session-only, so export to keep them.';
+  if(!storageOK) msg += ' \u26a0 Storage is blocked here. Changes are session-only, so export to keep them.';
   else if(customWords.length) msg += ' Saved in this browser.';
   el.textContent=msg;
 }
@@ -1950,7 +2053,7 @@ document.getElementById('lexExport').addEventListener('click',()=>{
 document.getElementById('lexPublish').addEventListener('click',()=>{
   if(!customWords.length){ flashStatus('Forge or import some words first, then publish.'); return; }
   downloadFile('lexicon.json', JSON.stringify(cleanForExport(customWords),null,2), 'application/json');
-  flashStatus('Saved lexicon.json \u2014 commit it next to index.html to publish for everyone.');
+  flashStatus('Saved lexicon.json. Commit it next to index.html to publish for everyone.');
 });
 document.getElementById('lexCsv').addEventListener('click',()=>{
   const rows=[['audalad','english','pos','source','proposed_by']];
@@ -2127,7 +2230,7 @@ function analyze(word){
   // gloss
   const rootGloss=stemSegs.map(s=>s.m).join(' + ');
   const affGloss=pre.concat(suf).map(s=>s.role).join(', ');
-  return {chain, gloss:(affGloss? affGloss+' \u2014 ':'')+rootGloss};
+  return {chain, gloss:(affGloss? affGloss+' \u00b7 ':'')+rootGloss};
 }
 function renderAnalyze(){
   const w=document.getElementById('anInput').value.trim();
@@ -2143,7 +2246,7 @@ function renderAnalyze(){
       '</div>';
   });
   html+='</div>';
-  html+='<div class="angloss"><div class="ag-lbl">Reading</div><div class="ag-text">'+escapeHtml(res.gloss||'\u2014')+'</div></div>';
+  html+='<div class="angloss"><div class="ag-lbl">Reading</div><div class="ag-text">'+escapeHtml(res.gloss||'\u00b7')+'</div></div>';
   out.innerHTML=html;
 }
 document.getElementById('anInput').addEventListener('input',renderAnalyze);
@@ -2166,11 +2269,12 @@ function renderPronoun(){
   document.getElementById('pnForm').textContent=f;
   document.getElementById('pnNative').textContent=toNative(f);
   document.getElementById('pnGloss').textContent=pronounGloss();
+  document.getElementById('pnWarn').textContent=dupWarnText(f);
 }
 function prBtn(item,active,label,form){
   const b=document.createElement('button');
   b.className='typebtn'+(active?' active':'');
-  b.innerHTML='<div class="ty-v" style="font-family:inherit;color:var(--gold);font-size:17px">'+escapeHtml(form||'\u2014')+'</div><div class="ty-l">'+escapeHtml(label)+'</div>';
+  b.innerHTML='<div class="ty-v" style="font-family:inherit;color:var(--gold);font-size:17px">'+escapeHtml(form||'\u00b7')+'</div><div class="ty-l">'+escapeHtml(label)+'</div>';
   return b;
 }
 function renderPrButtons(){
@@ -2181,7 +2285,7 @@ function renderPrButtons(){
 }
 function renderPrGrid(){
   let h='<table class="ctable"><thead><tr><th>PoV \\ Rank</th>';
-  PR_RANKS.forEach(r=>h+='<th>'+r.label+'<br><small>'+(r.prefix||'\u2014')+'</small></th>');
+  PR_RANKS.forEach(r=>h+='<th>'+r.label+'<br><small>'+(r.prefix||'\u00b7')+'</small></th>');
   h+='</tr></thead><tbody>';
   PR_POVS.forEach(p=>{
     h+='<tr><td class="c-tense">'+p.label+' <small>('+p.form+')</small></td>';
