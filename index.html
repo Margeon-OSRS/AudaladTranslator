@@ -238,6 +238,32 @@ select,.vinput{
 .lexbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:8px;}
 .ctable td{overflow-wrap:anywhere;}
 .lexstatus{text-align:center;color:var(--ink-dim);font-size:12px;font-style:italic;margin-bottom:12px;min-height:16px;}
+.scratch{max-width:760px;margin:0 auto 16px;border:1px solid var(--line);border-radius:6px;background:rgba(212,175,82,0.03);}
+.scratch>summary{cursor:pointer;list-style:none;padding:9px 14px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-soft);}
+.scratch>summary::-webkit-details-marker{display:none;}
+.scratch>summary::before{content:'\25B8 ';color:var(--gold-dim);}
+.scratch[open]>summary::before{content:'\25BE ';}
+.scratch>summary:hover{color:var(--gold);}
+.scratch>summary small{font-family:'EB Garamond',serif;text-transform:none;letter-spacing:0;font-size:12px;font-style:italic;color:var(--ink-dim);margin-left:8px;}
+.scratch-body{padding:4px 14px 14px;}
+.scratch-hint{color:var(--ink-dim);font-size:13px;line-height:1.6;margin:6px 0 10px;}
+.scratch-hint code{background:var(--panel2);border:1px solid var(--line);border-radius:3px;padding:1px 5px;color:var(--gold-soft);font-size:12px;}
+.scratch-ta{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:4px;color:var(--ink);padding:11px 13px;font-family:'EB Garamond',serif;font-size:15px;line-height:1.7;outline:none;resize:vertical;}
+.scratch-ta:focus{border-color:var(--gold-dim);}
+.scratch-preview{margin:10px 0 0;display:flex;flex-direction:column;gap:5px;}
+.sp-row{display:flex;align-items:baseline;gap:9px;font-size:14px;padding:5px 10px;border:1px solid var(--line);border-radius:4px;background:var(--panel2);}
+.sp-form{color:var(--gold);overflow-wrap:anywhere;}
+.sp-native{font-family:'AudaladScript';color:var(--gold-soft);font-size:19px;opacity:.85;}
+.sp-mean{color:var(--ink);flex:1;overflow-wrap:anywhere;}
+.sp-pos{color:var(--ink-dim);font-style:italic;font-size:12px;}
+.sp-flag{font-size:10px;font-family:'Cinzel',serif;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;}
+.sp-row.ready .sp-flag{color:var(--verd);}
+.sp-row.dupe{opacity:.65;}
+.sp-row.dupe .sp-flag{color:var(--gold-soft);}
+.sp-row.bad{border-color:var(--err);}
+.sp-row.bad .sp-flag{color:var(--err);}
+.scratch-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.scratch-summary-line{color:var(--ink-dim);font-size:12px;font-style:italic;padding:6px 2px;}
 .btn.danger{}
 .btn.ghost.danger:hover{border-color:var(--err);color:var(--err);}
 .entry.custom{border-color:var(--gold-dim);box-shadow:inset 0 0 0 1px rgba(212,175,82,0.12);}
@@ -413,6 +439,7 @@ a{color:var(--gold-soft);}
         <ul>
           <li>Type in either language and read the result below. Use the round <b>&#8646;</b> button to switch between <b>English &rarr; Audalad</b> and <b>Audalad &rarr; English</b>.</li>
           <li><b>Native script</b> shows the result in the Audalad writing system; <b>Word breakdown</b> shows what each word maps to and any grammar notes. Toggle either off if you don't need it.</li>
+          <li><b>Tense is read from the English.</b> A plain verb is set in the <i>present</i> (<i>Zhéar-</i>); <i>thought</i> or <i>-ed</i> gives near-past (<i>Ásar-</i>), <i>used to</i> the far-past (<i>Ás-</i>), <i>am/is/are &hellip;-ing</i> the continuous (<i>Zhé-</i>), and <i>will</i> the near-future (<i>Lúar-</i>). Helper words like <i>will</i> and <i>used to</i> are folded into the verb, not left loose. After <i>to</i>, the verb keeps its base form. The form lands in the word breakdown so you can see which tense was chosen. (Far-future <i>Lú-</i> has no English cue: reach for the Conjugate page when you need it.)</li>
           <li><b>Social rank</b> (English&rarr;Audalad only): set how each person is ranked relative to you: <i>Ascended (Ori')</i>, <i>Greater (Itu')</i>, <i>Equal</i> (no marker), or <i>Lesser (Ke')</i>. Pick separately for "I/we", "you", and "they/it".</li>
           <li>Words not in the dictionary appear <span style="color:var(--err)">in red</span>. Nothing is invented.</li>
           <li>Below the result you'll see the <b>pronunciation</b> in IPA. <b>Copy</b> grabs the text; <b>&#8595; Script PNG</b> saves the native script as an image for signs, books, and banners.</li>
@@ -425,6 +452,7 @@ a{color:var(--gold-soft);}
           <li>Search in English or Audalad, and filter by part of speech with the pills.</li>
           <li>Three kinds of entries: plain <b>built-in</b> words (the core dictionary), <span class="badge community">community</span> words (published additions everyone shares), and your own <span class="badge">forged</span> words (private to your browser, and editable, fix the meaning or type, or delete them).</li>
           <li>Each word is shown in roman letters and native script.</li>
+          <li><b>Scratchpad</b>: a paste-and-build bench. Drop in a batch of words as <i>form &middot; meaning [kind]</i>, see each one previewed with duplicates and mistakes flagged, then add the ready ones to your forged words in one stroke. Your text waits there between visits.</li>
         </ul>
       </details>
 
@@ -519,6 +547,18 @@ a{color:var(--gold-soft);}
       <input type="file" id="lexFile" accept="application/json,.json" multiple style="display:none">
     </div>
     <div class="lexstatus" id="lexStatus"></div>
+    <details class="scratch" id="scratch">
+      <summary>Scratchpad <small>paste words, preview them, add in bulk</small></summary>
+      <div class="scratch-body">
+        <p class="scratch-hint">One word per line, written <code>form &middot; meaning [kind]</code>: the same shape the Forge copies out. The <i>kind</i> is optional: a part of speech (<code>n</code>, <code>v</code>, <code>adj</code>&hellip;) or a plain label like <i>verb</i>. Blank lines and lines starting with <code>#</code> are skipped. What you type stays here between visits, a quiet bench to lay words on while you work; add the ready ones to your forged lexicon when you're satisfied.</p>
+        <textarea id="scratchText" class="scratch-ta" rows="7" placeholder="Rinu &middot; to eat [verb]&#10;Zhuraku &middot; to drink [verb]&#10;Muru &middot; water [n]&#10;# a note to self is ignored"></textarea>
+        <div class="scratch-preview" id="scratchPreview"></div>
+        <div class="scratch-actions">
+          <button class="btn" id="scratchAdd">Add ready words &rarr; lexicon</button>
+          <button class="btn ghost" id="scratchClear">Clear scratchpad</button>
+        </div>
+      </div>
+    </details>
     <div class="posfilter" id="posfilter"></div>
     <div class="count" id="count"></div>
     <details class="contribs" id="contribs"></details>
@@ -1164,15 +1204,44 @@ function applyMorph(rec, kind, opts){
     if(opts && opts.afterNumber) return {au, en, note:'plural (counted)'}; // number already marks it
     const p=pluralForm(rec); return {au:p.au, en, note:p.note};
   }
-  if(kind==='past')   return pos==='v' ? {au:tensePrefix(au,'Ásar'), en, note:'past'} : {au, en, note:null};
-  if(kind==='cont')   return pos==='v' ? {au:tensePrefix(au,'Zhé'), en, note:'continuous'} : {au, en, note:null};
-  if(kind==='present')return {au, en, note: pos==='v'?'present':null};
+  // verb tenses are prefixes (see Conjugate); non-verbs ignore them
+  if(pos==='v'){
+    if(kind==='farpast')    return {au:tensePrefix(au,'Ás'),    en, note:'far-past'};
+    if(kind==='past')       return {au:tensePrefix(au,'Ásar'),  en, note:'near-past'};
+    if(kind==='present')    return {au:tensePrefix(au,'Zhéar'), en, note:'present'};
+    if(kind==='cont')       return {au:tensePrefix(au,'Zhé'),   en, note:'continuous'};
+    if(kind==='nearfut')    return {au:tensePrefix(au,'Lúar'),  en, note:'near-future'};
+    if(kind==='farfut')     return {au:tensePrefix(au,'Lú'),    en, note:'far-future'};
+    if(kind==='infinitive') return {au, en, note:'base form'};
+  }
   return {au, en, note:null};
 }
+function verbStemCandidates(w){
+  const t=[];
+  if(w.length>4 && w.endsWith('ing')){ t.push(w.slice(0,-3)); t.push(w.slice(0,-3)+'e'); if(/([bcdfghjklmnpqrstvwxz])\1ing$/.test(w)) t.push(w.slice(0,-4)); }
+  if(w.length>3 && w.endsWith('ed')){ t.push(w.slice(0,-2)); t.push(w.slice(0,-1)); if(/([bcdfghjklmnpqrstvwxz])\1ed$/.test(w)) t.push(w.slice(0,-3)); }
+  if(w.length>4 && w.endsWith('ies')) t.push(w.slice(0,-3)+'y');
+  if(w.length>3 && w.endsWith('es'))  t.push(w.slice(0,-2));
+  if(w.length>2 && w.endsWith('s') && !w.endsWith('ss')) t.push(w.slice(0,-1));
+  return t;
+}
+function lemmaIsVerb(word){
+  const lw=(word||'').toLowerCase();
+  if(!lw) return false;
+  if(enToAu[lw]) return enToAu[lw][0].pos==='v';
+  if(IRREG_EN[lw]){ const l=IRREG_EN[lw][0]; return !!(enToAu[l] && enToAu[l][0].pos==='v'); }
+  return verbStemCandidates(lw).some(c=>enToAu[c] && enToAu[c][0].pos==='v');
+}
 function resolveEng(w, opts){
+  opts = opts || {};
   w=w.toLowerCase();
-  if(enToAu[w]) return applyMorph(enToAu[w][0], null, opts);
-  if(IRREG_EN[w]){ const [lemma,kind]=IRREG_EN[w]; if(enToAu[lemma]) return applyMorph(enToAu[lemma][0], kind, opts); }
+  const forced = opts.tense || null;
+  if(enToAu[w]){
+    const rec=enToAu[w][0];
+    const kind = forced || (rec.pos==='v' ? 'present' : null);
+    return applyMorph(rec, kind, opts);
+  }
+  if(IRREG_EN[w]){ const [lemma,kind]=IRREG_EN[w]; if(enToAu[lemma]){ const useKind=(kind==='plural')?'plural':(forced||kind); return applyMorph(enToAu[lemma][0], useKind, opts); } }
   const tries=[]; // [stem, suffixType]
   if(w.length>4 && w.endsWith('ies')) tries.push([w.slice(0,-3)+'y','s']);
   if(w.length>3 && w.endsWith('es'))  tries.push([w.slice(0,-2),'s']);
@@ -1183,9 +1252,9 @@ function resolveEng(w, opts){
   for(const [stem,suf] of tries){
     if(enToAu[stem]){
       const rec=enToAu[stem][0];
-      if(suf==='s')   return (rec.pos==='n'||rec.pos==='title') ? applyMorph(rec,'plural',opts) : rec.pos==='v' ? applyMorph(rec,'present',opts) : applyMorph(rec,null,opts);
-      if(suf==='ed')  return applyMorph(rec,'past',opts);
-      if(suf==='ing') return applyMorph(rec,'cont',opts);
+      if(suf==='s')   return (rec.pos==='n'||rec.pos==='title') ? applyMorph(rec,'plural',opts) : rec.pos==='v' ? applyMorph(rec, forced||'present', opts) : applyMorph(rec, forced, opts);
+      if(suf==='ed')  return applyMorph(rec, forced||'past', opts);
+      if(suf==='ing') return applyMorph(rec, forced||'cont', opts);
     }
   }
   return null;
@@ -1199,9 +1268,24 @@ function translateEnToAu(text){
   const out = [];
   let i = 0;
   let prevWasNumber = false;
+  let pendingTense = null; // tense carried from an auxiliary onto the next verb
+  const AUX_FUT = {will:1, shall:1};
+  const AUX_BE  = {am:1, is:1, are:1, was:1, were:1, be:1, been:1, being:1};
+  const next = k => (words[i+k]||'').toLowerCase();
   while(i < words.length){
     const w = words[i];
-    if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); i++; continue; }
+    if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); pendingTense=null; i++; continue; }
+    const lw = w.toLowerCase();
+    // tense-bearing helpers are swallowed and recolour the verb that follows
+    if(!pendingTense){
+      if(AUX_FUT[lw]){ pendingTense='nearfut'; i++; continue; }
+      if(lw==='used'  && next(1)==='to' && lemmaIsVerb(next(2))){ pendingTense='farpast'; i+=2; continue; }
+      if(lw==='going' && next(1)==='to' && lemmaIsVerb(next(2))){ pendingTense='nearfut'; i+=2; continue; }
+      if(lw==='did' && lemmaIsVerb(next(1))){ pendingTense='past'; i++; continue; }
+      if((lw==='do'||lw==='does') && lemmaIsVerb(next(1))){ pendingTense='present'; i++; continue; }
+      if(lw==='to' && lemmaIsVerb(next(1))){ pendingTense='infinitive'; i++; continue; }
+      if(AUX_BE[lw] && /ing$/.test(next(1)) && lemmaIsVerb(next(1))){ pendingTense='cont'; i++; continue; }
+    }
     // greedy phrase up to 3 words
     let matched = null, span = 1;
     for(let n=Math.min(3, words.length-i); n>=1; n--){
@@ -1210,21 +1294,26 @@ function translateEnToAu(text){
     }
     const srcText = words.slice(i,i+span).join(' ');
     if(matched){
-      let auForm = matched.au;
-      let rnote = null;
-      const pcat = PRON_PERSON[auForm.toLowerCase()];
-      if(pcat && pronRank[pcat]){
-        auForm = pronRank[pcat] + auForm;
-        rnote = RANK_LABEL[pronRank[pcat]];
+      let auForm = matched.au, rnote = null;
+      if(matched.pos==='v'){
+        const m = applyMorph(matched, pendingTense || 'present', {afterNumber:prevWasNumber});
+        auForm = m.au; rnote = m.note;
+      } else {
+        const pcat = PRON_PERSON[auForm.toLowerCase()];
+        if(pcat && pronRank[pcat]){
+          auForm = pronRank[pcat] + auForm;
+          rnote = RANK_LABEL[pronRank[pcat]];
+        }
       }
       out.push({src:srcText, au:auForm, en:matched.full, note:rnote});
       prevWasNumber = (matched.pos==='num' || matched.pos==='ord');
     } else {
-      const r = resolveEng(w, {afterNumber: prevWasNumber});
+      const r = resolveEng(w, {afterNumber: prevWasNumber, tense: pendingTense});
       if(r){ out.push({src:srcText, au:r.au, en:r.en, note:r.note}); }
       else { out.push({src:srcText, au:null}); }
       prevWasNumber = false;
     }
+    pendingTense = null;
     i += span;
   }
   return {tokens:out};
@@ -2096,6 +2185,95 @@ document.getElementById('lexClear').addEventListener('click',()=>{
     customWords=[]; lexiconChanged();
   }
 });
+
+/* ---------- scratchpad: paste plaintext words, preview, bulk-add ---------- */
+const LS_SCRATCH='audalad_scratch_v1';
+function kindToPos(kind){
+  const k=(kind||'').trim().toLowerCase();
+  if(!k) return 'n';
+  if(KIND_POS[k]) return KIND_POS[k];
+  const direct={n:'n',noun:'n',v:'v',verb:'v',adj:'adj',adjective:'adj',adv:'adv',adverb:'adv',pron:'pron',pronoun:'pron',prep:'prep',preposition:'prep',conj:'conj',conjunction:'conj',num:'num',number:'num',numeral:'num',title:'title',name:'title',interj:'interj',interjection:'interj'};
+  if(direct[k]) return direct[k];
+  if(k.indexOf('verb')===0) return 'v';
+  if(k.indexOf('noun')===0) return 'n';
+  if(k.indexOf('adject')===0) return 'adj';
+  if(k.indexOf('adverb')===0) return 'adv';
+  if(k.indexOf('pron')===0) return 'pron';
+  return 'n';
+}
+function parseScratchLine(line){
+  let s=(line||'').trim();
+  if(!s || s.charAt(0)==='#' || s.slice(0,2)==='//') return null;
+  let kind='';
+  const m=s.match(/\[([^\]]*)\]\s*$/);
+  if(m){ kind=(m[1].split(';')[0]||'').trim(); s=s.slice(0,m.index).trim(); }
+  // leftmost separator wins: prefer the middot/dash/equals, then a spaced or bare colon, then a spaced hyphen
+  const sep=s.match(/\s*(?:[\u00b7\u2014\u2013=]|\s:\s|:|\s-\s)\s*/);
+  let form='', mean='';
+  if(sep){ form=s.slice(0,sep.index).trim(); mean=s.slice(sep.index+sep[0].length).trim(); }
+  else { form=s; }
+  let err='';
+  if(!form) err='no word';
+  else if(!mean) err='needs a meaning';
+  return {form:form, mean:mean, kind:kind, pos:kindToPos(kind), err:err};
+}
+function parseScratch(){
+  const ta=document.getElementById('scratchText');
+  return (ta?ta.value:'').split(/\r?\n/).map(parseScratchLine).filter(Boolean);
+}
+function renderScratch(){
+  const prev=document.getElementById('scratchPreview'); if(!prev) return;
+  const rows=parseScratch();
+  if(!rows.length){ prev.innerHTML='<div class="scratch-summary-line">Nothing on the bench yet.</div>'; updateScratchBtn(0); return; }
+  let ready=0;
+  prev.innerHTML=rows.map(function(r){
+    let cls, flag;
+    if(r.err){ cls='bad'; flag=r.err; }
+    else if(existsInLexicon(r.form)){ cls='dupe'; flag='already in lexicon'; }
+    else { cls='ready'; flag='ready'; ready++; }
+    const native = (r.form && !r.err) ? '<span class="sp-native">'+escapeHtml(toNative(r.form))+'</span>' : '';
+    const pos = (r.mean && !r.err) ? '<span class="sp-pos">'+escapeHtml(r.pos)+'</span>' : '';
+    return '<div class="sp-row '+cls+'">'+
+      '<span class="sp-form">'+escapeHtml(r.form||'?')+'</span>'+native+
+      '<span class="sp-mean">'+escapeHtml(r.mean||'')+'</span>'+pos+
+      '<span class="sp-flag">'+escapeHtml(flag)+'</span>'+
+    '</div>';
+  }).join('');
+  updateScratchBtn(ready);
+}
+function updateScratchBtn(ready){
+  const b=document.getElementById('scratchAdd'); if(!b) return;
+  b.disabled = ready===0;
+  b.style.opacity = ready ? '' : '.5';
+  b.textContent = ready ? ('Add '+ready+' word'+(ready===1?'':'s')+' \u2192 lexicon') : 'Nothing ready to add';
+}
+function saveScratch(){ try{ localStorage.setItem(LS_SCRATCH, document.getElementById('scratchText').value); }catch(e){} }
+(function initScratch(){
+  const ta=document.getElementById('scratchText'); if(!ta) return;
+  try{ const v=localStorage.getItem(LS_SCRATCH); if(v!=null) ta.value=v; }catch(e){}
+  ta.addEventListener('input', function(){ saveScratch(); renderScratch(); });
+  document.getElementById('scratchAdd').addEventListener('click', function(){
+    const rows=parseScratch(); const by=currentAuthor();
+    let added=0, dupes=0, bad=0;
+    rows.forEach(function(r){
+      if(r.err){ bad++; return; }
+      if(existsInLexicon(r.form)){ dupes++; return; }
+      const entry={au:r.form, en:r.mean||'(unglossed)', pos:r.pos, custom:true};
+      if(by) entry.by=by;
+      customWords.push(entry); added++;
+    });
+    if(added) lexiconChanged();
+    renderScratch();
+    flashStatus('Added '+added+' word'+(added===1?'':'s')+' to your lexicon'+(dupes?' \u00b7 skipped '+dupes+' already in':'')+(bad?' \u00b7 '+bad+' line'+(bad===1?'':'s')+' to fix':'')+'.');
+  });
+  document.getElementById('scratchClear').addEventListener('click', function(){
+    if(!ta.value.trim()) return;
+    if(confirm('Clear the scratchpad text? Words already added to your lexicon are not touched.')){
+      ta.value=''; saveScratch(); renderScratch();
+    }
+  });
+  renderScratch();
+})();
 let statusTimer=null;
 function flashStatus(msg){
   const el=document.getElementById('lexStatus'); if(!el) return;
