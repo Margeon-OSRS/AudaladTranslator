@@ -439,7 +439,6 @@ a{color:var(--gold-soft);}
         <ul>
           <li>Type in either language and read the result below. Use the round <b>&#8646;</b> button to switch between <b>English &rarr; Audalad</b> and <b>Audalad &rarr; English</b>.</li>
           <li><b>Native script</b> shows the result in the Audalad writing system; <b>Word breakdown</b> shows what each word maps to and any grammar notes. Toggle either off if you don't need it.</li>
-          <li><b>Tense is read from the English.</b> A plain verb is set in the <i>present</i> (<i>Zhéar-</i>); <i>thought</i> or <i>-ed</i> gives near-past (<i>Ásar-</i>), <i>used to</i> the far-past (<i>Ás-</i>), <i>am/is/are &hellip;-ing</i> the continuous (<i>Zhé-</i>), and <i>will</i> the near-future (<i>Lúar-</i>). Helper words like <i>will</i> and <i>used to</i> are folded into the verb, not left loose. After <i>to</i>, the verb keeps its base form. The form lands in the word breakdown so you can see which tense was chosen. (Far-future <i>Lú-</i> has no English cue: reach for the Conjugate page when you need it.)</li>
           <li><b>Social rank</b> (English&rarr;Audalad only): set how each person is ranked relative to you: <i>Ascended (Ori')</i>, <i>Greater (Itu')</i>, <i>Equal</i> (no marker), or <i>Lesser (Ke')</i>. Pick separately for "I/we", "you", and "they/it".</li>
           <li>Words not in the dictionary appear <span style="color:var(--err)">in red</span>. Nothing is invented.</li>
           <li>Below the result you'll see the <b>pronunciation</b> in IPA. <b>Copy</b> grabs the text; <b>&#8595; Script PNG</b> saves the native script as an image for signs, books, and banners.</li>
@@ -472,6 +471,8 @@ a{color:var(--gold-soft);}
           <li><b>Verb</b>: type a stem, or pick a documented root from the list below it, and choose an action type, which sets the final vowel (physical <i>-u</i>, emotional <i>-a</i>, abstract <i>-i</i>&hellip;). The gloss names the root when it recognizes one, shows the adverb form, and warns if the verb already exists. Switch the list to <i>Coined verbs</i> to reuse the stem of an existing verb.</li>
           <li><b>Pronoun</b>: choose a rank and point of view, toggle possessive/plural, and it builds the pronoun. A full reference chart sits below.</li>
           <li><b>Derive</b>: take any word and apply a plural, possessive, negation, ordinal, tense, and more.</li>
+          <li><b>Name</b>: cast gender-neutral everyday names (used as first or last), built from the documented sounds and name-endings. Pick one, give it a meaning if it has one, and forge it.</li>
+          <li><b>Regal name</b>: adapt a dictionary word and mark it with <i>&Acirc;</i> for a non-literal, regal or divine name.</li>
           <li><b>Generate root</b>: roll fresh, valid-sounding roots from scratch when no existing root fits.</li>
           <li><b>Number</b>: type any number (0&ndash;999999) and get it written in Audalad words, native script, and pronunciation, with an ordinal toggle.</li>
           <li><b>Analyze</b>: paste any Audalad word to break it back into its roots and affixes, great for checking your own words.</li>
@@ -482,9 +483,9 @@ a{color:var(--gold-soft);}
       <details class="g-page">
         <summary>Sharing &amp; the community dictionary</summary>
         <ul>
-          <li>Words you forge are <b>private to your browser</b>. To propose them, add them to your Lexicon, hit <b>Export forged (JSON)</b>, and send the file in for review.</li>
+          <li>Words you forge are <b>private to your browser</b>. To propose them, add them to your Lexicon, hit <b>Export forged (text)</b>, and send the file in for review. It saves as a plain <code>form &middot; meaning [kind]</code> list: readable, editable, and the same shape the scratchpad reads back in.</li>
           <li>Approved words get published and then show up for <b>everyone</b> as <span class="badge community">community</span> entries, credited to whoever proposed them.</li>
-          <li><b>Export all (CSV)</b> downloads the whole dictionary for a spreadsheet. <b>Clear forged</b> removes your private additions (export first if you want to keep them).</li>
+          <li><b>Import text/CSV</b> merges words back in from those exported lists (or any CSV). <b>Export all (CSV)</b> downloads the whole dictionary for a spreadsheet. <b>Clear forged</b> removes your private additions (export first if you want to keep them).</li>
         </ul>
       </details>
     </div>
@@ -539,12 +540,12 @@ a{color:var(--gold-soft);}
       <input id="search" type="text" placeholder="Search English or Audalad&hellip;">
     </div>
     <div class="lexbar">
-      <button class="btn ghost" id="lexExport" title="Download the words you've added as a JSON file to keep or send to the maintainer">Export forged (JSON)</button>
-      <button class="btn ghost" id="lexImport" title="Load one or more JSON files and merge those words in (select several at once to batch submissions)">Import JSON</button>
+      <button class="btn ghost" id="lexExport" title="Download the words you've added as a plain text list to keep or send in for review">Export forged (text)</button>
+      <button class="btn ghost" id="lexImport" title="Load one or more text or CSV files and merge those words in (select several at once to batch submissions)">Import text/CSV</button>
       <button class="btn ghost" id="lexPublish" title="Save your reviewed words as lexicon.json to commit alongside index.html, everyone visiting the site then sees them">Publish &rarr; lexicon.json</button>
       <button class="btn ghost" id="lexCsv" title="Download the whole dictionary (built-in + community + forged) as a CSV for spreadsheets">Export all (CSV)</button>
       <button class="btn ghost danger" id="lexClear" title="Permanently delete the words you've added here. Export or publish first if you want to keep them.">Clear forged</button>
-      <input type="file" id="lexFile" accept="application/json,.json" multiple style="display:none">
+      <input type="file" id="lexFile" accept=".txt,.csv,.tsv,text/plain,text/csv" multiple style="display:none">
     </div>
     <div class="lexstatus" id="lexStatus"></div>
     <details class="scratch" id="scratch">
@@ -591,6 +592,7 @@ a{color:var(--gold-soft);}
         <button class="subtab" data-fview="verb">Verb</button>
         <button class="subtab" data-fview="pronoun">Pronoun</button>
         <button class="subtab" data-fview="derive">Derive</button>
+        <button class="subtab" data-fview="name">Name</button>
         <button class="subtab" data-fview="regal">Regal name</button>
         <button class="subtab" data-fview="generate">Generate root</button>
         <button class="subtab" data-fview="number">Number</button>
@@ -698,6 +700,26 @@ a{color:var(--gold-soft);}
           </div>
         </div>
         <div class="note"><b>Morphology.</b> <i>-ae</i> personified plural &middot; <i>Yi-</i> non-personified plural &middot; <i>-ad/-adi/-id</i> "of the" (noun&rarr;adjective) &middot; <i>-ir</i> negation/inverse &middot; <i>-dir/-diret</i> ordinal &middot; <i>Elsakat-</i> "to fear" &middot; tense prefixes.</div>
+      </div>
+
+      <!-- name -->
+      <div class="fview" id="f-name">
+        <div class="builder">
+          <div class="coinout">
+            <div class="c-native" id="nmNative"></div>
+            <div class="c-form" id="nmForm"></div>
+            <div class="c-warn" id="nmWarn"></div>
+          </div>
+          <div class="frow" style="justify-content:center">
+            <button class="btn" id="nmRoll">Cast names</button>
+          </div>
+          <div class="morphgrid" id="nmList" style="margin-top:14px;max-height:none"></div>
+          <div class="frow" style="margin-top:12px">
+            <input class="vinput" id="nmMean" placeholder="Significance of the name (optional)">
+            <button class="btn" id="nmSave">Forge name</button>
+          </div>
+        </div>
+        <div class="note"><b>Everyday names.</b> Audalad names carry no gender and serve as either a first or last name, as with <i>Ederai</i> &ldquo;rose,&rdquo; <i>Naru</i> &ldquo;benevolent,&rdquo; or <i>Utur</i> &ldquo;shining.&rdquo; Candidates are cast from the documented sounds and name-endings (<i>-ai, -i, -u, -ur, -il, -ar, -an, -el</i>), avoiding harsh clusters and the regal <i>&Acirc;</i> marker. Click one, give it a meaning if it has one, and forge it.</div>
       </div>
 
       <!-- regal -->
@@ -1204,44 +1226,15 @@ function applyMorph(rec, kind, opts){
     if(opts && opts.afterNumber) return {au, en, note:'plural (counted)'}; // number already marks it
     const p=pluralForm(rec); return {au:p.au, en, note:p.note};
   }
-  // verb tenses are prefixes (see Conjugate); non-verbs ignore them
-  if(pos==='v'){
-    if(kind==='farpast')    return {au:tensePrefix(au,'Ás'),    en, note:'far-past'};
-    if(kind==='past')       return {au:tensePrefix(au,'Ásar'),  en, note:'near-past'};
-    if(kind==='present')    return {au:tensePrefix(au,'Zhéar'), en, note:'present'};
-    if(kind==='cont')       return {au:tensePrefix(au,'Zhé'),   en, note:'continuous'};
-    if(kind==='nearfut')    return {au:tensePrefix(au,'Lúar'),  en, note:'near-future'};
-    if(kind==='farfut')     return {au:tensePrefix(au,'Lú'),    en, note:'far-future'};
-    if(kind==='infinitive') return {au, en, note:'base form'};
-  }
+  if(kind==='past')   return pos==='v' ? {au:tensePrefix(au,'Ásar'), en, note:'past'} : {au, en, note:null};
+  if(kind==='cont')   return pos==='v' ? {au:tensePrefix(au,'Zhé'), en, note:'continuous'} : {au, en, note:null};
+  if(kind==='present')return {au, en, note: pos==='v'?'present':null};
   return {au, en, note:null};
 }
-function verbStemCandidates(w){
-  const t=[];
-  if(w.length>4 && w.endsWith('ing')){ t.push(w.slice(0,-3)); t.push(w.slice(0,-3)+'e'); if(/([bcdfghjklmnpqrstvwxz])\1ing$/.test(w)) t.push(w.slice(0,-4)); }
-  if(w.length>3 && w.endsWith('ed')){ t.push(w.slice(0,-2)); t.push(w.slice(0,-1)); if(/([bcdfghjklmnpqrstvwxz])\1ed$/.test(w)) t.push(w.slice(0,-3)); }
-  if(w.length>4 && w.endsWith('ies')) t.push(w.slice(0,-3)+'y');
-  if(w.length>3 && w.endsWith('es'))  t.push(w.slice(0,-2));
-  if(w.length>2 && w.endsWith('s') && !w.endsWith('ss')) t.push(w.slice(0,-1));
-  return t;
-}
-function lemmaIsVerb(word){
-  const lw=(word||'').toLowerCase();
-  if(!lw) return false;
-  if(enToAu[lw]) return enToAu[lw][0].pos==='v';
-  if(IRREG_EN[lw]){ const l=IRREG_EN[lw][0]; return !!(enToAu[l] && enToAu[l][0].pos==='v'); }
-  return verbStemCandidates(lw).some(c=>enToAu[c] && enToAu[c][0].pos==='v');
-}
 function resolveEng(w, opts){
-  opts = opts || {};
   w=w.toLowerCase();
-  const forced = opts.tense || null;
-  if(enToAu[w]){
-    const rec=enToAu[w][0];
-    const kind = forced || (rec.pos==='v' ? 'present' : null);
-    return applyMorph(rec, kind, opts);
-  }
-  if(IRREG_EN[w]){ const [lemma,kind]=IRREG_EN[w]; if(enToAu[lemma]){ const useKind=(kind==='plural')?'plural':(forced||kind); return applyMorph(enToAu[lemma][0], useKind, opts); } }
+  if(enToAu[w]) return applyMorph(enToAu[w][0], null, opts);
+  if(IRREG_EN[w]){ const [lemma,kind]=IRREG_EN[w]; if(enToAu[lemma]) return applyMorph(enToAu[lemma][0], kind, opts); }
   const tries=[]; // [stem, suffixType]
   if(w.length>4 && w.endsWith('ies')) tries.push([w.slice(0,-3)+'y','s']);
   if(w.length>3 && w.endsWith('es'))  tries.push([w.slice(0,-2),'s']);
@@ -1252,9 +1245,9 @@ function resolveEng(w, opts){
   for(const [stem,suf] of tries){
     if(enToAu[stem]){
       const rec=enToAu[stem][0];
-      if(suf==='s')   return (rec.pos==='n'||rec.pos==='title') ? applyMorph(rec,'plural',opts) : rec.pos==='v' ? applyMorph(rec, forced||'present', opts) : applyMorph(rec, forced, opts);
-      if(suf==='ed')  return applyMorph(rec, forced||'past', opts);
-      if(suf==='ing') return applyMorph(rec, forced||'cont', opts);
+      if(suf==='s')   return (rec.pos==='n'||rec.pos==='title') ? applyMorph(rec,'plural',opts) : rec.pos==='v' ? applyMorph(rec,'present',opts) : applyMorph(rec,null,opts);
+      if(suf==='ed')  return applyMorph(rec,'past',opts);
+      if(suf==='ing') return applyMorph(rec,'cont',opts);
     }
   }
   return null;
@@ -1268,24 +1261,9 @@ function translateEnToAu(text){
   const out = [];
   let i = 0;
   let prevWasNumber = false;
-  let pendingTense = null; // tense carried from an auxiliary onto the next verb
-  const AUX_FUT = {will:1, shall:1};
-  const AUX_BE  = {am:1, is:1, are:1, was:1, were:1, be:1, been:1, being:1};
-  const next = k => (words[i+k]||'').toLowerCase();
   while(i < words.length){
     const w = words[i];
-    if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); pendingTense=null; i++; continue; }
-    const lw = w.toLowerCase();
-    // tense-bearing helpers are swallowed and recolour the verb that follows
-    if(!pendingTense){
-      if(AUX_FUT[lw]){ pendingTense='nearfut'; i++; continue; }
-      if(lw==='used'  && next(1)==='to' && lemmaIsVerb(next(2))){ pendingTense='farpast'; i+=2; continue; }
-      if(lw==='going' && next(1)==='to' && lemmaIsVerb(next(2))){ pendingTense='nearfut'; i+=2; continue; }
-      if(lw==='did' && lemmaIsVerb(next(1))){ pendingTense='past'; i++; continue; }
-      if((lw==='do'||lw==='does') && lemmaIsVerb(next(1))){ pendingTense='present'; i++; continue; }
-      if(lw==='to' && lemmaIsVerb(next(1))){ pendingTense='infinitive'; i++; continue; }
-      if(AUX_BE[lw] && /ing$/.test(next(1)) && lemmaIsVerb(next(1))){ pendingTense='cont'; i++; continue; }
-    }
+    if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); i++; continue; }
     // greedy phrase up to 3 words
     let matched = null, span = 1;
     for(let n=Math.min(3, words.length-i); n>=1; n--){
@@ -1294,26 +1272,21 @@ function translateEnToAu(text){
     }
     const srcText = words.slice(i,i+span).join(' ');
     if(matched){
-      let auForm = matched.au, rnote = null;
-      if(matched.pos==='v'){
-        const m = applyMorph(matched, pendingTense || 'present', {afterNumber:prevWasNumber});
-        auForm = m.au; rnote = m.note;
-      } else {
-        const pcat = PRON_PERSON[auForm.toLowerCase()];
-        if(pcat && pronRank[pcat]){
-          auForm = pronRank[pcat] + auForm;
-          rnote = RANK_LABEL[pronRank[pcat]];
-        }
+      let auForm = matched.au;
+      let rnote = null;
+      const pcat = PRON_PERSON[auForm.toLowerCase()];
+      if(pcat && pronRank[pcat]){
+        auForm = pronRank[pcat] + auForm;
+        rnote = RANK_LABEL[pronRank[pcat]];
       }
       out.push({src:srcText, au:auForm, en:matched.full, note:rnote});
       prevWasNumber = (matched.pos==='num' || matched.pos==='ord');
     } else {
-      const r = resolveEng(w, {afterNumber: prevWasNumber, tense: pendingTense});
+      const r = resolveEng(w, {afterNumber: prevWasNumber});
       if(r){ out.push({src:srcText, au:r.au, en:r.en, note:r.note}); }
       else { out.push({src:srcText, au:null}); }
       prevWasNumber = false;
     }
-    pendingTense = null;
     i += span;
   }
   return {tokens:out};
@@ -1507,7 +1480,7 @@ document.getElementById('swapBtn').addEventListener('click', ()=>{
 });
 
 /* ---------- dictionary ---------- */
-const POS_LABEL={n:'Noun',v:'Verb',adj:'Adjective',adv:'Adverb',prep:'Preposition',conj:'Conjunction',det:'Determiner',num:'Number',ord:'Ordinal',pron:'Pronoun',intj:'Greeting',q:'Question',title:'Title'};
+const POS_LABEL={n:'Noun',v:'Verb',adj:'Adjective',adv:'Adverb',prep:'Preposition',conj:'Conjunction',det:'Determiner',num:'Number',ord:'Ordinal',pron:'Pronoun',intj:'Greeting',q:'Question',title:'Title',name:'Name'};
 let activePos='all';
 const dictlist=document.getElementById('dictlist');
 const searchEl=document.getElementById('search');
@@ -1687,7 +1660,7 @@ function dupWarnText(form){
 /* coinage store (in-memory only) */
 let coinages=[];
 function addCoinage(c){ coinages.push(c); renderCoins(); }
-const KIND_POS={verb:'v','regal name':'title',cluster:'n','coined root':'n',derived:'n',pronoun:'pron'};
+const KIND_POS={verb:'v','regal name':'title',name:'name',cluster:'n','coined root':'n',derived:'n',pronoun:'pron'};
 function promoteCoinage(i){
   const c=coinages[i]; if(!c||c.promoted) return;
   // clusterification apostrophe stays in the stored form; that's canonical
@@ -2098,6 +2071,59 @@ document.getElementById('gnSave').addEventListener('click',()=>{
   document.getElementById('gnMean').value='';
 });
 
+/* --- name --- */
+const NAME_END=['ai','i','u','ur','il','ar','an','el','et','ina','iz','umi'];
+function genName(){
+  const syl=Math.random()<0.55?2:(Math.random()<0.7?1:2);
+  let s='';
+  let prevStop=false;
+  for(let i=0;i<syl;i++){
+    let on=pick(GEN_ONSET);
+    if(prevStop && STOPS.includes(on)) on=pick(['n','m','r','l','s','sh']); // avoid stop+stop seam
+    s+=on+pick(GEN_VOWEL);
+    prevStop=STOPS.includes(on);
+  }
+  s+=pick(NAME_END);
+  return s.charAt(0).toUpperCase()+s.slice(1);
+}
+let nmSelected='';
+function rollNames(){
+  const list=document.getElementById('nmList');list.innerHTML='';
+  nmSelected='';
+  document.getElementById('nmForm').textContent='';
+  document.getElementById('nmNative').textContent='';
+  document.getElementById('nmWarn').textContent='';
+  const seen={};
+  let n=0,tries=0;
+  while(n<9 && tries<400){
+    tries++;
+    const r=genName();
+    if(seen[r]||existsInLexicon(r)) continue;
+    seen[r]=1;n++;
+    const b=document.createElement('button');b.className='morphbtn';
+    b.innerHTML='<span class="mb-f">'+escapeHtml(r)+'</span><span class="mb-m">'+escapeHtml(toNative(r))+'</span>';
+    b.style.fontFamily='inherit';
+    b.querySelector('.mb-m').style.fontFamily="'AudaladScript'";
+    b.querySelector('.mb-m').style.fontSize='20px';
+    b.addEventListener('click',()=>{
+      nmSelected=r;
+      document.getElementById('nmForm').textContent=r;
+      document.getElementById('nmNative').textContent=toNative(r);
+      document.getElementById('nmWarn').textContent=dupWarnText(r);
+      list.querySelectorAll('.morphbtn').forEach(x=>x.classList.remove('typebtn','active'));
+      b.classList.add('active');
+    });
+    list.appendChild(b);
+  }
+}
+document.getElementById('nmRoll').addEventListener('click',rollNames);
+document.getElementById('nmSave').addEventListener('click',()=>{
+  if(!nmSelected) return;
+  const mean=document.getElementById('nmMean').value.trim();
+  addCoinage({form:nmSelected,mean,kind:'name',note:'generated'});
+  document.getElementById('nmMean').value='';
+});
+
 /* datalists for derive + regal */
 function fillWordDatalists(){
   ['allWords','allWords2','allWords3'].forEach(id=>{
@@ -2135,9 +2161,19 @@ function downloadFile(name, text, type){
 function cleanForExport(arr){
   return arr.map(c=>{ const o={au:c.au, en:c.en, pos:c.pos}; if(c.by) o.by=c.by; return o; });
 }
+function posToKind(p){
+  const map={n:'n',v:'verb',adj:'adj',adv:'adv',pron:'pron',prep:'prep',conj:'conj',num:'num',title:'title',interj:'interj'};
+  return map[p]||p||'n';
+}
+function forgedToText(arr){
+  return arr.map(c=>{
+    const kind=posToKind(c.pos);
+    return c.au+' \u00b7 '+(c.en||'(unglossed)')+' ['+kind+(c.by?'; by '+c.by:'')+']';
+  }).join('\n')+'\n';
+}
 document.getElementById('lexExport').addEventListener('click',()=>{
   if(!customWords.length){ flashStatus('Nothing forged to export yet.'); return; }
-  downloadFile('audalad_forged.json', JSON.stringify(cleanForExport(customWords),null,2), 'application/json');
+  downloadFile('audalad_forged.txt', forgedToText(customWords), 'text/plain');
 });
 document.getElementById('lexPublish').addEventListener('click',()=>{
   if(!customWords.length){ flashStatus('Forge or import some words first, then publish.'); return; }
@@ -2152,6 +2188,51 @@ document.getElementById('lexCsv').addEventListener('click',()=>{
   const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
   downloadFile('audalad_lexicon.csv', csv, 'text/csv');
 });
+/* split one CSV/TSV row into fields, honouring quotes */
+function splitDelimited(line, delim){
+  const out=[]; let cur='', q=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(q){
+      if(ch==='"'){ if(line[i+1]==='"'){ cur+='"'; i++; } else q=false; }
+      else cur+=ch;
+    } else {
+      if(ch==='"') q=true;
+      else if(ch===delim){ out.push(cur); cur=''; }
+      else cur+=ch;
+    }
+  }
+  out.push(cur);
+  return out.map(s=>s.trim());
+}
+/* turn a text or CSV file into {au,en,pos,by} entries */
+function parseImport(text){
+  const lines=String(text).split(/\r?\n/);
+  const first=(lines.find(l=>l.trim())||'').trim();
+  const isCsv=/^"?audalad"?\s*[,\t]/i.test(first) || (first.indexOf(',')>-1 && first.indexOf('\u00b7')===-1 && first.indexOf(' - ')===-1);
+  const out=[];
+  if(isCsv){
+    const delim=first.indexOf('\t')>-1 ? '\t' : ',';
+    let start=0;
+    if(/^"?audalad"?/i.test(first)) start=1; // skip header row
+    for(let i=start;i<lines.length;i++){
+      if(!lines[i].trim()) continue;
+      const f=splitDelimited(lines[i], delim);
+      const au=(f[0]||'').trim(); if(!au) continue;
+      out.push({au, en:(f[1]||'(unglossed)').trim()||'(unglossed)', pos:kindToPos(f[2]||'n'), by:(f[4]||'').trim()});
+    }
+  } else {
+    lines.forEach(raw=>{
+      const row=parseScratchLine(raw);
+      if(!row || row.err) return;
+      let by='';
+      const bm=raw.match(/[;#]\s*by\s+([^\];#]+)/i); // recover "... [kind; by NAME]" or "# by NAME"
+      if(bm) by=bm[1].trim();
+      out.push({au:row.form, en:row.mean||'(unglossed)', pos:row.pos, by});
+    });
+  }
+  return out;
+}
 document.getElementById('lexImport').addEventListener('click',()=>document.getElementById('lexFile').click());
 document.getElementById('lexFile').addEventListener('change',e=>{
   const files=Array.from(e.target.files||[]); if(!files.length) return;
@@ -2160,19 +2241,18 @@ document.getElementById('lexFile').addEventListener('change',e=>{
     const r=new FileReader();
     r.onload=()=>{
       try{
-        const arr=JSON.parse(r.result);
-        if(Array.isArray(arr)) arr.forEach(x=>{
-          if(!x||!x.au) return;
-          const au=String(x.au);
-          if(customWords.some(c=>c.au.toLowerCase()===au.toLowerCase())){ dupes++; return; }
-          const entry={au, en:String(x.en||'(unglossed)'), pos:x.pos||'n', custom:true};
-          if(x.by) entry.by=String(x.by);
+        parseImport(r.result).forEach(x=>{
+          if(!x.au) return;
+          if(existsInLexicon(x.au)){ dupes++; return; }
+          if(customWords.some(c=>c.au.toLowerCase()===x.au.toLowerCase())){ dupes++; return; }
+          const entry={au:x.au, en:x.en, pos:x.pos, custom:true};
+          if(x.by) entry.by=x.by;
           customWords.push(entry); added++;
         });
       }catch(err){ /* skip unreadable file */ }
       if(--pending===0){
         lexiconChanged();
-        flashStatus('Imported '+added+' word'+(added===1?'':'s')+(dupes?' \u00b7 skipped '+dupes+' duplicate'+(dupes===1?'':'s'):'')+'.');
+        flashStatus('Imported '+added+' word'+(added===1?'':'s')+(dupes?' \u00b7 skipped '+dupes+' already in':'')+'.');
       }
     };
     r.readAsText(file);
