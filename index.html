@@ -768,7 +768,34 @@ a{color:var(--gold-soft);}
             <div class="c-form" id="nmForm"></div>
             <div class="c-warn" id="nmWarn"></div>
           </div>
-          <div class="frow" style="justify-content:center">
+          <div class="flabel">Shape of the name</div>
+          <div class="frow" style="gap:10px;flex-wrap:wrap;align-items:center">
+            <div class="pickseg" id="nmLenSeg">
+              <button class="seg" data-len="1">Short</button>
+              <button class="seg active" data-len="2">Medium</button>
+              <button class="seg" data-len="3">Long</button>
+            </div>
+            <div class="pickseg" id="nmTexSeg">
+              <button class="seg active" data-tex="any">Any</button>
+              <button class="seg" data-tex="soft">Soft</button>
+              <button class="seg" data-tex="strong">Strong</button>
+              <button class="seg" data-tex="flow">Flowing</button>
+            </div>
+          </div>
+          <div class="frow" style="gap:14px;flex-wrap:wrap;align-items:flex-end;margin-top:12px">
+            <div>
+              <div class="flabel" style="margin:0 0 5px">Ending</div>
+              <select id="nmEnd" class="rksel"><option value="any">Any ending</option><option value="ai">-ai</option><option value="i">-i</option><option value="u">-u</option><option value="ur">-ur</option><option value="il">-il</option><option value="ar">-ar</option><option value="an">-an</option><option value="el">-el</option><option value="et">-et</option><option value="ina">-ina</option><option value="iz">-iz</option><option value="umi">-umi</option></select>
+            </div>
+            <div>
+              <div class="flabel" style="margin:0 0 5px">Begins with (optional)</div>
+              <input class="vinput" id="nmStart" placeholder="e.g. Sh, El, Za\u2026" style="max-width:170px">
+            </div>
+          </div>
+          <div class="flabel">Build from a meaning (optional)</div>
+          <input class="vinput" id="nmSeed" list="allWordsName" placeholder="A word the name should echo, e.g. fire, rose, light\u2026">
+          <datalist id="allWordsName"></datalist>
+          <div class="frow" style="justify-content:center;margin-top:14px">
             <button class="btn" id="nmRoll">Cast names</button>
           </div>
           <div class="morphgrid" id="nmList" style="margin-top:14px;max-height:none"></div>
@@ -777,7 +804,7 @@ a{color:var(--gold-soft);}
             <button class="btn" id="nmSave">Forge name</button>
           </div>
         </div>
-        <div class="note"><b>Everyday names.</b> Audalad names carry no gender and serve as either a first or last name, as with <i>Ederai</i> &ldquo;rose,&rdquo; <i>Naru</i> &ldquo;benevolent,&rdquo; or <i>Utur</i> &ldquo;shining.&rdquo; Candidates are cast from the documented sounds and name-endings (<i>-ai, -i, -u, -ur, -il, -ar, -an, -el</i>), avoiding harsh clusters and the regal <i>&Acirc;</i> marker. Click one, give it a meaning if it has one, and forge it.</div>
+        <div class="note"><b>Everyday names.</b> Audalad names carry no gender and serve as either a first or last name, as with <i>Ederai</i> &ldquo;rose,&rdquo; <i>Naru</i> &ldquo;benevolent,&rdquo; or <i>Utur</i> &ldquo;shining.&rdquo; Shape your casting first: choose its <i>length</i>, its <i>sound</i> (soft and flowing for the gentle, strong for the martial), a fixed <i>ending</i>, or the sound it should begin with. To name a thing after its meaning, name the meaning and the forge will echo the parent word, marking the candidate with its sense. Candidates avoid harsh clusters and the regal <i>&Acirc;</i> marker. Click one, give it a meaning if it has none, and forge it.</div>
       </div>
 
       <!-- regal -->
@@ -2369,49 +2396,146 @@ document.getElementById('gnSave').addEventListener('click',()=>{
 
 /* --- name --- */
 const NAME_END=['ai','i','u','ur','il','ar','an','el','et','ina','iz','umi'];
+const ONSET_SOFT=['n','m','r','l','v','h','sh','s','f'];
+const ONSET_STRONG=['k','t','d','g','b','p','z','zh','ts'];
+const ONSET_FLOW=['s','z','sh','zh','ts','r','l','n','v'];
+let nmLen=2, nmTex='any';
+function nmOnsetPool(){
+  if(nmTex==='soft')return ONSET_SOFT;
+  if(nmTex==='strong')return ONSET_STRONG;
+  if(nmTex==='flow')return ONSET_FLOW;
+  return GEN_ONSET;
+}
+function nmCap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+function nmPickEnd(){
+  const v=document.getElementById('nmEnd').value;
+  return (v && v!=='any') ? v : pick(NAME_END);
+}
+function nmCleanStart(){
+  return (document.getElementById('nmStart').value||'').trim().toLowerCase().replace(/[^a-z']/g,'');
+}
+/* free generation honouring length / texture / ending / start */
 function genName(){
-  const syl=Math.random()<0.55?2:(Math.random()<0.7?1:2);
-  let s='';
-  let prevStop=false;
-  for(let i=0;i<syl;i++){
-    let on=pick(GEN_ONSET);
-    if(prevStop && STOPS.includes(on)) on=pick(['n','m','r','l','s','sh']); // avoid stop+stop seam
+  const pool=nmOnsetPool();
+  const start=nmCleanStart();
+  let s='';let prevStop=false;
+  for(let k=0;k<nmLen;k++){
+    if(k===0 && start){
+      s+= /[aeiou]$/.test(start) ? start : start+pick(GEN_VOWEL);
+      const last=start.replace(/[aeiou]+$/,'').slice(-1);
+      prevStop=STOPS.includes(last);
+      continue;
+    }
+    let on=pick(pool);
+    if(prevStop && STOPS.includes(on)) on=pick(['n','m','r','l','s','sh']);
     s+=on+pick(GEN_VOWEL);
     prevStop=STOPS.includes(on);
   }
-  s+=pick(NAME_END);
-  return s.charAt(0).toUpperCase()+s.slice(1);
+  s+=nmPickEnd();
+  return nmCap(s);
 }
-let nmSelected='';
+/* meaning seed: resolve an English sense or a typed form to a parent word */
+function nmResolveSeed(){
+  const raw=(document.getElementById('nmSeed').value||'').trim();
+  if(!raw) return null;
+  const t=raw.toLowerCase();
+  const L=lex();
+  let m=L.find(d=>d.en.toLowerCase()===t);
+  if(!m) m=L.find(d=>d.en.toLowerCase().split(/[\/,;]/).map(x=>x.trim()).includes(t));
+  if(!m) m=L.find(d=>d.au.toLowerCase()===t);
+  if(!m) m=L.find(d=>d.en.toLowerCase().includes(t));
+  if(m) return {form:m.au, mean:m.en};
+  return {form:raw, mean:''};
+}
+function nmSeedStem(form){
+  let b=form.toLowerCase().replace(/[^a-z]/g,'');
+  let stem=b.replace(/[aeiou]+$/,'');
+  if(stem.length<2) stem=b;
+  return {b, stem};
+}
+/* build a deduped list of name candidates derived from the parent word */
+function nmSeedCandidates(seed){
+  const {b, stem}=nmSeedStem(seed.form);
+  const endsel=document.getElementById('nmEnd').value;
+  const ends=(endsel && endsel!=='any') ? [endsel] : NAME_END;
+  const out=[];const seen={};
+  const add=w=>{w=nmCap(w);if(w.length>1 && !seen[w]){seen[w]=1;out.push(w);}};
+  if(/[aeiourln]$/.test(b) && b.length>=3) add(b);            // parent word, if name-shaped
+  ends.forEach(e=>add(stem+e));                                // full stem, re-ended
+  const short=stem.slice(0,Math.max(2,Math.min(stem.length,4)));
+  ends.forEach(e=>add(short+e));                               // clipped stem, re-ended
+  // shuffle for variety
+  for(let k=out.length-1;k>0;k--){const r=Math.floor(Math.random()*(k+1));[out[k],out[r]]=[out[r],out[k]];}
+  return out;
+}
+let nmSelected='', nmSelMean='';
+function nmMakeBtn(list, word, mean){
+  const b=document.createElement('button');b.className='morphbtn';
+  b.innerHTML='<span class="mb-f">'+escapeHtml(word)+'</span><span class="mb-m">'+escapeHtml(toNative(word))+'</span>';
+  b.style.fontFamily='inherit';
+  b.querySelector('.mb-m').style.fontFamily="'AudaladScript'";
+  b.querySelector('.mb-m').style.fontSize='20px';
+  if(mean) b.title=word+' \u00b7 '+mean;
+  b.addEventListener('click',()=>{
+    nmSelected=word; nmSelMean=mean||'';
+    document.getElementById('nmForm').textContent=word;
+    document.getElementById('nmNative').textContent=toNative(word);
+    document.getElementById('nmWarn').textContent=dupWarnText(word);
+    const mf=document.getElementById('nmMean');
+    if(mean && !mf.value.trim()) mf.value=mean;
+    list.querySelectorAll('.morphbtn').forEach(x=>x.classList.remove('typebtn','active'));
+    b.classList.add('active');
+  });
+  list.appendChild(b);
+}
 function rollNames(){
   const list=document.getElementById('nmList');list.innerHTML='';
-  nmSelected='';
+  nmSelected='';nmSelMean='';
   document.getElementById('nmForm').textContent='';
   document.getElementById('nmNative').textContent='';
   document.getElementById('nmWarn').textContent='';
+  const seed=nmResolveSeed();
   const seen={};
-  let n=0,tries=0;
-  while(n<9 && tries<400){
-    tries++;
-    const r=genName();
-    if(seen[r]||existsInLexicon(r)) continue;
-    seen[r]=1;n++;
-    const b=document.createElement('button');b.className='morphbtn';
-    b.innerHTML='<span class="mb-f">'+escapeHtml(r)+'</span><span class="mb-m">'+escapeHtml(toNative(r))+'</span>';
-    b.style.fontFamily='inherit';
-    b.querySelector('.mb-m').style.fontFamily="'AudaladScript'";
-    b.querySelector('.mb-m').style.fontSize='20px';
-    b.addEventListener('click',()=>{
-      nmSelected=r;
-      document.getElementById('nmForm').textContent=r;
-      document.getElementById('nmNative').textContent=toNative(r);
-      document.getElementById('nmWarn').textContent=dupWarnText(r);
-      list.querySelectorAll('.morphbtn').forEach(x=>x.classList.remove('typebtn','active'));
-      b.classList.add('active');
-    });
-    list.appendChild(b);
+  if(seed){
+    const cands=nmSeedCandidates(seed);
+    let n=0;
+    for(const w of cands){
+      if(n>=9) break;
+      if(seen[w]||existsInLexicon(w)) continue;
+      seen[w]=1;n++;
+      nmMakeBtn(list, w, seed.mean);
+    }
+    // top up with free names if the seed didn't yield enough
+    let tries=0;
+    while(n<9 && tries<300){
+      tries++;const r=genName();
+      if(seen[r]||existsInLexicon(r)) continue;
+      seen[r]=1;n++;nmMakeBtn(list, r, '');
+    }
+  } else {
+    let n=0,tries=0;
+    while(n<9 && tries<400){
+      tries++;const r=genName();
+      if(seen[r]||existsInLexicon(r)) continue;
+      seen[r]=1;n++;nmMakeBtn(list, r, '');
+    }
   }
 }
+/* wire the segmented controls */
+document.querySelectorAll('#nmLenSeg .seg').forEach(b=>{
+  b.addEventListener('click',()=>{
+    nmLen=parseInt(b.dataset.len,10)||2;
+    document.querySelectorAll('#nmLenSeg .seg').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+  });
+});
+document.querySelectorAll('#nmTexSeg .seg').forEach(b=>{
+  b.addEventListener('click',()=>{
+    nmTex=b.dataset.tex||'any';
+    document.querySelectorAll('#nmTexSeg .seg').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+  });
+});
 document.getElementById('nmRoll').addEventListener('click',rollNames);
 document.getElementById('nmSave').addEventListener('click',()=>{
   if(!nmSelected) return;
@@ -2430,6 +2554,16 @@ function fillWordDatalists(){
       const o=document.createElement('option');o.value=d.au;o.textContent=d.au+' \u00b7 '+d.en;dl.appendChild(o);
     });
   });
+  const nd=document.getElementById('allWordsName');
+  if(nd){
+    nd.innerHTML='';
+    const seenEn={};
+    lex().slice().sort((a,b)=>a.en.localeCompare(b.en)).forEach(d=>{
+      const key=d.en.toLowerCase();
+      if(seenEn[key]) return; seenEn[key]=1;
+      const o=document.createElement('option');o.value=d.en;o.textContent=d.en+' \u00b7 '+d.au;nd.appendChild(o);
+    });
+  }
 }
 
 function initForge(){
