@@ -262,6 +262,8 @@ select,.vinput{
 .sp-row.dupe .sp-flag{color:var(--gold-soft);}
 .sp-row.bad{border-color:var(--err);}
 .sp-row.bad .sp-flag{color:var(--err);}
+.sp-row.warn{border-color:var(--gold-dim);}
+.sp-row.warn .sp-flag{color:var(--gold-soft);}
 .scratch-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
 .scratch-summary-line{color:var(--ink-dim);font-size:12px;font-style:italic;padding:6px 2px;}
 .btn.danger{}
@@ -1885,6 +1887,25 @@ function existsInLexicon(form){
   const k=form.replace(/['\u2019\u02bc]/g,'').toLowerCase();
   return lex().find(d=>d.au.replace(/['\u2019\u02bc]/g,'').toLowerCase()===k);
 }
+function glossSet(s){
+  // split a meaning into its individual glosses, lowercased, parentheticals dropped
+  const out=new Set();
+  String(s||'').split(/[\/,;]/).forEach(p=>{
+    const g=p.toLowerCase().replace(/\([^)]*\)/g,'').trim();
+    if(!g) return;
+    out.add(g);
+    const m=g.match(/^to\s+(\S+)$/);   // a verb "to sell" also matches its bare stem "sell" (and vice-versa)
+    if(m) out.add(m[1]);
+  });
+  return out;
+}
+function meaningHits(mean){
+  // existing lexicon entries that share a gloss with this meaning (synonyms)
+  const want=glossSet(mean); if(!want.size) return [];
+  const hits=[];
+  lex().forEach(d=>{ for(const g of glossSet(d.en)){ if(want.has(g)){ hits.push(d); break; } } });
+  return hits;
+}
 function knownMeaning(form){
   // recognise a base as either a dictionary word or a documented root (exact match)
   const f=(form||'').trim();
@@ -2554,7 +2575,11 @@ function renderScratch(){
     let cls, flag;
     if(r.err){ cls='bad'; flag=r.err; }
     else if(existsInLexicon(r.form)){ cls='dupe'; flag='already in lexicon'; }
-    else { cls='ready'; flag='ready'; ready++; }
+    else {
+      const mh=meaningHits(r.mean);
+      if(mh.length){ cls='warn'; flag='same meaning as '+mh.slice(0,3).map(function(d){return d.au;}).join(', ')+(mh.length>3?' +'+(mh.length-3):''); ready++; }
+      else { cls='ready'; flag='ready'; ready++; }
+    }
     const native = (r.form && !r.err) ? '<span class="sp-native">'+escapeHtml(toNative(r.form))+'</span>' : '';
     const pos = (r.mean && !r.err) ? '<span class="sp-pos">'+escapeHtml(r.pos)+'</span>' : '';
     return '<div class="sp-row '+cls+'">'+
