@@ -79,6 +79,49 @@ h1{
 }
 .tab:hover{color:var(--ink);border-color:var(--gold-dim);}
 .tab.active{color:var(--bg);background:var(--gold);border-color:var(--gold);font-weight:700;}
+.tab-badge{display:inline-block;margin-left:7px;min-width:16px;padding:0 5px;border-radius:9px;background:var(--gold-dim);color:var(--ink);font-size:10px;line-height:16px;text-align:center;letter-spacing:0;vertical-align:middle;}
+.tab.active .tab-badge{background:var(--bg);color:var(--gold);}
+.tab-badge.hidden{display:none;}
+/* WANTS view */
+.wants-intro{max-width:680px;margin:0 auto 22px;text-align:center;}
+.wants-intro .lede{color:var(--ink-dim);font-size:15px;line-height:1.6;font-style:italic;}
+.wmode{display:flex;justify-content:center;gap:6px;margin-bottom:18px;}
+.wmode-btn{font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;background:transparent;border:1px solid var(--line);color:var(--ink-dim);padding:8px 18px;cursor:pointer;border-radius:2px;transition:all .18s;}
+.wmode-btn:hover{color:var(--ink);border-color:var(--gold-dim);}
+.wmode-btn.active{color:var(--bg);background:var(--gold-soft);border-color:var(--gold-soft);font-weight:700;}
+.wmode-panel.hidden{display:none;}
+.wants-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+.wsort{display:flex;align-items:center;gap:6px;color:var(--ink-dim);font-size:12px;flex-wrap:wrap;}
+.wsort-btn{font-size:11px;letter-spacing:.5px;background:transparent;border:1px solid var(--line);color:var(--ink-dim);padding:5px 11px;border-radius:2px;cursor:pointer;transition:all .15s;}
+.wsort-btn:hover{color:var(--ink);border-color:var(--gold-dim);}
+.wsort-btn.active{color:var(--gold);border-color:var(--gold-dim);}
+.wants-actions{display:flex;gap:8px;}
+.wtable{width:100%;border-collapse:collapse;margin-top:6px;}
+.wtable th{font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-soft);text-align:left;padding:10px 12px;border-bottom:1px solid var(--gold-dim);}
+.wtable td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle;}
+.wtable .w-word{color:var(--ink);font-size:17px;}
+.wtable .w-n{color:var(--gold);font-size:15px;text-align:center;width:90px;}
+.wtable .w-act{text-align:right;white-space:nowrap;width:170px;}
+.wtable .w-seen{color:var(--ink-dim);font-size:12px;margin-top:3px;}
+.w-forge,.w-dismiss{font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;background:transparent;border:1px solid var(--line);color:var(--ink-dim);padding:6px 11px;border-radius:2px;cursor:pointer;transition:all .18s;margin-left:6px;}
+.w-forge:hover{border-color:var(--gold);color:var(--gold);}
+.w-dismiss:hover{border-color:var(--err);color:var(--err);}
+.w-tier{display:inline-block;margin-left:9px;font-size:10px;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:9px;vertical-align:middle;border:1px solid;}
+.w-tier.core{color:#cf8f3c;border-color:#cf8f3c;}
+.w-tier.common{color:var(--verd);border-color:var(--verd);}
+.w-tier.uncommon{color:var(--ink-dim);border-color:var(--line);}
+.w-tier.rare{color:#8d7ea0;border-color:#4a3f5a;}
+.wants-empty{text-align:center;color:var(--ink-dim);font-style:italic;padding:34px 16px;line-height:1.7;}
+.core-summary{text-align:center;margin-bottom:18px;}
+.core-bar{max-width:460px;height:12px;margin:10px auto 8px;background:var(--panel2);border:1px solid var(--line);border-radius:7px;overflow:hidden;}
+.core-bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--gold-soft),var(--gold));transition:width .4s;}
+.core-count{font-family:'Cinzel',serif;font-size:14px;letter-spacing:1px;color:var(--gold);}
+.core-sub{color:var(--ink-dim);font-size:12px;font-style:italic;margin-top:4px;}
+.ctile{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;border-bottom:1px solid var(--line);}
+.ctile.have{opacity:.5;}
+.ctile .ct-word{color:var(--ink);font-size:15px;}
+.ctile.have .ct-word{color:var(--ink-dim);}
+.ctile .ct-have{color:var(--verd);font-size:12px;}
 
 /* collapsible guide */
 .guide{max-width:680px;margin:0 auto 26px;background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:6px;overflow:hidden;}
@@ -348,6 +391,9 @@ select,.vinput{
 .subtab.active{color:var(--gold);border-color:var(--gold);background:rgba(212,175,82,0.08);}
 .fview{display:none;}
 .fview.active{display:block;animation:fade .3s ease;}
+.fintro{max-width:640px;margin:0 auto 18px;text-align:center;color:var(--ink-dim);font-size:14px;line-height:1.6;font-style:italic;}
+.fintro b{display:block;margin-bottom:5px;color:var(--gold-soft);font-style:normal;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;}
+.fintro .step{font-style:normal;color:var(--gold-dim);font-weight:700;}
 .forgewrap{max-width:680px;margin:0 auto;}
 .builder{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:6px;padding:20px;margin-bottom:18px;}
 .coinout{text-align:center;padding:14px 10px 6px;}
@@ -481,6 +527,7 @@ a{color:var(--gold-soft);}
   <div class="tabs">
     <button class="tab active" data-view="translate">Translate</button>
     <button class="tab" data-view="dict">Lexicon</button>
+    <button class="tab" data-view="wants">Wants<span class="tab-badge hidden" id="wantsBadge">0</span></button>
     <button class="tab" data-view="conj">Conjugate</button>
     <button class="tab" data-view="forge">Forge</button>
     <button class="tab" data-view="grammar">Grammar</button>
@@ -624,6 +671,40 @@ a{color:var(--gold-soft);}
     <div class="dictlist" id="dictlist"></div>
   </section>
 
+  <!-- WANTS -->
+  <section class="view" id="wants">
+    <div class="wants-intro">
+      <p class="lede">Two readings of what the tongue still lacks: the words speakers reached for and did not find, and the universal core every language is expected to carry. Both are worklists for the Forge and the Council.</p>
+    </div>
+    <div class="wmode">
+      <button class="wmode-btn active" data-wmode="use">From use</button>
+      <button class="wmode-btn" data-wmode="core">Core vocabulary</button>
+    </div>
+
+    <div id="wantsUse" class="wmode-panel">
+      <div class="wants-bar">
+        <div class="wsort"><span>Order by</span>
+          <button class="wsort-btn active" data-wsort="demand">Most wanted</button>
+          <button class="wsort-btn" data-wsort="freq">Most common</button>
+        </div>
+        <div class="wants-actions">
+          <button class="btn ghost mini" id="wantsExport" title="Copy the list as ranked text for a Council proposal">Copy list</button>
+          <button class="btn ghost mini danger" id="wantsClear" title="Forget all gathered wants">Clear all</button>
+        </div>
+      </div>
+      <div id="wantsBody"></div>
+    </div>
+
+    <div id="wantsCore" class="wmode-panel hidden">
+      <div class="core-summary" id="coreSummary"></div>
+      <div class="wants-bar">
+        <label class="toggle"><input type="checkbox" id="coreShowAll"><span class="dot"></span>Show concepts already carried</label>
+        <button class="btn ghost mini" id="coreExport" title="Copy the missing core words for a Council proposal">Copy gaps</button>
+      </div>
+      <div id="coreBody"></div>
+    </div>
+  </section>
+
   <!-- CONJUGATE -->
   <section class="view" id="conj">
     <div class="conjwrap">
@@ -659,6 +740,7 @@ a{color:var(--gold-soft);}
 
       <!-- compound -->
       <div class="fview active" id="f-compound">
+        <div class="fintro"><b>Compound</b>Fuse existing roots into a brand-new word. <span class="step">Click roots</span> below to stack them, smooth the joined form for sound, name what it means, then forge.</div>
         <div class="builder">
           <div class="coinout">
             <div class="c-native" id="cmpNative"></div>
@@ -676,13 +758,14 @@ a{color:var(--gold-soft);}
           </div>
         </div>
         <div class="flabel">Roots &amp; morphemes: click to add</div>
-        <input class="morphsearch" id="morphSearch" placeholder="Filter roots by form or meaning\u2026">
+        <input class="morphsearch" id="morphSearch" placeholder="Filter roots by form or meaning&hellip;">
         <div class="morphgrid" id="morphGrid"></div>
         <div class="note"><b>Cluster rule.</b> New cluster words are built from original Audalad roots, and an apostrophe (<i>'</i>) is added at the end to mark that clusterification was used. The final form is editable so you can drop a vowel or soften a cluster. Audalad favors soft sounds and avoids harsh clusters.</div>
       </div>
 
       <!-- verb -->
       <div class="fview" id="f-verb">
+        <div class="fintro"><b>Verb</b>Turn a stem into a verb. <span class="step">Type or pick a stem</span>, choose what <i>kind</i> of action it is (this sets the final vowel), then forge. The gloss and adverb form update as you build.</div>
         <div class="builder">
           <div class="coinout">
             <div class="c-native" id="vbNative"></div>
@@ -691,7 +774,7 @@ a{color:var(--gold-soft);}
             <div class="c-warn" id="vbWarn"></div>
           </div>
           <div class="flabel">Verb stem</div>
-          <input class="vinput" id="vbStem" placeholder="e.g. sar, nerg, zhav\u2026 or pick a root below">
+          <input class="vinput" id="vbStem" placeholder="e.g. sar, nerg, zhav&hellip; or pick a root below">
           <div class="flabel">Action type (sets the final vowel)</div>
           <div class="typegrid" id="vbTypes"></div>
           <div class="frow">
@@ -707,13 +790,14 @@ a{color:var(--gold-soft);}
             <button class="seg" id="vbModeVerbs">Coined verbs</button>
           </span>
         </div>
-        <input class="morphsearch" id="vbSearch" placeholder="Filter roots by form or meaning\u2026">
+        <input class="morphsearch" id="vbSearch" placeholder="Filter roots by form or meaning&hellip;">
         <div class="morphgrid" id="vbPickGrid"></div>
         <div class="note"><b>Verb typing.</b> A verb's final vowel encodes the <i>kind</i> of action: physical <i>-u</i>, emotional <i>-a</i>, abstract <i>-i</i>, existential <i>-&#616;</i>, revealing <i>-l</i>, selfish <i>-r</i>, neutral <i>-d</i>, completory <i>-k</i>. The adverb form adds <i>-esha</i> (shown above the result). Pick a documented root for the stem or type your own. The gloss confirms the root when it recognizes one, and warns if the verb already exists.</div>
       </div>
 
       <!-- pronoun -->
       <div class="fview" id="f-pronoun">
+        <div class="fintro"><b>Pronoun</b>Assemble a rank-marked pronoun. <span class="step">Choose your rank</span> toward the listener and the point of view, toggle possessive or plural, and the form builds itself by the rank formula.</div>
         <div class="builder">
           <div class="coinout">
             <div class="c-native" id="pnNative"></div>
@@ -740,6 +824,7 @@ a{color:var(--gold-soft);}
 
       <!-- derive -->
       <div class="fview" id="f-derive">
+        <div class="fintro"><b>Derive</b>Bend a word you already have into a new form. <span class="step">Pick a base word</span>, apply a transformation (plural, possessive, negation, tense, ordinal), then keep the result.</div>
         <div class="builder">
           <div class="coinout">
             <div class="c-native" id="drNative"></div>
@@ -748,7 +833,7 @@ a{color:var(--gold-soft);}
             <div class="c-warn" id="drWarn"></div>
           </div>
           <div class="flabel">Base word</div>
-          <input class="vinput" id="drBase" list="allWords" placeholder="Type or pick any Audalad word\u2026">
+          <input class="vinput" id="drBase" list="allWords" placeholder="Type or pick any Audalad word&hellip;">
           <datalist id="allWords"></datalist>
           <div class="flabel">Apply a transformation</div>
           <div class="affixrow" id="drAffixes"></div>
@@ -762,6 +847,7 @@ a{color:var(--gold-soft);}
 
       <!-- name -->
       <div class="fview" id="f-name">
+        <div class="fintro"><b>Name</b>Cast names for people and places. <span class="step">Set the shape</span> you want (length, sound, ending, or opening), or name a meaning for it to echo, then cast a batch and forge the one you like.</div>
         <div class="builder">
           <div class="coinout">
             <div class="c-native" id="nmNative"></div>
@@ -789,11 +875,11 @@ a{color:var(--gold-soft);}
             </div>
             <div>
               <div class="flabel" style="margin:0 0 5px">Begins with (optional)</div>
-              <input class="vinput" id="nmStart" placeholder="e.g. Sh, El, Za\u2026" style="max-width:170px">
+              <input class="vinput" id="nmStart" placeholder="e.g. Sh, El, Za&hellip;" style="max-width:170px">
             </div>
           </div>
           <div class="flabel">Build from a meaning (optional)</div>
-          <input class="vinput" id="nmSeed" list="allWordsName" placeholder="A word the name should echo, e.g. fire, rose, light\u2026">
+          <input class="vinput" id="nmSeed" list="allWordsName" placeholder="A word the name should echo, e.g. fire, rose, light&hellip;">
           <datalist id="allWordsName"></datalist>
           <div class="frow" style="justify-content:center;margin-top:14px">
             <button class="btn" id="nmRoll">Cast names</button>
@@ -809,6 +895,7 @@ a{color:var(--gold-soft);}
 
       <!-- regal -->
       <div class="fview" id="f-regal">
+        <div class="fintro"><b>Regal name</b>Lift a common word into a regal or divine name. <span class="step">Choose a source word</span>, reshape it if you wish, and the <i>&Acirc;</i> marker is added to set it above the literal.</div>
         <div class="builder">
           <div class="coinout">
             <div class="c-native" id="rgNative"></div>
@@ -817,11 +904,11 @@ a{color:var(--gold-soft);}
             <div class="c-warn" id="rgWarn"></div>
           </div>
           <div class="flabel">Source word</div>
-          <input class="vinput" id="rgBase" list="allWords2" placeholder="A dictionary word to adapt\u2026">
+          <input class="vinput" id="rgBase" list="allWords2" placeholder="A dictionary word to adapt&hellip;">
           <datalist id="allWords2"></datalist>
           <div class="flabel">Adapt the form (optional), then it is marked with &Acirc;</div>
           <div class="frow">
-            <input class="vinput" id="rgAdapt" placeholder="Adapted form\u2026">
+            <input class="vinput" id="rgAdapt" placeholder="Adapted form&hellip;">
             <button class="btn ghost" id="rgApply">Add &Acirc;</button>
           </div>
           <div class="frow" style="margin-top:10px">
@@ -834,6 +921,7 @@ a{color:var(--gold-soft);}
 
       <!-- generate -->
       <div class="fview" id="f-generate">
+        <div class="fintro"><b>Generate root</b>When no existing root fits, roll fresh ones from scratch. <span class="step">Cast a batch</span> of valid-sounding roots, pick one, give it a meaning, and it becomes a root others can build on.</div>
         <div class="builder">
           <div class="coinout">
             <div class="c-native" id="gnNative"></div>
@@ -854,9 +942,10 @@ a{color:var(--gold-soft);}
 
       <!-- analyze -->
       <div class="fview" id="f-analyze">
+        <div class="fintro"><b>Analyze</b>The forge run in reverse. <span class="step">Paste any Audalad word</span> and it strips the affixes and markers, then splits the stem into the roots it recognizes: a quick way to check your own coinages.</div>
         <div class="builder">
           <div class="flabel">Word to analyze</div>
-          <input class="vinput" id="anInput" list="allWords3" placeholder="Type any Audalad word\u2026 e.g. Zh\u00e9arsarekir, Audalad, Elsakataudaladae">
+          <input class="vinput" id="anInput" list="allWords3" placeholder="Type any Audalad word&hellip; e.g. Zh&eacute;arsarekir, Audalad, Elsakataudaladae">
           <datalist id="allWords3"></datalist>
           <div class="anresult" id="anResult"><div class="emptyhint">Enter a word to break it into roots and affixes.</div></div>
         </div>
@@ -865,6 +954,7 @@ a{color:var(--gold-soft);}
 
       <!-- number -->
       <div class="fview" id="f-number">
+        <div class="fintro"><b>Number</b>Write any number in words. <span class="step">Type a value</span> from 0 to 999999 and read it in Audalad, native script, and pronunciation, with an ordinal toggle.</div>
         <div class="builder">
           <div class="coinout">
             <div class="c-native" id="numNative"></div>
@@ -3012,6 +3102,162 @@ initRankControls();
 updateRankbarVisibility();
 render();
 loadOfficial();
+
+/* ================= WANTS: unmet demand + core vocabulary ================= */
+const LS_WANTS = 'audalad_wants_v1';
+let wants = {};
+let recordedBuffer = {};
+let wantsTimer = null;
+let wantsSort = 'demand';
+
+const FREQ_WORDS = "the to and of a in i is for that you it on with this was be as are have at he not by but from my or we an your all so his they me if one can will just like about up out what has when more do no were who had it's their there her which time get been would she new people how don't some also them now other i'm its our than good only after first him into know see two make over think any then could back these us want because go well said way most much very where even should may here need really did right work year years being day too going before off why made still take got many never those life say world down great through you're last s that's while best such love man home long look something use can't same used both every am come part state three around between always better find help high little old since another does own things under during game i've thing give house place school again next each mr without against didn't end found must show big feel sure team ever family keep might please put money free second someone away left number city days lot name night play until company doing few he's let real called different having set thought done however getting god government group looking public top women business care start system times week already anything case nothing person today change enough everything full live making point read there's told yet bad doesn't four hard mean once support tell including music power seen states stop water based believe call head men national small took white came far job side though try went yes actually american later less line order party run says service country open season shit thank children everyone general they're trying united using area black d following law makes together war whole car face five kind maybe per president story working course games health hope important least means news within able book early friends i'll information local oh post t thanks young ago others social talk court fact given guys half hand isn't level mind often single become body coming control death food guy hours office pay problem south true we're almost fuck history known large lost m research room several started taking university win wrong along anyone else girl john matter pretty remember air bit friend hit needs nice playing probably saying understand yeah york class close comes i'd idea international looks past possible wanted b cause due happy human members months move question r series wait woman ask community data late leave north saw special watch won't c either fucking future light low million morning police short stay taken age buy deal rather reason red report soon third turn whether among check development form further heart minutes myself services yourself act although asked child fire fun living major media players art behind building easy gonna market near non plan political quite six talking west works according available e education final former front kids list ready sometimes son street wasn't bring college current example experience heard london meet program type baby chance father march process she's song study word across action clear gave gets himself month outside self students words board cost cut dr field held instead main moment mother road seems thinking town wants de department energy fight fine force hear issue played points price re rest results running shows space summer term wife america beautiful date goes killed land miss project sex shot site strong you'll account co especially eyes include june parents period position record similar total w above club common died film happened knew lead likely military perfect personal security share st what's won x april center county couple dead english happen hold industry inside issues player private problems return rights sense star test view weeks break british companies event higher hour l member middle needed present result sorry takes training wish wouldn't answer boy design finally girls gold gone guess interest july king learn policy society added al alone average bank brought certain church east hands hot let's longer medical movie original park performance press received role sent themselves tried worked worth areas became bill books cool director exactly giving ground meeting n provide questions relationship september sound source usually value evidence follow lives official ok production rate reading round save stand stuff tax whatever amount blue countries david drive eat fall fast federal feeling felt green league management match model p picture size step trust you've central changes england forward groups hey key mom o page paid range review science trade uk upon various attention brother cannot character chief cup football hate haven't james led looked lower natural october property quality send style u vote amazing august blood china complete dog economic hell involved itself language lord november oil related serious stage terms title add article attack born couldn't damn decided decision enjoy entire french january kill met perhaps poor release situation technology turned written choice code considered continue council cover currently door election european events f financial foreign hair increase legal lose michael pick race seem seven sign simple simply staff super union walk washington bed began built career changed crazy daily daughter december die difficult figure hospital knows loss modern ones paper parts popular published safe starting systems version voice whose writing army australia earth forget goal h huge listen okay practice rules sea sir success towards v waiting ways access aren't base below created deep followed la mark missing offer pass professional released risk schools sleep table ten truth ball box build card cases dark district europe george india mine minister note percent piece products recent seeing straight visit wall wanna we've wrote allowed boys culture etc fans february gives growth included married officer pain paul places respect response river rock shall speak specific standard tonight write y album century charge cold create effect eight except eye funny ii limited moving network peace provided recently required sales spent store student tomorrow track via watching weight addition ahead allow anti association beat brown capital chinese committee conference difference double expect gas island moved normal plans population potential pressure radio russian station text treatment western ass beginning california campaign certainly completely content credit cross described despite female focus g hi husband ice individual interesting j join kept leading loved message miles nearly particular previous quickly region reported section sort speed travel consider contact drop fair feet jesus kid link positive sale throughout tour welcome absolutely additional beyond conditions earlier extra forces immediately jobs leaving minute nature numbers quick sell significant studies unless winning agree canada clean computer construction episode favorite income justice levels manager movement photo posted safety san scene sold sounds spend statement sun teams ability announced asking calling coach collection continued costs definitely designed expected friday gun happens heavy includes knowledge particularly search subject train wide wow author centre claim dad developed fear fit generally german global goals gotta hotel interested judge lady leader letter lines material named nobody opportunity plus pre product regular secretary sister stories unit workers annual anymore bar battle brain contract degree families features finished floor france growing hurt image insurance majority meant opening opinion physical pro reach rule seriously sports stupid successful active administration approach australian biggest cancer civil dance defense direction independent master none reasons russia ship stock trump weekend wonder worst africa awesome band beach cash clearly commercial compared effort ended fan fighting imagine impact lack latest learning multiple older operation organization passed pictures protect secret senior spring sunday telling wear activities address analysis anyway bought calls choose christmas color commission competition details direct dream easily finish grand here's increased indian k literally luck marriage names necessary patients resources rich skin speaking supposed sweet thus touch yesterday caught closed congress damage directly disease doctor doubt drink driving established facebook feels fish gay germany glad greater grow largest machine notice overall planning professor programs records reports shown sit trip associated basic captain carry cars crime effective effects explain fully highly holding japan laws male mrs parties plant reality smith spot texas we'll winter worse advice agreement ain't award block broken caused challenge characters christian comment equipment eventually helped holy killing lived lots nation otherwise peter prices primary purpose rates responsible shop showing sick teacher theory uses william agency avoid camera catch cell coast comments drug economy environment executive foot hall mass meaning mission nine officers operations politics pop produced ran saturday status therefore trial truly weather activity application claims coffee complex condition division evening flight freedom heat highest interview library located location murder obama offered putting queen seconds showed sitting standing stars walking accept actual appear attempt broke channel distance eating exchange fat fell finding glass learned losing mobile northern opened placed powerful prior protection reached receive religious ride robert royal screen serve signed slow species speech traffic tree types vs wearing who's whom wonderful agreed airport animals appears begin benefits bottom cities demand engine everybody famous ideas investment keeping lie notes partner plays raised runs sad solution songs sources southern square stopped structure thomas traditional twice wind worry americans appeared becomes brand bus cent chicago count covered critical digital forced fourth fresh lake mental mentioned missed mostly mouth owner photos previously realize remain scale score separate smart starts surface throw tom totally twitter views wedding you'd acting actions african arms benefit budget click estate failed faith fashion feature fund generation hearing hill jack larger louis metal mid paris profile pull push returned rose seat seemed sexual shouldn't target understanding village agent animal apply authority basis becoming chris draw dude employees enter ex follows foundation gain http individuals japanese leaders memory prime projects ring rise selling served silver soul spread supply waste weird adult apparently artist chairman edition engineering grade happening healthy institute method mike monday nations obviously option prison provides remains senate smaller somebody stone strength users wild window winner arrived bag bet camp cast christ continues correct dangerous ed extremely firm greatest handle improve indeed leaves movies negative prevent removed richard spirit television till trouble usa videos advantage apart aware cat customers decide dinner dollars eastern fifth function gift helping herself impossible influence items joe los marketing mary materials nor produce progress proud require shooting shut standards tells thinks van wood background birth bridge carried charles classes completed concept copy dear dogs drugs efforts garden host housing inc israel journal labor leadership length lucky neither onto patient possibly prove rare setting skills software thousands tough units ad alive apple balance birthday bitch boss cards changing connection dress easier fellow florida horse knowing liked magic managed map net owned request stick they've turns vehicle volume wake aid beauty believed billion busy buying cells concerned conversation corner criminal cultural develop driver ends existing farm file fix fly frank guide images investigation mexico operating paying presented raise responsibility roll slightly suggest surprise technical thoughts treat unique variety violence weapons yours youth appreciate bigger breaking discovered dont dry edge evil excited forever funds helps henry injury iron lovely mad magazine martin models offers ordered parliament prepared reference religion sites somewhere stated strategy teachers web wine accounts angeles arm audience bay closer core democratic description dropped excellent exist figures forms guard honest issued joined jones lee lies likes medicine mention mountain nuclear orders port presence reaction reduce shoot sides solid spanish sport steps stress taste tea victory afternoon assistant britain citizens classic clothes decisions electric emergency entered entirely facts failure festival flat fuel harry hello houses ill initial introduced johnson kick links mail massive matters pair picked pieces plane plenty prince proper providing quarter regional scott session shape sky teaching toward transfer upper useful valley watched willing windows zone accident advanced alternative anywhere articles awards bear boat bringing capacity cheap climate communities discussion drinking duty fantastic feelings flying governor hasn't hundred industrial joint mix museum options path plants policies promise proposed purchase rain remove signs spending steel steve supporting terrible they'll tired treated turning vice warm afraid arts beer border canadian command crew crowd dating dick elements enemy ensure environmental filled fixed forest intelligence intended labour limit moon ocean powers profit proof soldiers suit wins women's appearance asian attorney banks behavior ben bodies brothers buildings chair creating debt domestic expensive grew historical homes honestly honor im jump launch listed minimum native noted originally planned pm ray sets suddenly supreme survey tech trees update user writer yellow younger ancient attacks charges combined communication connected contains download ending exercise express flow formed girlfriend hero illegal increasing joke loan methods officials people's performed planet relationships restaurant scotland selected shared shopping soft stuck sugar suggested supported surprised taught transport weren't accepted adding affairs allows appeal applied appropriate artists boston ca confirmed device drama entry era factor feed golden grant grown heads hoping keeps lawyer legs lying measures mistake ms muslim organizations platform pool pulled regarding relations requires route saved schedule scientific shoes smoke squad teach testing tests values walked williams ya abuse angry businesses candidate comfortable concern developing discuss elections emotional et everywhere facilities falling fox guns hole holiday interests internal ireland italian italy jersey laugh leg letters liberal listening ll loves lunch max milk pack payment perform recorded relatively sector sharing snow storm streets strike studio sub weak youtube actor advance apartment asia chain chapter committed confidence cook cute equal fake finance focused hits identity journey kitchen korea leads maintain measure mm numerous owners posts properties quiet revealed specifically split task taxes taylor twenty urban acts affected aircraft applications approved approximately argument arrested claimed conflict considering corporate debate determined distribution documents escape extended factors faster fault fill films flowers friendly ladies lay lights millions mixed phase properly pure reduced requirements residents revenue sam sat secure smile strange talent temperature thousand tony troops truck votes ah authorities basically besides bird blame bob bowl causes chicken collected context coverage determine display dying elected examples experienced falls false fired forgot funding identified iii incredible inspired launched ma meat ministry mode neck noticed novel obvious passing positions remaining scored shirt shots slowly stadium stores surgery trading tuesday vision whenever worried zero alex allowing begins champion charged cream crisis daniel delivered editor estimated eu giant iran jail jim kingdom literature mayor minor moments opposite orange ourselves pages remained selection serving signal stream struggle suicide talked theme thursday tiny typically un unfortunately usual vehicles virginia voted voting walls wave alcohol assembly breakfast bright brings capable carrying chosen combination conservative customer cutting desire destroyed draft drunk essential fail familiar finds granted guilty humans hundreds id improved jewish largely laughing markets medium ohio opportunities papers perfectly recommend referred relevant seek sending solo spoke stands talks ticket unable upset wing world's answers birds bomb creative cycle dealing directed don educational entertainment extreme facility fields goods hang holds info mainly maximum newspaper offering painting republic reserve returns row salt scared scottish shares statistics switch territory threat tickets wales adults affect appointed armed aside assistance bell blow bond boyfriend careful circumstances communications concerns controlled corporation cry danger deals delivery deserve devices dollar dreams empty enjoyed explained faces folks fucked gender instance kim kinda matches mile motion moves nick pacific prize realized reasonable receiving register resolution rural ryan saving sees singing spain tools typical universe warning wars wednesday admit attitude branch brazil conducted decades dedicated definition drawing favor flag frame guest ha heaven independence institutions it'll jackson kiss load plot possibility random recovery rent replace represent reviews scenes seeking senator sentence teeth tips trained understood academic academy accurate achieve adam afford andrew assume bbc bottle bunch category chat cheese chemical clinton competitive detail diet em favourite fruit harder he'd index item lane mess navy normally occurred opposition parent permanent personally pleasure prefer programme representative scheme shift stood storage tank tend tight transportation ultimately unlike weekly yard anybody assets basketball button candidates combat constitution consumer counter creation crown crying dc defined depending depression describe drivers el employment exclusive excuse expert frequently golf grace hopefully identify importance kevin laid latter manufacturing mining object partners pattern performing personnel perspective pregnant premier promote q revolution rooms severe sleeping suppose tool tournament turkey ve victim victims agents amazon arrest attend ban brilliant carbon catholic chose circle concert crash declared deliver depth deputy dirty doctors earned electronic error existence experiences expression factory headed interior joy jr legislation maintenance manner mate matt nearby noise origin pakistan panel personality plate practices prepare relief replaced resistance retail rice roads roof shame ships somewhat staying stronger surely tip updated writers absolute advertising agencies baseball bathroom bible cable calm championship checked client constant da dates degrees doors driven dumb empire exciting expansion he'll heavily hide incident irish linked manage messages michigan multi nfl politicians print quit refused reporting sight significantly sing soviet weapon wet widely worldwide ages anniversary attractive bike broad burn cake causing closely constantly contest deaths depends drawn fees francisco haha hardly hat height hidden hong invited letting loud manchester marine motor officially pc peak portion pounds princess protein puts raw reform regions represented respond retirement sample seats secondary solar somehow stayed suffering sydney today's tries ultimate unknown wilson wondering attached attacked automatically balls battery bills blind breath brief carolina chest conduct debut decade destroy differences edward engaged experts expressed external fantasy ft grab hollywood immediate introduction joseph license paint pilot pink presidential principal recognize recognized registered regularly representatives rising seasons shipping singer smoking steam suffered survive tall thats theatre therapy witness adopted aim campus cap chances childhood clinical clubs comedy commander comparison covers dan defeat defence democracy detailed entitled exact exposed fed fee injured jan jordan kinds lets loans lock musical nose objects opposed organized plastic protected purposes quote recording semi statements suspect swear techniques tie tim trend valuable wealth wise yards aged approval aspects attempts bread burning champions contain convention dancing document eggs employee en engineer equivalent facing fairly fingers ford founded functions gang graduate greek hanging inner islands le lift marked memories miller monthly mountains neighborhood operate outstanding permission racing recommended regulations reply rid roman scientists shoulder shower solutions sons stations stephen tower tradition visited visual wheel zealand achieved admitted appointment authors barely bc bush cabinet celebrate challenges chocolate coal colour contemporary criticism davis dna effectively eric extensive faced filed formation fought gained gallery highway historic hunt improvement inch initially junior jury kong korean marks monster obtained olympic philosophy pride promised repeat returning riding rough santa settlement smell sought speaker studied suggests surrounding tone topic toronto universal vast visitors wanting auto consistent continuing earn exists finger grey guitar heading howard ignore involving latin lewis meal meanwhile meetings naturally necessarily offices pants partnership payments percentage pocket practical primarily proved rape regardless relative represents rescue resulting rush sarah sessions sharp simon soccer stable structures supplies symptoms temporary tested trick attended audio bone brian bullshit chamber chart children's circuit clothing complicated confused consequences defend divided elizabeth everyday extent fishing format gap gate gotten harm healthcare household immigration impressive jews joining killer lesson limits loving ltd managers membership miami mirror mount nights occur parking proposal province purchased recognition reputation rolling shortly situations strongly tears technique thin tied z accused adventure argue assessment atmosphere awful bedroom belief bound breaks carefully cats ceo choices closing cloud colorado colors contrast courses courts donald drew egg element elsewhere establish extension files founder gear georgia hills hip hitting increases infrastructure jason locations loose machines men's moral offensive pa package pointed poverty processes processing qualified railway reaching ridiculous sensitive server shock silence soldier superior supporters thick threw tons transition violent voters wash acid actress administrative alan alongside angel anxiety babies bars bonus castle charity clients compare contained cooking covering curious directors discovery discussed duke egypt encourage enforcement featuring finals flash formal formula fort governments gray gross horses hungry informed innocent jeff losses luke mac math minds mistakes mystery networks olympics palace passes penalty pet phones photography producing protest publication rating refer respectively rome scheduled select silent spoken successfully suffer temple tracks trail uncle unusual waters woods yo arrival asks assault awareness badly bath captured chase components concrete dave deeply expectations explanation exposure featured fiction guarantee happiness harris hearts horrible ideal illinois injuries islamic jimmy kelly legend lieutenant mini mood muscle muslims passion picking pleased procedure producer pushing rank replacement retired roles sand savings settled shadow singles tag tape thread victoria visiting wage we'd wings andy avenue bags beating believes blocks boring charlie checking clock commissioner commitment confident containing copies crimes custom denied desk drinks ear electricity episodes farmers fbi grounds gym helpful horror iphone iraq label liverpool locked naked ny opens output persons pitch pizza plain pushed raising rear reveal romantic scores sisters speaks stages strategic swimming welfare winners wire worker afterwards alright android anger architecture assist attempted behalf belt capture centers ceremony comic cops cuts dallas designer diamond disappointed dressed economics efficient electrical employed enjoying entering essentially establishment expecting explains flower ghost guests handed hockey houston https hunting industries islam jane judges kit lab languages maps min morgan moscow na nervous newly odd op ordinary participate philadelphia prayer principles racist rarely references sexy skill soil solve stomach struck studying suck supports trash ugly vegas virus walker whoever amounts anthony arthur aspect banned boost bureau colonel comfort controls cousin crack deck demands dies dragon dramatic dust dutch engineers evolution foods hired illness inspiration institution kings knife lately lowest memorial mexican minority mum opinions patterns presents priority promotion rail readers remote repair root saint steal stolen telephone tho titles trans ups vol whereas abandoned acquired actors alexander alliance annoying ap bid bro buddy buried butter cares columbia conclusion confirm congratulations contracts convinced crap crystal dean decent decline delay describes desert downtown elite enemies forgotten forth gods hadn't hire hop hopes insane installed israeli landing layer managing marry nah nowhere nurse obtain organic ownership participants pennsylvania poetry pot pray printed recall rugby sake sheet signing smooth spiritual stops string sudden sweden syria throwing thrown vacation abroad arab assigned associate assumed atlantic bench bother broadcast bye cambridge citizen cleaning compete consists consumers contributed cricket critics damaged disaster discover disney entrance equally fallen figured fitness francis friendship gary handling idiot intense keys lawyers lifetime liquid makeup medal mortgage narrative narrow nba observed occasionally one's pan physics posting potentially reduction reflect refuse researchers resource roger ross sciences seattle serves shell silly subsequent they'd towns translation visible yep adds allen amendment angle arizona arrive belong berlin bishop channels clark commonly connect defensive designs efficiency enterprise experiment feb females findings firms forum gifts grass hence increasingly incredibly iv jay journalist kicked lessons lists maintained mill mo occasion oxford pace passenger pen pope possession pp races rapid regulation resident rocks shaped sixth spin styles subjects sucks suitable thirty valid vital whilst year's agriculture alleged anna atlanta bands christians collect commerce cop creek currency emotions exhibition fraud funeral genuine god's gordon honey honour hook hunter immigrants improving instructions introduce kansas km lands legacy log matthew merely monitor mother's nov patrick phil prisoners programming publishing ratio regret rejected remind resort resulted reverse routine scary seed settle sin spell summary survival sword tongue ward waves wayne achievement anderson argued asleep austin automatic begun behaviour cd cents coat comprehensive consent daddy destruction diego diseases divorce doc drove ears engage extraordinary fate frequency gaming gene glory headquarters heritage initiative interviews jean juice landscape logic meets melbourne microsoft objective organisation privacy procedures profits reducing regard representing residence roughly salary scoring script searching sections strip surrounded threatened transferred tube universities walter wisconsin would've writes ambassador ann apps awarded banking breast cant carter chelsea chemistry concluded consumption corruption cotton crossed detroit discount dozen engines epic exception exit expand fancy gorgeous grateful heroes holes impression inches indicate input johnny josh knock leather lips luxury lyrics manufacturers masters movements oct operated ought outcome painted poll preferred pulling ranked referring removal rep reporter rio risks rob screaming sept sequence singapore stretch tear tennis terrorist theater ties twelve versions virgin voices wishes wolf absence agricultural asshole ate athletes bears blues boxes bruce bull cameras commonwealth contribute contribution contributions couples delicious deny deserves ease extend fame flood generated genetic glasses impressed indicated instant investors involves kate kills liberty man's maria ministers monitoring occurs passengers photographs principle";
+const FREQ_RANK = (function(){ const m={}; FREQ_WORDS.split(' ').forEach((w,i)=>{ if(m[w]===undefined) m[w]=i; }); return m; })();
+function freqRank(w){ const r=FREQ_RANK[(w||'').toLowerCase()]; return r===undefined?Infinity:r; }
+function freqTier(w){
+  const r=freqRank(w);
+  if(r<250) return {k:'core', label:'very common'};
+  if(r<1000) return {k:'common', label:'common'};
+  if(r<3000) return {k:'uncommon', label:'uncommon'};
+  return {k:'rare', label:'rare'};
+}
+const SWADESH = ["I", "you (singular)", "he", "we", "you (plural)", "they", "this", "that", "here", "there", "who", "what", "where", "when", "how", "not", "all", "many", "some", "few", "other", "one", "two", "three", "four", "five", "big", "long", "wide", "thick", "heavy", "small", "short", "narrow", "thin", "woman", "man (adult male)", "man (human)", "child", "wife", "husband", "mother", "father", "animal", "fish", "bird", "dog", "louse", "snake", "worm", "tree", "forest", "stick", "fruit", "seed", "leaf", "root", "bark (of tree)", "flower", "grass", "rope", "skin", "meat", "blood", "bone", "fat (noun)", "egg", "horn", "tail", "feather", "hair", "head", "ear", "eye", "nose", "mouth", "tooth", "tongue", "fingernail", "foot", "leg", "knee", "hand", "wing", "belly", "guts", "neck", "back", "breast", "heart", "liver", "to drink", "to eat", "to bite", "to suck", "to spit", "to vomit", "to blow", "to breathe", "to laugh", "to see", "to hear", "to know", "to think", "to smell", "to fear", "to sleep", "to live", "to die", "to kill", "to fight", "to hunt", "to hit", "to cut", "to split", "to stab", "to scratch", "to dig", "to swim", "to fly", "to walk", "to come", "to lie (rest)", "to sit", "to stand", "to turn", "to fall", "to give", "to hold", "to squeeze", "to rub", "to wash", "to wipe", "to pull", "to push", "to throw", "to tie", "to sew", "to count", "to say", "to sing", "to play", "to float", "to flow", "to freeze", "to swell", "sun", "moon", "star", "water", "rain", "river", "lake", "sea", "salt", "stone", "sand", "dust", "earth", "cloud", "fog", "sky", "wind", "snow", "ice", "smoke", "fire", "ash", "to burn", "road", "mountain", "red", "green", "yellow", "white", "black", "night", "day", "year", "warm", "cold", "full", "new", "old", "good", "bad", "rotten", "dirty", "straight", "round", "sharp", "dull", "smooth", "wet", "dry", "correct", "near", "far", "right", "left", "at", "in", "with", "and", "if", "because", "name"];
+
+function loadWants(){ try{ const raw=localStorage.getItem(LS_WANTS); wants=raw?JSON.parse(raw):{}; }catch(e){ wants={}; } }
+function saveWants(){ try{ localStorage.setItem(LS_WANTS, JSON.stringify(wants)); }catch(e){} }
+
+function lexHas(key){
+  key=(key||'').toLowerCase(); if(!key) return false;
+  if(enToAu[key]) return true;
+  if(typeof IRREG_EN!=='undefined' && IRREG_EN[key] && enToAu[IRREG_EN[key][0]]) return true;
+  return false;
+}
+function wantKnown(word){ return lexHas(word); }
+
+function recordWants(){
+  if(dir!=='en2au') return;
+  const res=translateEnToAu(inputEl.value);
+  let added=false;
+  res.tokens.forEach(t=>{
+    if(t.punct || t.au!=null) return;
+    (t.src||'').split(/\s+/).forEach(piece=>{
+      const w=piece.replace(/[^A-Za-z']/g,'').toLowerCase();
+      if(w.length<2) return;
+      if(recordedBuffer[w]) return;
+      if(wantKnown(w)) return;
+      recordedBuffer[w]=1;
+      const now=Date.now();
+      if(wants[w]){ wants[w].n++; wants[w].last=now; } else { wants[w]={n:1,first:now,last:now}; }
+      added=true;
+    });
+  });
+  if(added){ saveWants(); updateWantsBadge(); if(currentWMode()==='use') renderWantsUse(); }
+}
+inputEl.addEventListener('input', ()=>{
+  clearTimeout(wantsTimer);
+  if(!inputEl.value.trim()){ recordedBuffer={}; return; }
+  wantsTimer=setTimeout(recordWants, 900);
+});
+
+function wantsSorted(){
+  const arr=Object.keys(wants).filter(w=>!wantKnown(w)).map(w=>({w, n:wants[w].n, last:wants[w].last, fr:freqRank(w)}));
+  if(wantsSort==='freq') arr.sort((a,b)=> a.fr-b.fr || b.n-a.n || a.w.localeCompare(b.w));
+  else arr.sort((a,b)=> b.n-a.n || a.fr-b.fr || b.last-a.last || a.w.localeCompare(b.w));
+  return arr;
+}
+function updateWantsBadge(){
+  const b=document.getElementById('wantsBadge'); if(!b) return;
+  const c=Object.keys(wants).filter(w=>!wantKnown(w)).length;
+  b.textContent=c; b.classList.toggle('hidden', c===0);
+}
+function wantsAgo(ts){
+  if(!ts) return '';
+  const s=Math.floor((Date.now()-ts)/1000);
+  if(s<60) return 'just now';
+  const m=Math.floor(s/60); if(m<60) return m+(m===1?' minute':' minutes')+' ago';
+  const h=Math.floor(m/60); if(h<24) return h+(h===1?' hour':' hours')+' ago';
+  const d=Math.floor(h/24); if(d<30) return d+(d===1?' day':' days')+' ago';
+  const mo=Math.floor(d/30); return mo+(mo===1?' month':' months')+' ago';
+}
+function renderWantsUse(){
+  const body=document.getElementById('wantsBody'); if(!body) return;
+  const list=wantsSorted();
+  if(!list.length){ body.innerHTML='<div class="wants-empty">No wants gathered yet.<br>Translate from English, and any word the lexicon cannot answer gathers here, ranked by how often it was wanted.</div>'; return; }
+  let h='<table class="wtable"><thead><tr><th>Word the tongue lacks</th><th style="text-align:center">Times wanted</th><th></th></tr></thead><tbody>';
+  list.forEach(it=>{
+    const t=freqTier(it.w), wAttr=escapeHtml(it.w);
+    h+='<tr><td class="w-word">'+escapeHtml(it.w)+'<span class="w-tier '+t.k+'">'+t.label+'</span><div class="w-seen">last wanted '+wantsAgo(it.last)+'</div></td>'+
+       '<td class="w-n">'+it.n+'</td>'+
+       '<td class="w-act"><button class="w-forge" data-w="'+wAttr+'">Forge</button><button class="w-dismiss" data-w="'+wAttr+'">Dismiss</button></td></tr>';
+  });
+  h+='</tbody></table>';
+  body.innerHTML=h;
+  body.querySelectorAll('.w-forge').forEach(btn=>btn.addEventListener('click',()=>forgeWant(btn.dataset.w)));
+  body.querySelectorAll('.w-dismiss').forEach(btn=>btn.addEventListener('click',()=>dismissWant(btn.dataset.w)));
+}
+function coreCovered(label){
+  let b=label.replace(/\([^)]*\)/g,'').trim().toLowerCase();
+  const cands=[b]; if(b.startsWith('to ')) cands.push(b.slice(3)); else cands.push('to '+b);
+  return cands.some(lexHas);
+}
+function renderCore(){
+  const summary=document.getElementById('coreSummary'), body=document.getElementById('coreBody');
+  if(!summary||!body) return;
+  const sa=document.getElementById('coreShowAll'); const showAll=sa&&sa.checked;
+  let have=0; const rows=[];
+  SWADESH.forEach(label=>{ const ok=coreCovered(label); if(ok) have++; rows.push({label, ok}); });
+  const pct=Math.round(have/SWADESH.length*100);
+  summary.innerHTML='<div class="core-count">'+have+' / '+SWADESH.length+' core concepts carried</div>'+
+    '<div class="core-bar"><i style="width:'+pct+'%"></i></div>'+
+    '<div class="core-sub">'+pct+'% of the universal Swadesh core has a word. '+(SWADESH.length-have)+' still to forge.</div>';
+  const shown=showAll?rows:rows.filter(r=>!r.ok);
+  if(!shown.length){ body.innerHTML='<div class="wants-empty">Every core concept is carried. The foundation is complete.</div>'; return; }
+  let h='';
+  shown.forEach(r=>{
+    const wAttr=escapeHtml(r.label.replace(/\([^)]*\)/g,'').trim());
+    h+='<div class="ctile'+(r.ok?' have':'')+'"><span class="ct-word">'+escapeHtml(r.label)+'</span>'+
+       (r.ok?'<span class="ct-have">&#10003; carried</span>':'<button class="w-forge" data-w="'+wAttr+'">Forge</button>')+'</div>';
+  });
+  body.innerHTML=h;
+  body.querySelectorAll('.w-forge').forEach(btn=>btn.addEventListener('click',()=>forgeWant(btn.dataset.w)));
+}
+function currentWMode(){ const a=document.querySelector('.wmode-btn.active'); return a?a.dataset.wmode:'use'; }
+function renderWants(){ if(currentWMode()==='core') renderCore(); else renderWantsUse(); }
+function forgeWant(w){ try{ navigator.clipboard.writeText(w); }catch(e){} const ft=document.querySelector('.tab[data-view="forge"]'); if(ft) ft.click(); }
+function dismissWant(w){ delete wants[(w||'').toLowerCase()]; saveWants(); renderWantsUse(); updateWantsBadge(); }
+
+document.querySelectorAll('.wmode-btn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.wmode-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  const m=b.dataset.wmode;
+  document.getElementById('wantsUse').classList.toggle('hidden', m!=='use');
+  document.getElementById('wantsCore').classList.toggle('hidden', m!=='core');
+  renderWants();
+}));
+document.querySelectorAll('.wsort-btn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.wsort-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); wantsSort=b.dataset.wsort; renderWantsUse();
+}));
+const coreShowAllEl=document.getElementById('coreShowAll'); if(coreShowAllEl) coreShowAllEl.addEventListener('change', renderCore);
+const wantsTabBtn=document.querySelector('.tab[data-view="wants"]'); if(wantsTabBtn) wantsTabBtn.addEventListener('click', renderWants);
+const wantsExportBtn=document.getElementById('wantsExport'); if(wantsExportBtn) wantsExportBtn.addEventListener('click', e=>{
+  const list=wantsSorted();
+  if(!list.length){ const b=e.currentTarget,o=b.textContent; b.textContent='Nothing to copy'; setTimeout(()=>b.textContent=o,1200); return; }
+  const text='Words the empire still lacks (by demand)\n\n'+list.map(it=>it.w+'  ('+it.n+', '+freqTier(it.w).label+')').join('\n')+'\n';
+  copyText(text, e.currentTarget);
+});
+const coreExportBtn=document.getElementById('coreExport'); if(coreExportBtn) coreExportBtn.addEventListener('click', e=>{
+  const missing=SWADESH.filter(l=>!coreCovered(l));
+  if(!missing.length){ const b=e.currentTarget,o=b.textContent; b.textContent='None missing'; setTimeout(()=>b.textContent=o,1200); return; }
+  const text='Core vocabulary still to forge ('+missing.length+' of '+SWADESH.length+')\n\n'+missing.join('\n')+'\n';
+  copyText(text, e.currentTarget);
+});
+const wantsClearBtn=document.getElementById('wantsClear'); if(wantsClearBtn) wantsClearBtn.addEventListener('click', ()=>{
+  if(!Object.keys(wants).length) return;
+  if(!confirm('Forget every gathered want? This cannot be undone.')) return;
+  wants={}; recordedBuffer={}; saveWants(); renderWantsUse(); updateWantsBadge();
+});
+loadWants();
+updateWantsBadge();
 
 /* ================= LOW-AUDALAD TAB (derives entirely from the shared lexicon) ================= */
 (function(){
