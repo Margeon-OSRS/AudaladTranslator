@@ -410,6 +410,62 @@ select,.vinput{
 .emptyhint{color:#5a5266;font-style:italic;text-align:center;padding:18px;font-size:14px;}
 footer{text-align:center;color:#4b4458;font-size:12px;margin-top:46px;font-style:italic;letter-spacing:.5px;}
 a{color:var(--gold-soft);}
+
+/* ===== Low-Audalad tab (harbor dialect) ===== */
+#lowaudalad{ --brine:#5fb6a8; --brine-soft:#8fd2c6; --brine-dim:#3c7d74; --rope:#c79a5e; --rope-soft:#e0bd86; --ink-faint:#6a7d7a; }
+#lowaudalad .la-intro{text-align:center;margin-bottom:16px;}
+#lowaudalad .la-crest{font-family:'AudaladScript';font-size:38px;color:var(--brine);line-height:1;letter-spacing:2px;opacity:.9;}
+#lowaudalad .la-title{font-family:'Cinzel',serif;font-weight:700;letter-spacing:5px;font-size:23px;margin:6px 0 2px;color:var(--ink);}
+#lowaudalad .la-sub{color:var(--ink-dim);font-style:italic;font-size:14px;max-width:580px;margin:0 auto;line-height:1.5;}
+#lowaudalad .lsub{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:18px 0 22px;}
+#lowaudalad .lsub button{font-family:'Cinzel',serif;letter-spacing:1.5px;text-transform:uppercase;font-size:11px;background:transparent;border:1px solid var(--line);color:var(--ink-dim);padding:8px 15px;border-radius:3px;cursor:pointer;transition:.15s;}
+#lowaudalad .lsub button:hover{color:var(--ink);border-color:var(--brine-dim);}
+#lowaudalad .lsub button.active{background:linear-gradient(180deg,var(--panel),var(--bg2));color:var(--brine-soft);border-color:var(--brine-dim);}
+#lowaudalad .lpairsel{display:flex;gap:6px;justify-content:center;margin-bottom:12px;flex-wrap:wrap;}
+#lowaudalad .lpairsel button{font-family:'Cinzel',serif;letter-spacing:1px;text-transform:uppercase;font-size:10px;background:transparent;border:1px solid var(--line);color:var(--ink-dim);padding:6px 12px;border-radius:3px;cursor:pointer;transition:.15s;}
+#lowaudalad .lpairsel button:hover{color:var(--ink);border-color:var(--brine-dim);}
+#lowaudalad .lpairsel button.on{background:linear-gradient(180deg,var(--panel),var(--bg2));color:var(--brine-soft);border-color:var(--brine-dim);}
+#lowaudalad .lview{display:none;}
+#lowaudalad .lview.active{display:block;}
+#lowaudalad .native{color:var(--brine);}
+#lowaudalad .t-au{color:var(--brine-soft);}
+#lowaudalad .la-dirbar{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:14px;}
+#lowaudalad .la-dirlabel{font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-dim);}
+#lowaudalad .la-dirlabel b{color:var(--brine-soft);font-weight:400;}
+#lowaudalad .la-swap{background:var(--panel);border:1px solid var(--line);color:var(--brine);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:17px;transition:.18s;}
+#lowaudalad .la-swap:hover{border-color:var(--brine-dim);color:var(--brine-soft);}
+#lowaudalad .l-search{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:'EB Garamond',serif;font-size:16px;padding:10px 13px;margin-bottom:6px;}
+#lowaudalad .l-search:focus{outline:none;border-color:var(--brine-dim);}
+#lowaudalad .l-count{color:var(--ink-faint);font-size:13px;font-style:italic;margin-bottom:12px;}
+#lowaudalad .l-sec{font-family:'Cinzel',serif;font-size:12.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--brine-soft);margin:26px 0 10px;display:flex;align-items:center;gap:12px;}
+#lowaudalad .l-sec::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent);}
+#lowaudalad .l-sec .n{font-family:'EB Garamond',serif;font-size:13px;letter-spacing:0;text-transform:none;color:var(--ink-dim);font-style:italic;}
+#lowaudalad .l-grid{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+#lowaudalad .l-row{display:grid;grid-template-columns:minmax(110px,1.1fr) 1.4fr minmax(100px,.9fr);gap:12px;align-items:baseline;background:var(--bg2);padding:10px 13px;}
+#lowaudalad .l-row:hover{background:var(--panel);}
+#lowaudalad .l-dia{color:var(--brine-soft);font-size:17px;}
+#lowaudalad .l-dia .au{display:block;color:var(--brine);font-size:22px;line-height:1.3;font-family:'AudaladScript';}
+#lowaudalad .l-mean{color:var(--ink);}
+#lowaudalad .l-from{color:var(--ink-faint);font-size:13px;font-style:italic;text-align:right;}
+#lowaudalad .l-from b{color:var(--rope);font-style:normal;font-weight:400;}
+#lowaudalad .l-prose p{margin:0 0 14px;}
+#lowaudalad .l-lede{font-size:18px;color:var(--brine-soft);font-style:italic;line-height:1.55;margin-bottom:20px;}
+#lowaudalad .l-prose .l-drop{float:left;font-family:'Cinzel',serif;font-size:42px;line-height:.82;color:var(--rope);margin:6px 11px 0 0;}
+#lowaudalad .l-glyph{text-align:center;font-family:'AudaladScript';color:var(--brine-dim);font-size:24px;letter-spacing:3px;margin:20px 0;opacity:.6;}
+#lowaudalad .l-law{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-left:3px solid var(--brine-dim);border-radius:5px;padding:14px 17px;margin:0 0 13px;}
+#lowaudalad .l-law h4{font-family:'Cinzel',serif;font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--brine-soft);margin:0 0 5px;}
+#lowaudalad .l-law .ex{margin-top:9px;display:flex;flex-wrap:wrap;gap:7px 16px;font-size:14.5px;color:var(--ink-dim);}
+#lowaudalad .l-law .ex b{color:var(--rope-soft);font-weight:400;}
+#lowaudalad .arr{color:var(--brine-dim);}
+#lowaudalad .l-note{background:var(--bg2);border:1px dashed var(--line);border-radius:5px;padding:12px 15px;color:var(--ink-dim);font-size:14px;margin-top:8px;}
+#lowaudalad .l-note b{color:var(--rope-soft);font-weight:400;}
+#lowaudalad .l-morph{text-align:center;background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:8px;padding:18px;margin-bottom:18px;}
+#lowaudalad .l-morph .hi{font-size:22px;color:var(--ink);}
+#lowaudalad .l-morph .arr{margin:0 11px;}
+#lowaudalad .l-morph .lo{font-size:24px;color:var(--brine-soft);}
+#lowaudalad .l-morph .lo .au{color:var(--brine);font-family:'AudaladScript';font-size:28px;margin-left:9px;}
+#lowaudalad .l-morph .cap{color:var(--ink-faint);font-size:12px;font-style:italic;margin-top:7px;}
+@media (max-width:560px){ #lowaudalad .l-row{grid-template-columns:1fr;gap:3px;} #lowaudalad .l-from{text-align:left;} }
 </style>
 </head>
 <body>
@@ -427,6 +483,7 @@ a{color:var(--gold-soft);}
     <button class="tab" data-view="conj">Conjugate</button>
     <button class="tab" data-view="forge">Forge</button>
     <button class="tab" data-view="grammar">Grammar</button>
+    <button class="tab" data-view="lowaudalad">Low&#8209;Audalad</button>
   </div>
 
   <details class="guide">
@@ -989,7 +1046,110 @@ a{color:var(--gold-soft);}
     </div>
   </section>
 
-  <footer>Built from the Bastardized Audalad linguistic accord &middot; script font: Audalad v1 (juno)</footer>
+  <section class="view" id="lowaudalad">
+    <div class="la-intro">
+      <div class="la-crest">Audalad</div>
+      <div class="la-title">LOW-AUDALAD</div>
+      <div class="la-sub">The common dialect of traders, sailors and merchants: the high tongue worn smooth, rank markers dropped. Every word is derived live from the official lexicon by sound law, so the dialect keeps no dictionary of its own.</div>
+    </div>
+    <div class="lsub">
+      <button class="active" data-lview="translate">Translate</button>
+      <button data-lview="lexicon">Lexicon</button>
+      <button data-lview="tongue">The Tongue</button>
+    </div>
+
+    <div class="lview active" id="l-translate">
+      <div class="lpairsel">
+        <button class="on" id="lpairEL" data-lpair="el">English &harr; Low</button>
+        <button id="lpairHL" data-lpair="hl">High &harr; Low</button>
+      </div>
+      <div class="la-dirbar">
+        <span class="la-dirlabel" id="l-dirText"><b>English</b> &rarr; Low-Audalad</span>
+        <button class="la-swap" id="l-swap" title="Swap direction">&#8646;</button>
+      </div>
+      <div class="io">
+        <div class="field">
+          <div class="lbl"><span id="l-inLbl">English</span><span></span></div>
+          <textarea id="l-input" placeholder="Type here, e.g. the emperor will cross the sea"></textarea>
+        </div>
+        <div class="field">
+          <div class="lbl"><span id="l-outLbl">Low-Audalad</span></div>
+          <div class="out show-native" id="l-output"><div class="placeholder">Translation appears here&hellip;</div></div>
+          <div class="gloss" id="l-gloss"></div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <button class="btn ghost mini" id="l-copy" title="Copy the translation text">Copy</button>
+        <button class="btn ghost mini" id="l-png" title="Save the native script as a PNG">&#8595; Script PNG</button>
+      </div>
+      <div class="note"><b>How it reads.</b> Word-by-word from the shared lexicon, then run through the three sound laws of the dialect. There is no social rank here: the harbor tongue drops the honorific prefixes entirely. Words it can&rsquo;t find are marked in red. Use the toggle to switch between English and the court&rsquo;s High Audalad as the other side.</div>
+    </div>
+
+    <div class="lview" id="l-lexicon">
+      <input class="l-search" id="l-search" placeholder="Search in English or Audalad&hellip;">
+      <div class="l-count" id="l-count"></div>
+      <div id="l-lexlist"></div>
+    </div>
+
+    <div class="lview" id="l-tongue">
+      <div class="l-morph" id="l-morph">
+        <div><span class="hi" id="lm-hi">Autai</span><span class="arr">&rarr;</span><span class="lo"><span id="lm-lo">Ode</span><span class="au" id="lm-au">Ode</span></span></div>
+        <div class="cap" id="lm-cap">&ldquo;water&rdquo; &middot; the high tongue, then the low form</div>
+      </div>
+<div class="l-prose">
+      <p class="l-lede">High Audalad belongs to the court: carved into accords, spoken slow beneath the gold, guarded word by word by the Council. Low-Audalad is that same tongue let loose on the water. It is the speech of a crowded deck, a market stall, the long dust of a trade road, quicker, softer, and answerable to no one's rank.</p>
+
+      <div class="l-sec">The tongue of the trade roads</div>
+      <p><span class="l-drop">W</span>herever Audalad travels to do business, it loosens. A trader calling prices over the din of a market, a deckhand shouting orders through wind and spray, a carter who passes through a dozen ports in a season: none of them has time for the court's long vowels and careful endings. Low-Audalad is what remains when the tongue is worked hard and fast, day upon day. It belongs to the sailors, dockfolk, merchants and carters who move the Empire's goods, and who will likely never set foot in a council chamber.</p>
+      <p>It has no homeland but the harbor and the road. You will hear it thickest where the water meets the stone: on wharves and quaysides, aboard the trade ships, in the warehouse rows and the open markets where a hundred bargains are struck at once. Inland it thins; in the high halls it is scarcely spoken at all. But across the breadth of the Empire it is, by simple count of mouths, the most common Audalad there is.</p>
+
+      <div class="l-glyph">Au dal ad</div>
+
+      <div class="l-sec">How it wore smooth</div>
+      <p>No one decreed Low-Audalad. It is High Audalad with the corners rubbed off, the way a coin wears smooth in a thousand hands. Glided vowels run together, because a mouth in a hurry will not hold them apart. Hard sounds soften, because soft ones carry further over noise. The tails of long words fall away, because the meaning was already plain before the speaker reached them. Every one of these is a change the high tongue itself would make, were it ever set down and left to ordinary use, rather than guarded.</p>
+
+      <div class="l-sec">What the court makes of it</div>
+      <p>Scribes and nobles have long called it rough speech for rough work: a bastard tongue, unfit for an accord or the Emperor's ear. And yet it is the form of Audalad most mouths actually shape, and a high-tongue speaker can follow it without much trouble, because the bones beneath are the same, only worn. The two are not separate languages. They are one tongue, held apart by who is speaking, and by how great a hurry that speaker is in. Should the Accord that polishes the high lexicon ever turn to the low one, it would find nothing to invent, only to write down.</p>
+
+      <div class="l-sec">The three sound laws</div>
+      <p style="color:var(--ink-dim);margin-bottom:14px;">Three regular changes turn any high-tongue word into its low form. They apply in order, and a single word may meet all three.</p>
+
+      <div class="l-law">
+        <h4>1 &middot; Twin vowels become one</h4>
+        <p style="margin:0;color:var(--ink-dim);">A glided pair of vowels collapses to a single sound. <b style="color:var(--brine-soft);font-weight:400;">ai</b> turns to <b style="color:var(--brine-soft);font-weight:400;">e</b>, and <b style="color:var(--brine-soft);font-weight:400;">au</b> turns to <b style="color:var(--brine-soft);font-weight:400;">o</b>.</p>
+        <div class="ex"><span><b>Audalad</b> <span class="arr">&rarr;</span> <b>Odalad</b> &nbsp;island</span><span><b>Aulir</b> <span class="arr">&rarr;</span> <b>Olir</b> &nbsp;snow</span><span><b>Tsaidush</b> <span class="arr">&rarr;</span> <b>Tsedush</b> &nbsp;spirit</span></div>
+      </div>
+
+      <div class="l-law">
+        <h4>2 &middot; Hard sounds soften between &amp; after vowels</h4>
+        <p style="margin:0;color:var(--ink-dim);">A <b style="color:var(--brine-soft);font-weight:400;">k</b> caught between vowels, or sitting at a word's end after one, eases to <b style="color:var(--brine-soft);font-weight:400;">g</b>; a <b style="color:var(--brine-soft);font-weight:400;">t</b> in the same spot eases to <b style="color:var(--brine-soft);font-weight:400;">d</b>.</p>
+        <div class="ex"><span><b>Murak</b> <span class="arr">&rarr;</span> <b>Murag</b> &nbsp;foot</span><span><b>Sarek</b> <span class="arr">&rarr;</span> <b>Sareg</b> &nbsp;to know</span><span><b>Shaluk</b> <span class="arr">&rarr;</span> <b>Shalug</b> &nbsp;brother</span></div>
+      </div>
+
+      <div class="l-law">
+        <h4>3 &middot; Worn-off tails</h4>
+        <p style="margin:0;color:var(--ink-dim);">A final vowel on a longer word, the kind hurried speech swallows, simply drops away, leaving the word clipped.</p>
+        <div class="ex"><span><b>Nishi</b> <span class="arr">&rarr;</span> <b>Nish</b> &nbsp;child</span><span><b>Karu</b> <span class="arr">&rarr;</span> <b>Kar</b> &nbsp;coin</span><span><b>Dalka</b> <span class="arr">&rarr;</span> <b>Dalk</b> &nbsp;rock</span></div>
+        <div class="l-note">Short, everyday words (<b>Au</b>, <b>Mi</b>, <b>Su</b>, <b>Ir</b>) keep their shape: there is nothing to spare.</div>
+      </div>
+
+      <p style="margin:8px 0 16px;color:var(--ink-dim);">The laws run in order, so one word can meet all three. <b style="color:var(--rope-soft);font-weight:400;">Autai</b> &ldquo;water&rdquo; loses its glides to <b style="color:var(--rope-soft);font-weight:400;">Ote</b>, then softens between vowels to the everyday <b style="color:var(--brine-soft);font-weight:400;">Ode</b>.</p>
+
+      <div class="l-sec" style="color:var(--rope-soft);">No rank on the water</div>
+      <p>High Audalad bends its pronouns to mark who outranks whom: <i>Ori&rsquo;</i> for the divine and the dynasty, <i>Itu&rsquo;</i> for a greater, <i>Ke&rsquo;</i> for a lesser, and no marker at all between equals. Low-Audalad keeps none of it.</p>
+      <div class="l-law" style="border-left-color:var(--rope);">
+        <p style="margin:0;color:var(--ink-dim);">There is a reason, and the harbor folk will tell it to you: on a ship the sea outranks every soul aboard, and in a market a buyer's coin speaks louder than any title. So a sailor addresses a captain, a stranger and an emperor's envoy alike with the same plain <b>In</b> &ldquo;I,&rdquo; <b>Ir</b> &ldquo;you,&rdquo; <b>Enu</b> &ldquo;they.&rdquo; Standing is heard in the words a speaker chooses, never stamped onto the grammar. To the court this is the tongue's great rudeness. To everyone else, it is simply faster.</p>
+      </div>
+
+      <div class="l-sec">No two ports alike</div>
+      <p>Because no Council guards it, Low-Audalad drifts. A word clipped one way in a northern harbor is clipped another way three ports down the coast; sailors carry sounds from ship to ship, and foreign traders leave their own behind in the bargain. There is no single correct spelling, only the form that gets understood before the next wave hits. What this reckoning shows is one steady hand laid over that living speech: each high word given a single low form by the three laws, so a thing said a hundred ways might at least be written one.</p>
+
+      <div class="l-note" style="margin-top:18px;"><b>How this works.</b> Nothing here is a separate dictionary. Every word is the high-tongue word run through the three sound laws above, so the dialect stays exactly in step with the official lexicon as it grows. Change a word in the court and its low form changes with it.</div>
+    </div>
+    </div>
+  </section>
+
+  <footer>Audalad Language Toolkit &middot; v1.0 &middot; coded by Philly<br>Built from the Bastardized Audalad linguistic accord &middot; script font: Audalad v1 (juno)</footer>
 </div>
 
 <script>
@@ -1354,6 +1514,72 @@ function translateAuToEn(text){
   return {tokens:out};
 }
 
+/* ---------- HIGH <-> LOW-AUDALAD (sound-law dialect) ---------- */
+function _normBase(s){
+  return (s||'')
+    .replace(/\u0161/g,'sh').replace(/\u0160/g,'Sh')
+    .replace(/\u017e/g,'zh').replace(/\u017d/g,'Zh')
+    .replace(/\u014d/g,'o').replace(/\u014c/g,'O')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+}
+function harborWord(word){
+  if(!word) return word;
+  const norm=_normBase(word);
+  const wasCap=/^[A-Z]/.test(norm);
+  let s=norm.toLowerCase();
+  s=s.replace(/ai/g,'e').replace(/au/g,'o');                                  // 1 twin vowels -> one
+  s=s.replace(/([aeiou])k(?=[aeiou])/g,'$1g').replace(/([aeiou])t(?=[aeiou])/g,'$1d'); // 2 lenition (intervocalic)
+  s=s.replace(/([aeiou])k(?=$|['\u2019\-])/g,'$1g').replace(/([aeiou])t(?=$|['\u2019\-])/g,'$1d'); //   & final
+  const vCount=(s.match(/[aeiou]/g)||[]).length;
+  if(s.length>=4 && vCount>=2 && /[^aeiou'\u2019\- ][aeiou]$/.test(s)){ s=s.slice(0,-1); } // 3 worn tail
+  if(wasCap) s=s.charAt(0).toUpperCase()+s.slice(1);
+  return s;
+}
+function harborForm(phrase){
+  return (phrase||'').split(/(\s+)/).map(t=>/\s/.test(t)?t:harborWord(t)).join('');
+}
+let _lowToHigh=null;
+const _POSRANK={pron:0,det:1,conj:2,prep:3,adv:4,num:5,intj:6,q:7,n:8,adj:9,v:10,ord:11,title:12};
+function lowToHighMap(){
+  if(_lowToHigh) return _lowToHigh;
+  _lowToHigh={};
+  DATA.forEach(d=>{ const lf=harborForm(d.au).toLowerCase(); (_lowToHigh[lf]=_lowToHigh[lf]||[]).push(d); });
+  const rk=p=>(p in _POSRANK)?_POSRANK[p]:8;
+  Object.keys(_lowToHigh).forEach(k=>_lowToHigh[k].sort((a,b)=>rk(a.pos)-rk(b.pos)));
+  return _lowToHigh;
+}
+function translateHighToLow(text){
+  const raw=text.replace(/\s+/g,' ').trim();
+  if(!raw) return {tokens:[]};
+  const words=raw.match(/[^\s.,!?;:]+|[.,!?;:]/g)||[];
+  const out=[];
+  words.forEach(w=>{
+    if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
+    const low=harborForm(w);
+    const m=lookupAu(w);
+    out.push({src:w, au:low, en:(m?m.en:null), note:(m?m.en:null)});
+  });
+  return {tokens:out};
+}
+function translateLowToHigh(text){
+  const raw=text.replace(/\s+/g,' ').trim();
+  if(!raw) return {tokens:[]};
+  const map=lowToHighMap();
+  const words=raw.match(/[^\s.,!?;:]+|[.,!?;:]/g)||[];
+  const out=[];
+  words.forEach(w=>{
+    if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
+    const list=map[w.toLowerCase()]||map[harborForm(w).toLowerCase()];
+    if(list && list.length){
+      const main=list[0];
+      let note=main.en;
+      if(list.length>1){ note=main.en+' \u00b7 also: '+list.slice(1).map(x=>x.au+' ('+x.en+')').join(', '); }
+      out.push({src:w, au:main.au, en:main.en, note:note});
+    } else { out.push({src:w, au:null, en:null}); }
+  });
+  return {tokens:out};
+}
+
 /* ---------- render translate ---------- */
 let dir = 'en2au'; // or au2en
 const inputEl = document.getElementById('input');
@@ -1365,7 +1591,11 @@ let lastOutText='', lastNativeText='';
 
 function render(){
   const text = inputEl.value;
-  const res = dir==='en2au' ? translateEnToAu(text) : translateAuToEn(text);
+  const auOut = dir!=='au2en';   // output is Audalad (native script) for en2au, high2low and low2high
+  const res = dir==='en2au' ? translateEnToAu(text)
+            : dir==='au2en' ? translateAuToEn(text)
+            : dir==='high2low' ? translateHighToLow(text)
+            : translateLowToHigh(text);
   glossEl.innerHTML='';
   if(!res.tokens.length){
     lastOutText=''; lastNativeText='';
@@ -1376,7 +1606,7 @@ function render(){
   let parts=[];
   res.tokens.forEach(t=>{
     if(t.punct){ parts.push(t.punct); return; }
-    if(dir==='en2au'){ parts.push(t.au!=null ? t.au : '['+t.src+'?]'); }
+    if(auOut){ parts.push(t.au!=null ? t.au : '['+t.src+'?]'); }
     else { parts.push(t.en!=null ? t.en : '['+t.src+'?]'); }
   });
   // join, attach punctuation tight
@@ -1387,7 +1617,7 @@ function render(){
   });
   str=str.trim();
 
-  if(dir==='en2au'){
+  if(auOut){
     // native line shows ONLY translated Audalad words, never untranslated English fallback
     let nparts=[];
     res.tokens.forEach(t=>{
@@ -1412,8 +1642,8 @@ function render(){
     res.tokens.forEach(t=>{
       if(t.punct) return;
       const d=document.createElement('div');
-      d.className='tok'+(((dir==='en2au'&&t.au==null)||(dir==='au2en'&&t.en==null))?' miss':'');
-      if(dir==='en2au'){
+      d.className='tok'+(((auOut&&t.au==null)||(!auOut&&t.en==null))?' miss':'');
+      if(auOut){
         d.innerHTML='<div class="t-au">'+escapeHtml(t.au||'??')+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+t.note+'</div>':'');
       } else {
         d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.en||'??')+'</div>'+(t.note?'<div class="t-note">'+t.note+'</div>':'');
@@ -1427,7 +1657,7 @@ function escapeHtml(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&l
 inputEl.addEventListener('input', render);
 glossToggle.addEventListener('change', render);
 nativeToggle.addEventListener('change', ()=>{
-  outputEl.classList.toggle('show-native', nativeToggle.checked && dir==='en2au');
+  outputEl.classList.toggle('show-native', nativeToggle.checked && dir!=='au2en');
 });
 document.getElementById('copyOut').addEventListener('click', e=>copyText(lastOutText, e.currentTarget));
 document.getElementById('pngOut').addEventListener('click', async e=>{
@@ -1457,27 +1687,36 @@ function updateRankbarVisibility(){
   document.getElementById('rankbar').classList.toggle('hidden', dir!=='en2au');
 }
 
-document.getElementById('swapBtn').addEventListener('click', ()=>{
-  dir = dir==='en2au' ? 'au2en' : 'en2au';
-  const a=dir==='en2au'?'English':'Audalad';
-  const b=dir==='en2au'?'Audalad':'English';
+const DIR_LBL={
+  en2au:['English','Audalad'], au2en:['Audalad','English'],
+  high2low:['High Audalad','Low-Audalad'], low2high:['Low-Audalad','High Audalad']
+};
+const DIR_PH={
+  en2au:'Type here, e.g. the great emperor will rule the land',
+  au2en:'Type here, e.g. sei Orishara Rodezum',
+  high2low:'Type High Audalad, e.g. Autai Aurdi Utura',
+  low2high:'Type Low-Audalad, e.g. Ode Ord Udur'
+};
+const FLIP={en2au:'au2en',au2en:'en2au',high2low:'low2high',low2high:'high2low'};
+const PAIR={en2au:'ea',au2en:'ea',high2low:'hl',low2high:'hl'};
+
+function applyDir(){
+  const [a,b]=DIR_LBL[dir];
   document.getElementById('lblA').textContent=a;
   document.getElementById('lblB').textContent=b;
   document.getElementById('lblA').classList.toggle('on', true);
   document.getElementById('lblB').classList.toggle('on', false);
   document.getElementById('inLbl').textContent=a;
   document.getElementById('outLbl').textContent=b;
-  inputEl.placeholder = dir==='en2au'
-    ? 'Type here, e.g. the great emperor will rule the land'
-    : 'Type here, e.g. sei Orishara Rodezum';
-  // native only meaningful for en->au output
-  outputEl.classList.toggle('show-native', nativeToggle.checked && dir==='en2au');
+  inputEl.placeholder=DIR_PH[dir];
+  outputEl.classList.toggle('show-native', nativeToggle.checked && dir!=='au2en');
   updateRankbarVisibility();
-  // swap content if there is a translation: move output to input
   inputEl.value='';
   render();
   inputEl.focus();
-});
+}
+
+document.getElementById('swapBtn').addEventListener('click', ()=>{ dir=FLIP[dir]; applyDir(); });
 
 /* ---------- dictionary ---------- */
 const POS_LABEL={n:'Noun',v:'Verb',adj:'Adjective',adv:'Adverb',prep:'Preposition',conj:'Conjunction',det:'Determiner',num:'Number',ord:'Ordinal',pron:'Pronoun',intj:'Greeting',q:'Question',title:'Title',name:'Name'};
@@ -2582,6 +2821,126 @@ initRankControls();
 updateRankbarVisibility();
 render();
 loadOfficial();
+
+/* ================= LOW-AUDALAD TAB (derives entirely from the shared lexicon) ================= */
+(function(){
+  const POSORDER=['n','v','adj','adv','prep','conj','det','pron','intj','q','num','ord','title'];
+  const POSLABEL={n:'Nouns',v:'Verbs',adj:'Adjectives',adv:'Adverbs',prep:'Prepositions',conj:'Conjunctions',det:'Determiners',pron:'Pronouns',intj:'Greetings & cries',q:'Questions',num:'Numbers',ord:'Ordinals',title:'Titles & ranks'};
+
+  function translateEnToLow(text){
+    const raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
+    const words=raw.match(/[A-Za-z']+|[.,!?;:]/g)||[]; const out=[]; let i=0,prevNum=false;
+    while(i<words.length){
+      const w=words[i];
+      if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); i++; continue; }
+      let matched=null,span=1;
+      for(let n=Math.min(3,words.length-i);n>=1;n--){
+        const phrase=words.slice(i,i+n).filter(x=>!/^[.,!?;:]$/.test(x)).join(' ').toLowerCase();
+        if(enToAu[phrase]){ matched=enToAu[phrase][0]; span=n; break; }
+      }
+      const srcText=words.slice(i,i+span).join(' ');
+      if(matched){ out.push({src:srcText, au:harborForm(matched.au), en:matched.full, note:matched.full}); prevNum=(matched.pos==='num'||matched.pos==='ord'); }
+      else { const r=resolveEng(w,{afterNumber:prevNum}); if(r){ out.push({src:srcText, au:harborForm(r.au), en:r.en, note:r.en}); } else out.push({src:srcText, au:null}); prevNum=false; }
+      i+=span;
+    }
+    return {tokens:out};
+  }
+  function translateLowToEn(text){
+    const raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
+    const map=lowToHighMap(); const words=raw.match(/[^\s.,!?;:]+|[.,!?;:]/g)||[]; const out=[];
+    words.forEach(w=>{
+      if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
+      const list=map[w.toLowerCase()]||map[harborForm(w).toLowerCase()];
+      if(list&&list.length){ const u=[...new Set(list.map(x=>x.en))]; out.push({src:w, en:u[0], au:list[0].au, note:u.length>1?('also: '+u.slice(1).join('; ')):null}); }
+      else out.push({src:w, en:null, au:null});
+    });
+    return {tokens:out};
+  }
+
+  let l_dir='en2low', l_lastText='', l_lastNative='';
+  const lIn=document.getElementById('l-input'), lOut=document.getElementById('l-output'), lGloss=document.getElementById('l-gloss');
+  function joinParts(parts){ let s=''; parts.forEach(p=>{ if(/^[.,!?;:]$/.test(p)) s=s.replace(/\s$/,'')+p+' '; else s+=p+' '; }); return s.trim(); }
+  function lRender(){
+    const text=lIn.value; const auOut=(l_dir!=='low2en');
+    const res = l_dir==='en2low'?translateEnToLow(text)
+              : l_dir==='low2en'?translateLowToEn(text)
+              : l_dir==='high2low'?translateHighToLow(text)
+              : translateLowToHigh(text);
+    lGloss.innerHTML='';
+    if(!res.tokens.length){ l_lastText='';l_lastNative=''; lOut.innerHTML='<div class="placeholder">Translation appears here\u2026</div>'; return; }
+    const parts=res.tokens.map(t=> t.punct? t.punct : ((auOut?t.au:t.en)!=null?(auOut?t.au:t.en):'['+t.src+'?]'));
+    const str=joinParts(parts);
+    let html='<div class="roman">'+escapeHtml(str)+'</div>';
+    if(auOut){
+      const np=[]; res.tokens.forEach(t=>{ if(t.punct){np.push(t.punct);return;} if(t.au!=null) np.push(t.au); });
+      const ns=joinParts(np); l_lastText=str; l_lastNative=ns;
+      const ipa=ipaText(ns);
+      html+='<div class="native">'+escapeHtml(toNative(ns))+'</div>'+(ipa?'<div class="c-ipa">'+escapeHtml(ipa)+'</div>':'');
+    } else { l_lastText=str; l_lastNative=''; }
+    lOut.innerHTML=html;
+    res.tokens.forEach(t=>{
+      if(t.punct) return;
+      const d=document.createElement('div'); const miss=auOut?(t.au==null):(t.en==null);
+      d.className='tok'+(miss?' miss':'');
+      if(auOut) d.innerHTML='<div class="t-au">'+escapeHtml(t.au||'??')+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
+      else d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.en||'??')+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
+      lGloss.appendChild(d);
+    });
+  }
+  lIn.addEventListener('input', lRender);
+  const L_FLIP={en2low:'low2en',low2en:'en2low',high2low:'low2high',low2high:'high2low'};
+  const L_PAIR={en2low:'el',low2en:'el',high2low:'hl',low2high:'hl'};
+  const L_LBL={en2low:['English','Low-Audalad'],low2en:['Low-Audalad','English'],high2low:['High Audalad','Low-Audalad'],low2high:['Low-Audalad','High Audalad']};
+  const L_PH={en2low:'Type here, e.g. the emperor will cross the sea',low2en:'Type Low-Audalad, e.g. sei Orishar Rodezum',high2low:'Type High Audalad, e.g. Autai Aurdi Utura',low2high:'Type Low-Audalad, e.g. Ode Ord Udur'};
+  function applyLDir(){
+    const lab=L_LBL[l_dir];
+    document.getElementById('l-dirText').innerHTML='<b>'+lab[0]+'</b> &rarr; '+lab[1];
+    document.getElementById('l-inLbl').textContent=lab[0]; document.getElementById('l-outLbl').textContent=lab[1];
+    lOut.classList.toggle('show-native', l_dir!=='low2en');
+    lIn.placeholder=L_PH[l_dir];
+    document.getElementById('lpairEL').classList.toggle('on', L_PAIR[l_dir]==='el');
+    document.getElementById('lpairHL').classList.toggle('on', L_PAIR[l_dir]==='hl');
+    lIn.value=''; lRender(); lIn.focus();
+  }
+  document.getElementById('l-swap').addEventListener('click', ()=>{ l_dir=L_FLIP[l_dir]; applyLDir(); });
+  document.getElementById('lpairEL').addEventListener('click', ()=>{ if(L_PAIR[l_dir]!=='el'){ l_dir='en2low'; applyLDir(); } });
+  document.getElementById('lpairHL').addEventListener('click', ()=>{ if(L_PAIR[l_dir]!=='hl'){ l_dir='high2low'; applyLDir(); } });
+  document.getElementById('l-copy').addEventListener('click', e=>copyText(l_lastText, e.currentTarget));
+  document.getElementById('l-png').addEventListener('click', async e=>{ const b=e.currentTarget; if(!l_lastNative){ const o=b.textContent;b.textContent='Translate first';setTimeout(()=>b.textContent=o,1200);return;} const o=b.textContent;b.textContent='Saving\u2026'; await exportNativePNG(l_lastNative,'low-audalad-script'); b.textContent=o; });
+
+  function lowEntries(){ return lex().map(d=>({dia:harborForm(d.au),std:d.au,en:d.en,pos:d.pos})).sort((a,b)=>a.dia.toLowerCase().localeCompare(b.dia.toLowerCase())); }
+  const lSearch=document.getElementById('l-search'), lLexList=document.getElementById('l-lexlist'), lCount=document.getElementById('l-count');
+  function rowHtml(e){ const changed=e.dia!==e.std; return '<div class="l-row"><div class="l-dia">'+escapeHtml(e.dia)+'<span class="au">'+escapeHtml(toNative(e.dia))+'</span></div><div class="l-mean">'+escapeHtml(e.en)+'</div><div class="l-from">'+(changed?('from <b>'+escapeHtml(e.std)+'</b>'):'unchanged')+'</div></div>'; }
+  function buildLowLex(){
+    const all=lowEntries(); const q=lSearch.value.trim().toLowerCase();
+    const rows=all.filter(e=>!q||e.dia.toLowerCase().includes(q)||e.std.toLowerCase().includes(q)||e.en.toLowerCase().includes(q));
+    lCount.textContent=rows.length+' of '+all.length+' words'+(q?' matching':'');
+    if(!rows.length){ lLexList.innerHTML='<div class="l-count" style="text-align:center;padding:20px">No words match that.</div>'; return; }
+    const groups={}; rows.forEach(e=>{(groups[e.pos]=groups[e.pos]||[]).push(e);});
+    const order=POSORDER.slice(); Object.keys(groups).forEach(p=>{ if(order.indexOf(p)<0) order.push(p); });
+    let html=''; order.forEach(pos=>{ const list=groups[pos]; if(!list||!list.length) return; html+='<div class="l-sec">'+escapeHtml(POSLABEL[pos]||pos)+'<span class="n">'+list.length+'</span></div><div class="l-grid">'+list.map(rowHtml).join('')+'</div>'; });
+    lLexList.innerHTML=html;
+  }
+  lSearch.addEventListener('input', buildLowLex);
+
+  let lexInit=false;
+  document.querySelectorAll('#lowaudalad .lsub button').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('#lowaudalad .lsub button').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('#lowaudalad .lview').forEach(x=>x.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('l-'+btn.dataset.lview).classList.add('active');
+      if(btn.dataset.lview==='lexicon' && !lexInit){ buildLowLex(); lexInit=true; }
+    });
+  });
+
+  const MORPH=[['Autai','water'],['Aurdi','sea'],['Utura','light'],['Murak','foot'],['Karu','coin'],['Sarek','to know'],['Nishi','child'],['Audalad','island']];
+  let mi=0;
+  function spin(){ const pair=MORPH[mi%MORPH.length]; mi++; const lo=harborForm(pair[0]); const hi=document.getElementById('lm-hi'); if(!hi) return; hi.textContent=pair[0]; document.getElementById('lm-lo').textContent=lo; document.getElementById('lm-au').textContent=toNative(lo); document.getElementById('lm-cap').innerHTML='&ldquo;'+pair[1]+'&rdquo; &middot; the high tongue, then the low form'; }
+  spin(); setInterval(spin, 2600);
+
+  lRender();
+})();
 </script>
 </body>
 </html>
