@@ -1540,15 +1540,18 @@ function harborWord(word){
 function harborForm(phrase){
   return (phrase||'').split(/(\s+)/).map(t=>/\s/.test(t)?t:harborWord(t)).join('');
 }
-let _lowToHigh=null;
 const _POSRANK={pron:0,det:1,conj:2,prep:3,adv:4,num:5,intj:6,q:7,n:8,adj:9,v:10,ord:11,title:12};
 function lowToHighMap(){
-  if(_lowToHigh) return _lowToHigh;
-  _lowToHigh={};
-  DATA.forEach(d=>{ const lf=harborForm(d.au).toLowerCase(); (_lowToHigh[lf]=_lowToHigh[lf]||[]).push(d); });
+  // derive from the FULL working lexicon (built-in + community + forged), fresh each call
+  const map={}, seen={};
+  lex().forEach(d=>{
+    const id=d.au.toLowerCase(); if(seen[id]) return; seen[id]=1;   // de-dup by high form
+    const lf=harborForm(d.au).toLowerCase();
+    (map[lf]=map[lf]||[]).push(d);
+  });
   const rk=p=>(p in _POSRANK)?_POSRANK[p]:8;
-  Object.keys(_lowToHigh).forEach(k=>_lowToHigh[k].sort((a,b)=>rk(a.pos)-rk(b.pos)));
-  return _lowToHigh;
+  Object.keys(map).forEach(k=>map[k].sort((a,b)=>rk(a.pos)-rk(b.pos)));
+  return map;
 }
 function translateHighToLow(text){
   const raw=text.replace(/\s+/g,' ').trim();
