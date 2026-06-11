@@ -3,145 +3,145 @@
     "au": "Rinu",
     "en": "to cut",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Zhuraku",
     "en": "to burn",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Muraku",
     "en": "to walk",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Stuliy",
     "en": "to stay",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Inshuri",
     "en": "to think",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Daheshe",
     "en": "where",
     "pos": "q",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Dina",
     "en": "or",
     "pos": "conj",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Kata",
     "en": "this",
     "pos": "det",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Eshe",
     "en": "welcome (informal)",
     "pos": "intj",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Zimaru",
     "en": "to steal",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Lugashu",
     "en": "to help",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Relirahu",
     "en": "to come",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Adinirdu",
     "en": "to need",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Rudu",
     "en": "to open",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Arashu",
     "en": "to gain/earn",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Hashru",
     "en": "to defend/protect",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Marshuveshu",
     "en": "to wear/clothe",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Vau",
     "en": "to wait",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Marsuamu",
     "en": "to hide",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Iknau",
     "en": "to choose",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Rudir",
     "en": "to shut",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Karir",
     "en": "to sell",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Gashir",
     "en": "to lose",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Itoa",
     "en": "to rejoice/be glad",
     "pos": "v",
-    "by": "Phillip A. Brewtaker"
+    "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Inkhadinu",
@@ -262,5 +262,137 @@
     "en": "asshole",
     "pos": "n",
     "by": "Fox & Sage"
+  },
+  {
+    "au": "Shuai",
+    "en": "power, might",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Esukaddarzum'",
+    "en": "aridity",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Shenaar",
+    "en": "tongue, dialect",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Esukpla'",
+    "en": "a Rathniri Audalad",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Ederlum'",
+    "en": "rust",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Ederesuk'",
+    "en": "redstone",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Obir'",
+    "en": "existence",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Razir'",
+    "en": "frozen",
+    "pos": "adj",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Shurkel'",
+    "en": "coin, money",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Saratar'",
+    "en": "archive",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Polis'",
+    "en": "inordinate",
+    "pos": "adj",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Raipla'",
+    "en": "gardener",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Meshashr'",
+    "en": "gank",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Kelum'",
+    "en": "(iron) armor, chestplate",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Navilum'",
+    "en": "iron leggings",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Mumtlum'",
+    "en": "iron helmet",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Razikos'",
+    "en": "(frozen) peak",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Veralsch'",
+    "en": "brick",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Neruke'",
+    "en": "trunk, mast, flagpole",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Imukelonku'",
+    "en": "oval",
+    "pos": "adj",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Vaar",
+    "en": "strange, unknown",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Sheel",
+    "en": "source, spring, origin",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
   }
 ]
