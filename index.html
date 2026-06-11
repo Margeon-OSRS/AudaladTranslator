@@ -1553,6 +1553,55 @@ function lowToHighMap(){
   Object.keys(map).forEach(k=>map[k].sort((a,b)=>rk(a.pos)-rk(b.pos)));
   return map;
 }
+/* ---- shared low-form resolver: strips sound-law tense prefixes & affixes ---- */
+const TENSE_ACC={'near-past':'\u00c1sar','near-future':'L\u00faar','present':'Zh\u00e9ar','continuous':'Zh\u00e9','far-future':'L\u00fa','far-past':'\u00c1s'};
+function lowBare(stem,map){
+  const keys=[stem.toLowerCase(),harborWord(stem).toLowerCase()];
+  for(const k of keys){ if(map[k]&&map[k].length) return {list:map[k],notes:[]}; }
+  return null;
+}
+function lowAffix(stem,map){
+  let hit=lowBare(stem,map); if(hit) return hit;
+  const lw=stem.toLowerCase();
+  for(const pair of [['ae','plural'],['ir','negated'],['adi','of-the'],['id','of-the'],['ad','of-the']]){
+    const suf=pair[0], label=pair[1];
+    if(lw.endsWith(suf)&&lw.length>suf.length){ hit=lowBare(stem.slice(0,-suf.length),map); if(hit){ hit.notes=hit.notes.concat([label]); return hit; } }
+  }
+  if(lw.startsWith('yi')&&lw.length>2){ hit=lowBare(stem.slice(2),map); if(hit){ hit.notes=hit.notes.concat(['plural (Yi-)']); return hit; } }
+  return null;
+}
+function resolveLow(w,map){
+  let hit=lowAffix(w,map); if(hit) return hit;
+  const dw=deaccent(w);
+  for(const t of TENSE){
+    const plain=t[1], label=t[2];
+    if(dw.startsWith(plain)&&dw.length>plain.length){
+      const stem=w.slice(w.length-(dw.length-plain.length));
+      const r=lowAffix(stem,map); if(r){ r.notes=[label].concat(r.notes); return r; }
+    }
+  }
+  return null;
+}
+function buildHighForm(baseAu,notes){
+  let au=baseAu;
+  if(notes.includes('plural (Yi-)')) au='Yi'+au.charAt(0).toLowerCase()+au.slice(1);
+  if(notes.includes('plural'))  au=au+'ae';
+  if(notes.includes('negated')) au=au+'ir';
+  if(notes.includes('of-the'))  au=au+'ad';
+  const t=notes.find(n=>TENSE_ACC[n]);
+  if(t) au=TENSE_ACC[t]+au.charAt(0).toLowerCase()+au.slice(1);
+  return au;
+}
+function glossEn(en,notes){
+  if(notes.includes('negated')) en='not '+en.replace(/^to /,'');
+  if(notes.includes('plural')||notes.includes('plural (Yi-)')) en=en+'s';
+  if(notes.includes('of-the')) en=en+' (of)';
+  return en;
+}
+function lowNoteLabel(notes){
+  const human={'plural (Yi-)':'plural','plural':'plural','negated':'negation','of-the':'possessive'};
+  return notes.map(n=>TENSE_ACC[n]?n:(human[n]||n)).join(', ');
+}
 function translateHighToLow(text){
   const raw=text.replace(/\s+/g,' ').trim();
   if(!raw) return {tokens:[]};
@@ -1574,12 +1623,15 @@ function translateLowToHigh(text){
   const out=[];
   words.forEach(w=>{
     if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
-    const list=map[w.toLowerCase()]||map[harborForm(w).toLowerCase()];
-    if(list && list.length){
-      const main=list[0];
-      let note=main.en;
-      if(list.length>1){ note=main.en+' \u00b7 also: '+list.slice(1).map(x=>x.au+' ('+x.en+')').join(', '); }
-      out.push({src:w, au:main.au, en:main.en, note:note});
+    const hit=resolveLow(w,map);
+    if(hit && hit.list && hit.list.length){
+      const main=hit.list[0];
+      const au=buildHighForm(main.au,hit.notes);
+      const en=glossEn(main.en,hit.notes);
+      let note=en; const lab=lowNoteLabel(hit.notes);
+      if(lab) note=en+' \u00b7 ['+lab+']';
+      if(hit.list.length>1) note=note+' \u00b7 also: '+hit.list.slice(1).map(x=>x.au+' ('+x.en+')').join(', ');
+      out.push({src:w, au:au, en:en, note:note});
     } else { out.push({src:w, au:null, en:null}); }
   });
   return {tokens:out};
@@ -2855,9 +2907,15 @@ loadOfficial();
     const map=lowToHighMap(); const words=raw.match(/[^\s.,!?;:]+|[.,!?;:]/g)||[]; const out=[];
     words.forEach(w=>{
       if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
-      const list=map[w.toLowerCase()]||map[harborForm(w).toLowerCase()];
-      if(list&&list.length){ const u=[...new Set(list.map(x=>x.en))]; out.push({src:w, en:u[0], au:list[0].au, note:u.length>1?('also: '+u.slice(1).join('; ')):null}); }
-      else out.push({src:w, en:null, au:null});
+      const hit=resolveLow(w,map);
+      if(hit&&hit.list&&hit.list.length){
+        const u=[...new Set(hit.list.map(x=>x.en))];
+        const en=glossEn(u[0],hit.notes);
+        const extras=[]; const lab=lowNoteLabel(hit.notes);
+        if(lab) extras.push('['+lab+']');
+        if(u.length>1) extras.push('also: '+u.slice(1).join('; '));
+        out.push({src:w, en:en, au:hit.list[0].au, note:extras.length?extras.join(' \u00b7 '):null});
+      } else out.push({src:w, en:null, au:null});
     });
     return {tokens:out};
   }
