@@ -425,6 +425,7 @@ a{color:var(--gold-soft);}
 #lowaudalad .lpairsel button{font-family:'Cinzel',serif;letter-spacing:1px;text-transform:uppercase;font-size:10px;background:transparent;border:1px solid var(--line);color:var(--ink-dim);padding:6px 12px;border-radius:3px;cursor:pointer;transition:.15s;}
 #lowaudalad .lpairsel button:hover{color:var(--ink);border-color:var(--brine-dim);}
 #lowaudalad .lpairsel button.on{background:linear-gradient(180deg,var(--panel),var(--bg2));color:var(--brine-soft);border-color:var(--brine-dim);}
+#lowaudalad .chip.active{background:rgba(95,182,168,.14);border-color:var(--brine);color:var(--brine-soft);}
 #lowaudalad .lview{display:none;}
 #lowaudalad .lview.active{display:block;}
 #lowaudalad .native{color:var(--brine);}
@@ -1087,6 +1088,7 @@ a{color:var(--gold-soft);}
 
     <div class="lview" id="l-lexicon">
       <input class="l-search" id="l-search" placeholder="Search in English or Audalad&hellip;">
+      <div class="posfilter" id="l-posfilter"></div>
       <div class="l-count" id="l-count"></div>
       <div id="l-lexlist"></div>
     </div>
@@ -2911,15 +2913,27 @@ loadOfficial();
   function lowEntries(){ return lex().map(d=>({dia:harborForm(d.au),std:d.au,en:d.en,pos:d.pos})).sort((a,b)=>a.dia.toLowerCase().localeCompare(b.dia.toLowerCase())); }
   const lSearch=document.getElementById('l-search'), lLexList=document.getElementById('l-lexlist'), lCount=document.getElementById('l-count');
   function rowHtml(e){ const changed=e.dia!==e.std; return '<div class="l-row"><div class="l-dia">'+escapeHtml(e.dia)+'<span class="au">'+escapeHtml(toNative(e.dia))+'</span></div><div class="l-mean">'+escapeHtml(e.en)+'</div><div class="l-from">'+(changed?('from <b>'+escapeHtml(e.std)+'</b>'):'unchanged')+'</div></div>'; }
+  const LPOS_ORDER=['all','n','v','adj','adv','prep','conj','det','pron','num','ord','q','intj','title'];
+  let activeLowPos='all', lPosBuilt=false;
+  function buildLowPosFilter(){
+    const pf=document.getElementById('l-posfilter'); pf.innerHTML='';
+    const present=new Set(lex().map(d=>d.pos));
+    LPOS_ORDER.forEach(p=>{
+      if(p!=='all' && !present.has(p)) return;
+      const b=document.createElement('button');
+      b.className='chip'+(p===activeLowPos?' active':'');
+      b.textContent = p==='all'?'All':(POS_LABEL[p]||p);
+      b.addEventListener('click',()=>{ activeLowPos=p; pf.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); b.classList.add('active'); buildLowLex(); });
+      pf.appendChild(b);
+    });
+    lPosBuilt=true;
+  }
   function buildLowLex(){
+    if(!lPosBuilt) buildLowPosFilter();
     const all=lowEntries(); const q=lSearch.value.trim().toLowerCase();
-    const rows=all.filter(e=>!q||e.dia.toLowerCase().includes(q)||e.std.toLowerCase().includes(q)||e.en.toLowerCase().includes(q));
-    lCount.textContent=rows.length+' of '+all.length+' words'+(q?' matching':'');
-    if(!rows.length){ lLexList.innerHTML='<div class="l-count" style="text-align:center;padding:20px">No words match that.</div>'; return; }
-    const groups={}; rows.forEach(e=>{(groups[e.pos]=groups[e.pos]||[]).push(e);});
-    const order=POSORDER.slice(); Object.keys(groups).forEach(p=>{ if(order.indexOf(p)<0) order.push(p); });
-    let html=''; order.forEach(pos=>{ const list=groups[pos]; if(!list||!list.length) return; html+='<div class="l-sec">'+escapeHtml(POSLABEL[pos]||pos)+'<span class="n">'+list.length+'</span></div><div class="l-grid">'+list.map(rowHtml).join('')+'</div>'; });
-    lLexList.innerHTML=html;
+    const rows=all.filter(e=> (activeLowPos==='all'||e.pos===activeLowPos) && (!q||e.dia.toLowerCase().includes(q)||e.std.toLowerCase().includes(q)||e.en.toLowerCase().includes(q)));
+    lCount.textContent=rows.length+' of '+all.length+' words'+((q||activeLowPos!=='all')?' shown':'');
+    lLexList.innerHTML = rows.length ? ('<div class="l-grid">'+rows.map(rowHtml).join('')+'</div>') : '<div class="l-count" style="text-align:center;padding:20px">No words match that.</div>';
   }
   lSearch.addEventListener('input', buildLowLex);
 
