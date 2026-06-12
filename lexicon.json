@@ -586,5 +586,533 @@
     "en": "severe",
     "pos": "adj",
     "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Yimozh'",
+    "en": "some",
+    "pos": "det",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Aderi",
+    "en": "other",
+    "pos": "det",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Vunu",
+    "en": "long",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Lutu",
+    "en": "wide",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Zhavu",
+    "en": "thick",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rafu",
+    "en": "heavy",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Vunir",
+    "en": "short",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Lutir",
+    "en": "narrow",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Zhavir",
+    "en": "thin",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Zhuralu",
+    "en": "black",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Verau",
+    "en": "warm",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Yimu",
+    "en": "full",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Baemif'",
+    "en": "rotten",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mesu",
+    "en": "dirty",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Lorhir",
+    "en": "straight",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Onkulu",
+    "en": "round",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rinzum",
+    "en": "sharp",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Vazum",
+    "en": "dull",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ervisu",
+    "en": "smooth",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Esuku",
+    "en": "dry",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Esu",
+    "en": "correct",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Visumu",
+    "en": "right (proper)",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ise",
+    "en": "at",
+    "pos": "prep",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ozhi",
+    "en": "if",
+    "pos": "conj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Sorasha",
+    "en": "wife",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Sorashu",
+    "en": "husband",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Thasai",
+    "en": "animal",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rezhthas'",
+    "en": "dog",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Baemthas'",
+    "en": "louse/vermin",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Navirthas'",
+    "en": "snake",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mesthas'",
+    "en": "worm",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Raizhi'",
+    "en": "fruit",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Raibsha'",
+    "en": "seed",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rairaf'",
+    "en": "root (of plant)",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Nerurev'",
+    "en": "bark (of tree)",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mesrai'",
+    "en": "grass",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Vuhyt'",
+    "en": "rope",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Thaszhi'",
+    "en": "meat",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Imukela",
+    "en": "egg",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mumtelt'",
+    "en": "horn",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Thasraf'",
+    "en": "tail",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Revigu'",
+    "en": "feather",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Addarnu",
+    "en": "nose",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Urzelt'",
+    "en": "tooth",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ramelt'",
+    "en": "fingernail",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Navilor'",
+    "en": "knee",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Araddar'",
+    "en": "wing",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Zhike'",
+    "en": "belly",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Iske'",
+    "en": "guts",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mumtara'",
+    "en": "neck",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Keluta'",
+    "en": "back",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mabuke'",
+    "en": "breast",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ifke'",
+    "en": "heart",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Zhimarsu'",
+    "en": "liver",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Auesuk'",
+    "en": "salt",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mesesuk'",
+    "en": "dust",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Auddar'",
+    "en": "fog",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Veraddar'",
+    "en": "smoke",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Urzu",
+    "en": "to bite",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Sulu",
+    "en": "to suck",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Tufu",
+    "en": "to spit",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Velku",
+    "en": "to vomit",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Gela",
+    "en": "to laugh",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Addaru",
+    "en": "to smell",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ifɨ",
+    "en": "to live",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ifir",
+    "en": "to die",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Hazu",
+    "en": "to fight",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Thasku",
+    "en": "to hunt",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ramu",
+    "en": "to hit",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Bruku",
+    "en": "to split",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Aluku",
+    "en": "to stab",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rasku",
+    "en": "to scratch",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mesku",
+    "en": "to dig",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Uraku",
+    "en": "to stand",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Kelu",
+    "en": "to turn",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Gilgu",
+    "en": "to squeeze",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Visu",
+    "en": "to rub",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Aushu",
+    "en": "to wash",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Faleru",
+    "en": "to wipe",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Proku",
+    "en": "to push",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Iguku",
+    "en": "to throw",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Uhytu",
+    "en": "to tie",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Vuku",
+    "en": "to sew",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Gaela",
+    "en": "to play",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Auvu",
+    "en": "to float",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Augu",
+    "en": "to flow",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Razu",
+    "en": "to freeze",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rodezu",
+    "en": "to swell",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
   }
 ]
