@@ -1731,6 +1731,17 @@ function lowNoteLabel(notes){
   const human={'plural (Yi-)':'plural','plural':'plural','negated':'negation','of-the':'possessive'};
   return notes.map(n=>TENSE_ACC[n]?n:(human[n]||n)).join(', ');
 }
+/* Low-Audalad knows no rank: drop a leading honorific pronoun prefix (Ori' / Itu' / Ke') entirely */
+const _RANK_PREFIXES=PR_RANKS.filter(r=>r.prefix).map(r=>r.prefix);
+function stripRankPrefix(word){
+  if(!word) return {base:word, hadRank:false};
+  for(const pfx of _RANK_PREFIXES){
+    const head=pfx.replace(/['\u2019]/g,'');
+    const re=new RegExp('^'+head+'[\'\u2019]','i');
+    if(re.test(word)){ const base=word.replace(re,''); if(base) return {base, hadRank:true}; }
+  }
+  return {base:word, hadRank:false};
+}
 function translateHighToLow(text){
   const raw=text.replace(/\s+/g,' ').trim();
   if(!raw) return {tokens:[]};
@@ -1738,9 +1749,12 @@ function translateHighToLow(text){
   const out=[];
   words.forEach(w=>{
     if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
-    const low=harborForm(w);
-    const m=lookupAu(w);
-    out.push({src:w, au:low, en:(m?m.en:null), note:(m?m.en:null)});
+    const {base,hadRank}=stripRankPrefix(w);   // harbor tongue drops the rank marker
+    const low=harborForm(base);
+    const m=lookupAu(base)||lookupAu(w);
+    let en=m?m.en:null;
+    if(en&&hadRank){ PR_RANKS.forEach(r=>{ if(r.flavor) en=en.split(r.flavor).join(''); }); }
+    out.push({src:w, au:low, en:en, note:en});
   });
   return {tokens:out};
 }
