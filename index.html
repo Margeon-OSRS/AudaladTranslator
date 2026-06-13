@@ -521,6 +521,14 @@ a{color:var(--gold-soft);}
 #lowaudalad .l-morph .cap{color:var(--ink-faint);font-size:12px;font-style:italic;margin-top:7px;}
 @media (max-width:560px){ #lowaudalad .l-row{grid-template-columns:1fr;gap:3px;} #lowaudalad .l-from{text-align:left;} }
 
+/* ---------- KINDRED TONGUES (dialect group) ---------- */
+#dialects .dia-lede{text-align:center;color:var(--ink-dim);font-size:13.5px;font-style:italic;margin:0 auto 16px;max-width:560px;line-height:1.5;}
+#dialects .dia-pick{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 0 26px;}
+#dialects .dia-pick button{font-family:'Cinzel',serif;letter-spacing:2px;text-transform:uppercase;font-size:12px;background:transparent;border:1px solid var(--line);color:var(--ink-dim);padding:9px 22px;border-radius:4px;cursor:pointer;transition:.15s;}
+#dialects .dia-pick button:hover{color:var(--ink);border-color:var(--gold-dim);}
+#dialects .dia-pick button.active{background:linear-gradient(180deg,var(--panel),var(--bg2));color:var(--gold);border-color:var(--gold-dim);}
+#dialects .dia-panel{display:none;}
+#dialects .dia-panel.active{display:block;}
 /* ---------- DIMAINAD (reformed daughter) ---------- */
 #dimainad{ --patina:#6fb3a3; --patina-soft:#8fd4c2; --patina-dim:#3a665d; --oldgold:#d4af52; --oldgold-dim:#6e5a2c; --ink-faint:#6a7d7a; }
 #dimainad .la-intro{text-align:center;margin-bottom:16px;}
@@ -608,8 +616,7 @@ a{color:var(--gold-soft);}
     <button class="tab" data-view="conj">Conjugate</button>
     <button class="tab" data-view="forge">Forge</button>
     <button class="tab" data-view="grammar">Grammar</button>
-    <button class="tab" data-view="lowaudalad">Low&#8209;Audalad</button>
-    <button class="tab" data-view="dimainad">Dimainad</button>
+    <button class="tab" data-view="dialects">Kindred Tongues</button>
   </div>
 
   <details class="guide">
@@ -1247,7 +1254,13 @@ a{color:var(--gold-soft);}
     </div>
   </section>
 
-  <section class="view" id="lowaudalad">
+  <section class="view" id="dialects">
+    <p class="dia-lede">Audalad&rsquo;s kin: the harbor&rsquo;s worn dialect and House Dimaina&rsquo;s reform, each derived live from the shared lexicon.</p>
+    <div class="dia-pick">
+      <button class="active" data-dialect="lowaudalad">Low&#8209;Audalad</button>
+      <button data-dialect="dimainad">Dimainad</button>
+    </div>
+  <section class="dia-panel active" id="lowaudalad">
     <div class="la-intro">
       <div class="la-crest">Audalad</div>
       <div class="la-title">LOW-AUDALAD</div>
@@ -1262,7 +1275,7 @@ a{color:var(--gold-soft);}
     <div class="lview active" id="l-translate">
       <div class="lpairsel">
         <button class="on" id="lpairEL" data-lpair="el">English &harr; Low</button>
-        <button id="lpairHL" data-lpair="hl">High &harr; Low</button>
+        <button id="lpairHL" data-lpair="hl">Audalad &harr; Low</button>
       </div>
       <div class="la-dirbar">
         <span class="la-dirlabel" id="l-dirText"><b>English</b> &rarr; Low-Audalad</span>
@@ -1283,7 +1296,7 @@ a{color:var(--gold-soft);}
         <button class="btn ghost mini" id="l-copy" title="Copy the translation text">Copy</button>
         <button class="btn ghost mini" id="l-png" title="Save the native script as a PNG">&#8595; Script PNG</button>
       </div>
-      <div class="note"><b>How it reads.</b> Word-by-word from the shared lexicon, then run through the three sound laws of the dialect. There is no social rank here: the harbor tongue drops the honorific prefixes entirely. Words it can&rsquo;t find are marked in red. Use the toggle to switch between English and the court&rsquo;s High Audalad as the other side.</div>
+      <div class="note"><b>How it reads.</b> Word-by-word from the shared lexicon, then run through the three sound laws of the dialect. There is no social rank here: the harbor tongue drops the honorific prefixes entirely. Words it can&rsquo;t find are marked in red. Use the toggle to switch between English and the court&rsquo;s Audalad as the other side.</div>
     </div>
 
     <div class="lview" id="l-lexicon">
@@ -1299,7 +1312,7 @@ a{color:var(--gold-soft);}
         <div class="cap" id="lm-cap">&ldquo;water&rdquo; &middot; the high tongue, then the low form</div>
       </div>
 <div class="l-prose">
-      <p class="l-lede">High Audalad belongs to the court: carved into accords, spoken slow beneath the gold, guarded word by word by the Council. Low-Audalad is that same tongue let loose on the water. It is the speech of a crowded deck, a market stall, the long dust of a trade road, quicker, softer, and answerable to no one's rank.</p>
+      <p class="l-lede">Audalad belongs to the court: carved into accords, spoken slow beneath the gold, guarded word by word by the Council. Low-Audalad is that same tongue let loose on the water. It is the speech of a crowded deck, a market stall, the long dust of a trade road, quicker, softer, and answerable to no one's rank.</p>
 
       <div class="l-sec">The tongue of the trade roads</div>
       <p><span class="l-drop">W</span>herever Audalad travels to do business, it loosens. A trader calling prices over the din of a market, a deckhand shouting orders through wind and spray, a carter who passes through a dozen ports in a season: none of them has time for the court's long vowels and careful endings. Low-Audalad is what remains when the tongue is worked hard and fast, day upon day. It belongs to the sailors, dockfolk, merchants and carters who move the Empire's goods, and who will likely never set foot in a council chamber.</p>
@@ -1308,7 +1321,7 @@ a{color:var(--gold-soft);}
       <div class="l-glyph">Au dal ad</div>
 
       <div class="l-sec">How it wore smooth</div>
-      <p>No one decreed Low-Audalad. It is High Audalad with the corners rubbed off, the way a coin wears smooth in a thousand hands. Glided vowels run together, because a mouth in a hurry will not hold them apart. Hard sounds soften, because soft ones carry further over noise. The tails of long words fall away, because the meaning was already plain before the speaker reached them. Every one of these is a change the high tongue itself would make, were it ever set down and left to ordinary use, rather than guarded.</p>
+      <p>No one decreed Low-Audalad. It is Audalad with the corners rubbed off, the way a coin wears smooth in a thousand hands. Glided vowels run together, because a mouth in a hurry will not hold them apart. Hard sounds soften, because soft ones carry further over noise. The tails of long words fall away, because the meaning was already plain before the speaker reached them. Every one of these is a change the high tongue itself would make, were it ever set down and left to ordinary use, rather than guarded.</p>
 
       <div class="l-sec">What the court makes of it</div>
       <p>Scribes and nobles have long called it rough speech for rough work: a bastard tongue, unfit for an accord or the Emperor's ear. And yet it is the form of Audalad most mouths actually shape, and a high-tongue speaker can follow it without much trouble, because the bones beneath are the same, only worn. The two are not separate languages. They are one tongue, held apart by who is speaking, and by how great a hurry that speaker is in. Should the Accord that polishes the high lexicon ever turn to the low one, it would find nothing to invent, only to write down.</p>
@@ -1338,7 +1351,7 @@ a{color:var(--gold-soft);}
       <p style="margin:8px 0 16px;color:var(--ink-dim);">The laws run in order, so one word can meet all three. <b style="color:var(--rope-soft);font-weight:400;">Autai</b> &ldquo;water&rdquo; loses its glides to <b style="color:var(--rope-soft);font-weight:400;">Ote</b>, then softens between vowels to the everyday <b style="color:var(--brine-soft);font-weight:400;">Ode</b>.</p>
 
       <div class="l-sec" style="color:var(--rope-soft);">No rank on the water</div>
-      <p>High Audalad bends its pronouns to mark who outranks whom: <i>Ori&rsquo;</i> for the divine and the dynasty, <i>Itu&rsquo;</i> for a greater, <i>Ke&rsquo;</i> for a lesser, and no marker at all between equals. Low-Audalad keeps none of it.</p>
+      <p>Audalad bends its pronouns to mark who outranks whom: <i>Ori&rsquo;</i> for the divine and the dynasty, <i>Itu&rsquo;</i> for a greater, <i>Ke&rsquo;</i> for a lesser, and no marker at all between equals. Low-Audalad keeps none of it.</p>
       <div class="l-law" style="border-left-color:var(--rope);">
         <p style="margin:0;color:var(--ink-dim);">There is a reason, and the harbor folk will tell it to you: on a ship the sea outranks every soul aboard, and in a market a buyer's coin speaks louder than any title. So a sailor addresses a captain, a stranger and an emperor's envoy alike with the same plain <b>In</b> &ldquo;I,&rdquo; <b>Ir</b> &ldquo;you,&rdquo; <b>Enu</b> &ldquo;they.&rdquo; Standing is heard in the words a speaker chooses, never stamped onto the grammar. To the court this is the tongue's great rudeness. To everyone else, it is simply faster.</p>
       </div>
@@ -1350,12 +1363,11 @@ a{color:var(--gold-soft);}
     </div>
     </div>
   </section>
-
-  <section class="view" id="dimainad">
+  <section class="dia-panel" id="dimainad">
     <div class="la-intro">
       <div class="la-crest">Audalad</div>
       <div class="la-title">DIMAINAD</div>
-      <div class="la-sub">The reformed daughter of House Dimaina: the high tongue with its worn joints re-trued. Same roots, same compounding; only the rules are rebuilt, so every form is derived live from the shared lexicon. No dictionary of its own.</div>
+      <div class="la-sub">The reformed daughter of House Dimaina: the high tongue re-trued and re-voiced. The same words and compounding, kept in meaning, spoken in a clarified phonology of Filurdu&rsquo;s design and bent by the grammar reforms. Every form is derived live from the shared lexicon. No dictionary of its own.</div>
     </div>
     <div class="lsub">
       <button class="active" data-dview="translate">Translate</button>
@@ -1366,7 +1378,7 @@ a{color:var(--gold-soft);}
     <div class="lview active" id="d-translate">
       <div class="lpairsel">
         <button class="on" id="dpairEN" data-dpair="en">English &rarr; Dimainad</button>
-        <button id="dpairHI" data-dpair="hi">High &rarr; Dimainad</button>
+        <button id="dpairHI" data-dpair="hi">Audalad &rarr; Dimainad</button>
       </div>
       <div class="la-dirbar">
         <span class="la-dirlabel" id="d-dirText"><b>English</b> &rarr; Dimainad</span>
@@ -1386,7 +1398,7 @@ a{color:var(--gold-soft);}
         <button class="btn ghost mini" id="d-copy" title="Copy the translation text">Copy</button>
         <button class="btn ghost mini" id="d-png" title="Save the native script as a PNG">&#8595; Script PNG</button>
       </div>
-      <div class="note"><b>How it reads.</b> Word-by-word from the shared lexicon, then run through Filurdu&rsquo;s reforms: one plural, one possessive, free negation, the rebuilt verb, and phonemic spelling. Words it can&rsquo;t find are marked in red. This first build runs the two forward directions (from English, from High Audalad); reverse parsing is the next patch.</div>
+      <div class="note"><b>How it reads.</b> Word-by-word from the shared lexicon, then run through Filurdu&rsquo;s reforms: the clarified phonology, one plural, one possessive, free negation, the rebuilt verb, and phonemic spelling. Words it can&rsquo;t find are marked in red. This first build runs the two forward directions (from English, from Audalad); reverse parsing is the next patch.</div>
     </div>
 
     <div class="lview" id="d-lexicon">
@@ -1394,7 +1406,7 @@ a{color:var(--gold-soft);}
       <div class="posfilter" id="d-posfilter"></div>
       <div class="l-count" id="d-count"></div>
       <div id="d-lexlist"></div>
-      <div class="l-note" style="margin-top:16px;"><b>Note.</b> Most bare headwords pass through unchanged. Dimainad keeps the roots. The reform lives in the grammar: how words pluralise, possess, negate, and take tense. See <b>The Reform</b> for that.</div>
+      <div class="l-note" style="margin-top:16px;"><b>Note.</b> Each word is the high-tongue word in Dimainad&rsquo;s clarified phonology, plus the grammar reforms. Change a word in the court and its Dimainad form changes with it. See <b>The Reform</b> for the sound laws and the grammar.</div>
     </div>
 
     <div class="lview" id="d-reform">
@@ -1402,26 +1414,35 @@ a{color:var(--gold-soft);}
         <p class="l-lede">Audalad was never broken, only unfinished. Filurdu Urzinai Dimaina kept every root the high tongue had earned and rebuilt only the machinery that moved them.</p>
 
         <div class="l-sec">What it keeps</div>
-        <p>The whole lexicon, and its finest habit: transparent compounding. <b style="color:var(--patina-soft);font-weight:400;">Au &middot; dal &middot; ad</b> = water &middot; land &middot; of = <i>island</i>. Untouched. Nothing below replaces a word; every reform replaces a rule.</p>
+        <p>Every word the high tongue earned, kept in meaning, and its finest habit: transparent compounding. <b style="color:var(--patina-soft);font-weight:400;">Au &middot; dal &middot; ad</b> still = water &middot; land &middot; of = <i>island</i>. What changes is the voice: one clarified phonology laid over every root, then the grammar reforms. Filurdu replaced no meanings, only re-cut how they sound.</p>
+
+        <div class="l-sec">The clarified sounds</div>
+        <p>One phonology laid over every root, so the vocabulary reads as its own. The inverse of the harbor&rsquo;s worn dialect: where Low-Audalad lets sounds slur and fall, Dimainad sharpens and raises them.</p>
+        <div class="l-law"><h4><span class="rn">i</span> Hushed sibilants clear</h4><p><span style="color:var(--oldgold)">sh</span> becomes <span style="color:var(--patina-soft)">s</span>, <span style="color:var(--oldgold)">zh</span> becomes <span style="color:var(--patina-soft)">z</span>.</p><div class="d-fix"><span class="old">Nashei</span><span class="arr">&rarr;</span><span class="new">Nasei</span><span class="gl">woman</span></div></div>
+        <div class="l-law"><h4><span class="rn">ii</span> Doubled letters settle to one</h4><p>One sound, one symbol, taken all the way.</p><div class="d-fix"><span class="old">Naddar</span><span class="arr">&rarr;</span><span class="new">Nadar</span><span class="gl">wind</span></div></div>
+        <div class="l-law"><h4><span class="rn">iii</span> Diphthongs rise</h4><p><span style="color:var(--oldgold)">ai</span> rises to <span style="color:var(--patina-soft)">ei</span>, <span style="color:var(--oldgold)">au</span> to <span style="color:var(--patina-soft)">ou</span>.</p><div class="d-fix"><span class="old">Razai</span><span class="arr">&rarr;</span><span class="new">Razei</span><span class="gl">ice</span></div></div>
+        <div class="l-law"><h4><span class="rn">iv</span> The deep vowel</h4><p>Every <span style="color:var(--oldgold)">u</span> deepens to <span style="color:var(--patina-soft)">o</span>.</p><div class="d-fix"><span class="old">Nadu</span><span class="arr">&rarr;</span><span class="new">Nado</span><span class="gl">noble</span></div></div>
+        <div class="l-law"><h4><span class="rn">v</span> Hard k turns to c</h4><p>The court&rsquo;s <span style="color:var(--oldgold)">k</span> is cut clean as <span style="color:var(--patina-soft)">c</span>.</p><div class="d-fix"><span class="old">Sarek</span><span class="arr">&rarr;</span><span class="new">Sarec</span><span class="gl">to know</span></div></div>
+        <div class="l-law"><h4><span class="rn">vi</span> Final a settles to e</h4><p>A trailing <span style="color:var(--oldgold)">a</span> closes to <span style="color:var(--patina-soft)">e</span>.</p><div class="d-fix"><span class="old">Sahra</span><span class="arr">&rarr;</span><span class="new">Sahre</span><span class="gl">town</span></div></div>
 
         <div class="l-sec">The six reforms</div>
 
         <div class="l-law">
           <h4><span class="rn">01</span> One plural, for everything</h4>
           <p>The high tongue split plural by whether a thing could breathe: <span style="color:var(--oldgold)">-ae</span> for the living, prefix <span style="color:var(--oldgold)">Yi-</span> for the rest. Dimainad uses <span style="color:var(--patina-soft)">-ae</span> on everything; <i>Yimmu</i> &ldquo;many&rdquo; stays as a free quantifier.</p>
-          <div class="d-fix"><span class="old">Yiutal</span><span class="arr">&rarr;</span><span class="new">Utalae</span><span class="gl">houses</span></div>
+          <div class="d-fix"><span class="old">Yiutal</span><span class="arr">&rarr;</span><span class="new">Otalae</span><span class="gl">houses</span></div>
         </div>
 
         <div class="l-law">
           <h4><span class="rn">02</span> One possessive</h4>
           <p>Three coats (<span style="color:var(--oldgold)">-ad / -adi / -id</span>) collapse to one.</p>
-          <div class="d-fix"><span class="old">-adi / -id</span><span class="arr">&rarr;</span><span class="new">-ad</span><span class="gl">Shurad &middot; golden</span></div>
+          <div class="d-fix"><span class="old">-adi / -id</span><span class="arr">&rarr;</span><span class="new">-ad</span><span class="gl">Sorad &middot; golden</span></div>
         </div>
 
         <div class="l-law">
           <h4><span class="rn">03</span> A negation that isn&rsquo;t also &ldquo;you&rdquo;</h4>
           <p>The suffix <span style="color:var(--oldgold)">-ir</span> was the very shape of <i>Ir</i> &ldquo;you.&rdquo; Negation is lifted off the tail and set free in front as <span style="color:var(--patina-soft)">Vir</span>.</p>
-          <div class="d-fix"><span class="old">sarekir</span><span class="arr">&rarr;</span><span class="new">vir sarek</span><span class="gl">does not know</span></div>
+          <div class="d-fix"><span class="old">sarekir</span><span class="arr">&rarr;</span><span class="new">vir sarec</span><span class="gl">does not know</span></div>
         </div>
 
         <div class="l-law">
@@ -1430,16 +1451,16 @@ a{color:var(--gold-soft);}
           <div class="d-slots">
             <div class="d-slot"><div class="lab">When</div><div class="o">as-&nbsp;<small>past</small><br>zhe-&nbsp;<small>present</small><br>lu-&nbsp;<small>future</small></div></div>
             <div class="d-slot opt"><div class="lab">Near?</div><div class="o">+ -ar-<br><small>soon / now</small></div></div>
-            <div class="d-slot"><div class="lab">Root</div><div class="o">sarek<br><small>know</small></div></div>
+            <div class="d-slot"><div class="lab">Root</div><div class="o">sarec<br><small>know</small></div></div>
             <div class="d-slot opt"><div class="lab">Ongoing?</div><div class="o">+ -en<br><small>continuous</small></div></div>
           </div>
           <div class="d-vex">
-            <span class="nf">assarek</span> : <span class="gl">knew</span><br>
-            <span class="nf">asarsarek</span> : <span class="gl">just knew</span><br>
-            <span class="nf">zhesarek</span> : <span class="gl">knows</span><br>
-            <span class="nf">zhearsarek</span> : <span class="gl">knows this very moment</span> <span class="tg">new</span><br>
-            <span class="nf">luarsarek</span> : <span class="gl">will know soon</span><br>
-            <span class="nf">luarsareken</span> : <span class="gl">will soon be knowing</span> <span class="tg">stacks</span>
+            <span class="nf">assarec</span> : <span class="gl">knew</span><br>
+            <span class="nf">asarsarec</span> : <span class="gl">just knew</span><br>
+            <span class="nf">zhesarec</span> : <span class="gl">knows</span><br>
+            <span class="nf">zhearsarec</span> : <span class="gl">knows this very moment</span> <span class="tg">new</span><br>
+            <span class="nf">luarsarec</span> : <span class="gl">will know soon</span><br>
+            <span class="nf">luarsarecen</span> : <span class="gl">will soon be knowing</span> <span class="tg">stacks</span>
           </div>
         </div>
 
@@ -1457,16 +1478,19 @@ a{color:var(--gold-soft);}
 
         <div class="l-sec">The reforms, all at once</div>
         <div class="d-sample">
-          <div class="d-sline hi"><span class="tg">High Audalad</span><span class="tx">Naduae L&uacute;arsarek Shur Yiutalad</span></div>
-          <div class="d-sline di"><span class="tg">Dimainad</span><span class="tx">Naduae Luarsarek Shur Utalaead</span></div>
-          <p style="margin:14px 0 0;color:var(--ink-dim);font-size:14px;">&ldquo;The nobles will soon know the houses&rsquo; gold.&rdquo; Kin at a glance, every joint re-trued.</p>
+          <div class="d-sline hi"><span class="tg">Audalad</span><span class="tx">Naduae L&uacute;arsarek Shur Yiutalad</span></div>
+          <div class="d-sline di"><span class="tg">Dimainad</span><span class="tx">Nadoae Luarsarec Sor Otalaead</span></div>
+          <p style="margin:14px 0 0;color:var(--ink-dim);font-size:14px;">&ldquo;The nobles will soon know the houses&rsquo; gold.&rdquo; The same meaning, in Dimainad&rsquo;s own voice and rules.</p>
         </div>
 
-        <div class="l-note" style="margin-top:18px;"><b>Forged, not decreed.</b> The roots are the Empire&rsquo;s; the machinery is House Dimaina&rsquo;s. Everything here is derived from the same lexicon the other tabs run on. Change a word in the court and its Dimainad form changes with it.</div>
       </div>
     </div>
 
   </section>
+
+
+  </section>
+
 
   <footer>Audalad Language Toolkit &middot; v1.2 &middot; coded by Philly<br>Built from the Bastardized Audalad linguistic accord &middot; script font: Audalad v1 (juno)</footer>
 </div>
@@ -2077,12 +2101,12 @@ function updateRankbarVisibility(){
 
 const DIR_LBL={
   en2au:['English','Audalad'], au2en:['Audalad','English'],
-  high2low:['High Audalad','Low-Audalad'], low2high:['Low-Audalad','High Audalad']
+  high2low:['Audalad','Low-Audalad'], low2high:['Low-Audalad','Audalad']
 };
 const DIR_PH={
   en2au:'Type here, e.g. the great emperor will rule the land',
   au2en:'Type here, e.g. sei Orishara Rodezum',
-  high2low:'Type High Audalad, e.g. Autai Aurdi Utura',
+  high2low:'Type Audalad, e.g. Autai Aurdi Utura',
   low2high:'Type Low-Audalad, e.g. Ode Ord Udur'
 };
 const FLIP={en2au:'au2en',au2en:'en2au',high2low:'low2high',low2high:'high2low'};
@@ -3566,8 +3590,8 @@ updateWantsBadge();
   lIn.addEventListener('input', lRender);
   const L_FLIP={en2low:'low2en',low2en:'en2low',high2low:'low2high',low2high:'high2low'};
   const L_PAIR={en2low:'el',low2en:'el',high2low:'hl',low2high:'hl'};
-  const L_LBL={en2low:['English','Low-Audalad'],low2en:['Low-Audalad','English'],high2low:['High Audalad','Low-Audalad'],low2high:['Low-Audalad','High Audalad']};
-  const L_PH={en2low:'Type here, e.g. the emperor will cross the sea',low2en:'Type Low-Audalad, e.g. sei Orishar Rodezum',high2low:'Type High Audalad, e.g. Autai Aurdi Utura',low2high:'Type Low-Audalad, e.g. Ode Ord Udur'};
+  const L_LBL={en2low:['English','Low-Audalad'],low2en:['Low-Audalad','English'],high2low:['Audalad','Low-Audalad'],low2high:['Low-Audalad','Audalad']};
+  const L_PH={en2low:'Type here, e.g. the emperor will cross the sea',low2en:'Type Low-Audalad, e.g. sei Orishar Rodezum',high2low:'Type Audalad, e.g. Autai Aurdi Utura',low2high:'Type Low-Audalad, e.g. Ode Ord Udur'};
   function applyLDir(){
     const lab=L_LBL[l_dir];
     document.getElementById('l-dirText').innerHTML='<b>'+lab[0]+'</b> &rarr; '+lab[1];
@@ -3630,6 +3654,19 @@ updateWantsBadge();
   lRender();
 })();
 
+/* dialect group (Kindred Tongues) switcher */
+(function(){
+  var picks=document.querySelectorAll('#dialects .dia-pick button');
+  picks.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      picks.forEach(function(x){x.classList.remove('active');});
+      document.querySelectorAll('#dialects .dia-panel').forEach(function(x){x.classList.remove('active');});
+      btn.classList.add('active');
+      var t=document.getElementById(btn.dataset.dialect); if(t) t.classList.add('active');
+    });
+  });
+})();
+
 /* ================= DIMAINAD TAB (reformed daughter of Audalad - rules over the shared lexicon) ================= */
 (function(){
   function isWord(s){ s=deaccent(s||''); return !!auToEn[s]; }
@@ -3665,10 +3702,20 @@ updateWantsBadge();
     if(t){ pre=t.pre; suf=t.suf; body=t.stem; }
     var d=deaccent(body);
     var nn=dimNoun(d);
-    if(nn){ d=nn.stem+(nn.plural?'ae':'')+(nn.poss?'ad':''); }
+    if(nn){ d=dimSound(nn.stem)+(nn.plural?'ae':'')+(nn.poss?'ad':''); } else { d=dimSound(d); }
     var out=pre+d+suf;
     if(cap && out) out=out.charAt(0).toUpperCase()+out.slice(1);
     return out;
+  }
+  function dimSound(s){
+    if(!s) return s;
+    s=s.replace(/zh/g,'z').replace(/sh/g,'s');                 // 1 hushed sibilants clear
+    s=s.replace(/([bcdfghjklmnpqrstvwxz])\1/g,'$1');           // 2 doubled letters settle to one
+    s=s.replace(/ai/g,'ei').replace(/au/g,'ou');               // 3 diphthongs rise
+    s=s.replace(/u/g,'o');                                     // 4 the deep vowel
+    s=s.replace(/k/g,'c');                                     // 5 hard k turns to c
+    s=s.replace(/a$/,'e');                                     // 6 final a settles to e
+    return s;
   }
   function dimNoun(d){
     if(isWord(d)) return {stem:d, plural:false, poss:false};
@@ -3745,8 +3792,8 @@ updateWantsBadge();
     });
   }
   dIn.addEventListener('input', dRender);
-  var D_LBL={en2dim:['English','Dimainad'], high2dim:['High Audalad','Dimainad']};
-  var D_PH={en2dim:'Type here, e.g. the nobles will know the gold', high2dim:'Type High Audalad, e.g. Naduae L\u00faarsarek Shur Yiutalad'};
+  var D_LBL={en2dim:['English','Dimainad'], high2dim:['Audalad','Dimainad']};
+  var D_PH={en2dim:'Type here, e.g. the nobles will know the gold', high2dim:'Type Audalad, e.g. Naduae L\u00faarsarek Shur Yiutalad'};
   function applyDMode(){
     var lab=D_LBL[d_mode];
     document.getElementById('d-dirText').innerHTML='<b>'+lab[0]+'</b> &rarr; '+lab[1];
