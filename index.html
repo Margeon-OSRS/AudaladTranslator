@@ -551,6 +551,8 @@ a{color:var(--gold-soft);}
 #dimainad .la-dirbar{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:14px;}
 #dimainad .la-dirlabel{font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-dim);}
 #dimainad .la-dirlabel b{color:var(--patina-soft);font-weight:400;}
+#dimainad .la-swap{background:var(--panel);border:1px solid var(--line);color:var(--patina);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:17px;transition:.18s;}
+#dimainad .la-swap:hover{border-color:var(--patina-dim);color:var(--patina-soft);}
 #dimainad .l-search{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:'EB Garamond',serif;font-size:16px;padding:10px 13px;margin-bottom:6px;}
 #dimainad .l-search:focus{outline:none;border-color:var(--patina-dim);}
 #dimainad .l-count{color:var(--ink-faint);font-size:13px;font-style:italic;margin-bottom:12px;}
@@ -1262,7 +1264,7 @@ a{color:var(--gold-soft);}
     </div>
   <section class="dia-panel active" id="lowaudalad">
     <div class="la-intro">
-      <div class="la-crest">Audalad</div>
+      <div class="la-crest">Keshir-Audalad</div>
       <div class="la-title">LOW-AUDALAD</div>
       <div class="la-sub">The common dialect of traders, sailors and merchants: the high tongue worn smooth, rank markers dropped. Every word is derived live from the official lexicon by sound law, so the dialect keeps no dictionary of its own.</div>
     </div>
@@ -1365,7 +1367,7 @@ a{color:var(--gold-soft);}
   </section>
   <section class="dia-panel" id="dimainad">
     <div class="la-intro">
-      <div class="la-crest">Audalad</div>
+      <div class="la-crest">Dimainad</div>
       <div class="la-title">DIMAINAD</div>
       <div class="la-sub">The reformed daughter of House Dimaina: the high tongue re-trued and re-voiced. The same words and compounding, kept in meaning, spoken in a clarified phonology of Filurdu&rsquo;s design and bent by the grammar reforms. Every form is derived live from the shared lexicon. No dictionary of its own.</div>
     </div>
@@ -1382,6 +1384,7 @@ a{color:var(--gold-soft);}
       </div>
       <div class="la-dirbar">
         <span class="la-dirlabel" id="d-dirText"><b>English</b> &rarr; Dimainad</span>
+        <button class="la-swap" id="d-swap" title="Swap direction">&#8646;</button>
       </div>
       <div class="io">
         <div class="field">
@@ -3769,42 +3772,136 @@ updateWantsBadge();
     return {tokens:out};
   }
 
+  function dimToAuMap(){
+    var map={}, seen={};
+    lex().forEach(function(d){
+      var id=d.au.toLowerCase(); if(seen[id]) return; seen[id]=1;
+      var df=dimSound(deaccent(d.au));
+      (map[df]=map[df]||[]).push(d);
+    });
+    var rk=function(po){ return (po in _POSRANK)?_POSRANK[po]:8; };
+    Object.keys(map).forEach(function(k){ map[k].sort(function(a,b){ return rk(a.pos)-rk(b.pos); }); });
+    return map;
+  }
+  function dimBareLook(stem, map){ var k=stem.toLowerCase(); if(map[k] && map[k].length) return {list:map[k], notes:[]}; return null; }
+  function dimAffixLook(stem, map){
+    var hit=dimBareLook(stem, map); if(hit) return hit;
+    var lw=stem.toLowerCase();
+    if(lw.length>2 && lw.slice(-2)==='ad'){
+      var s1=lw.slice(0,-2);
+      if(s1.length>2 && s1.slice(-2)==='ae'){ var h=dimBareLook(s1.slice(0,-2), map); if(h){ h.notes=['plural','of-the']; return h; } }
+      var h2=dimBareLook(s1, map); if(h2){ h2.notes=['of-the']; return h2; }
+    }
+    if(lw.length>2 && lw.slice(-2)==='ae'){ var h3=dimBareLook(lw.slice(0,-2), map); if(h3){ h3.notes=['plural']; return h3; } }
+    return null;
+  }
+  function dimResolve(w, map){
+    var hit=dimAffixLook(w, map); if(hit) return hit;
+    var dw=w.toLowerCase();
+    var TEN=[['asar','near-past'],['luar','near-future'],['as','far-past'],['lu','far-future'],['zhear','present'],['zhe','present']];
+    for(var i=0;i<TEN.length;i++){
+      var pre=TEN[i][0], label=TEN[i][1];
+      if(dw.indexOf(pre)===0 && dw.length>pre.length){
+        var rest=w.slice(pre.length);
+        if(pre==='zhe' && rest.toLowerCase().slice(-2)==='en'){
+          var inner=dimAffixLook(rest.slice(0,-2), map);
+          if(inner){ inner.notes=['continuous'].concat(inner.notes); return inner; }
+        }
+        var r=dimAffixLook(rest, map);
+        if(r){ r.notes=[label].concat(r.notes); return r; }
+      }
+    }
+    return null;
+  }
+  function dimNoteLabel(notes){
+    var human={'plural':'plural','of-the':'possessive','negated':'negation','near-past':'near past','far-past':'past','near-future':'near future','far-future':'future','present':'present','continuous':'continuous'};
+    return notes.map(function(n){ return human[n]||n; }).join(', ');
+  }
+  function translateDimToEn(text){
+    var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
+    var map=dimToAuMap(); var words=raw.match(/[^\s.,!?;:]+|[.,!?;:]/g)||[]; var out=[]; var neg=false;
+    words.forEach(function(w){
+      if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
+      if(deaccent(w)==='vir'){ neg=true; return; }
+      var hit=dimResolve(w, map);
+      if(hit && hit.list && hit.list.length){
+        var notes=hit.notes.slice(); if(neg){ notes.push('negated'); neg=false; }
+        var uniq=[]; hit.list.forEach(function(x){ if(uniq.indexOf(x.en)<0) uniq.push(x.en); });
+        var en=glossEn(uniq[0], notes);
+        var extras=[]; var lab=dimNoteLabel(notes); if(lab) extras.push('['+lab+']');
+        if(uniq.length>1) extras.push('also: '+uniq.slice(1).join('; '));
+        out.push({src:w, en:en, au:hit.list[0].au, note:extras.length?extras.join(' \u00b7 '):null});
+      } else { out.push({src:w, en:null, au:null}); }
+    });
+    return {tokens:out};
+  }
+  function translateDimToHigh(text){
+    var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
+    var map=dimToAuMap(); var words=raw.match(/[^\s.,!?;:]+|[.,!?;:]/g)||[]; var out=[]; var neg=false;
+    words.forEach(function(w){
+      if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
+      if(deaccent(w)==='vir'){ neg=true; return; }
+      var hit=dimResolve(w, map);
+      if(hit && hit.list && hit.list.length){
+        var notes=hit.notes.slice(); if(neg){ notes.push('negated'); neg=false; }
+        var main=hit.list[0];
+        var au=buildHighForm(main.au, notes);
+        var en=glossEn(main.en, notes);
+        var note=en; var lab=dimNoteLabel(notes); if(lab) note=en+' \u00b7 ['+lab+']';
+        if(hit.list.length>1) note=note+' \u00b7 also: '+hit.list.slice(1).map(function(x){ return x.au+' ('+x.en+')'; }).join(', ');
+        out.push({src:w, au:au, en:en, note:note});
+      } else { out.push({src:w, au:null, en:null}); }
+    });
+    return {tokens:out};
+  }
   var d_mode='en2dim', d_lastText='', d_lastNative='';
   var dIn=document.getElementById('d-input'), dOut=document.getElementById('d-output'), dGloss=document.getElementById('d-gloss');
   function joinParts(parts){ var s=''; parts.forEach(function(p){ if(/^[.,!?;:]$/.test(p)) s=s.replace(/\s$/,'')+p+' '; else s+=p+' '; }); return s.trim(); }
   function dRender(){
-    var text=dIn.value;
-    var res = d_mode==='high2dim'?translateHighToDim(text):translateEnToDim(text);
+    var text=dIn.value; var auOut=(d_mode!=='dim2en');
+    var res = d_mode==='en2dim'?translateEnToDim(text)
+            : d_mode==='high2dim'?translateHighToDim(text)
+            : d_mode==='dim2en'?translateDimToEn(text)
+            : translateDimToHigh(text);
     dGloss.innerHTML='';
     if(!res.tokens.length){ d_lastText='';d_lastNative=''; dOut.innerHTML='<div class="placeholder">Translation appears here\u2026</div>'; return; }
-    var parts=res.tokens.map(function(t){ return t.punct? t.punct : (t.au!=null?t.au:'['+t.src+'?]'); });
+    var parts=res.tokens.map(function(t){ return t.punct? t.punct : ((auOut?t.au:t.en)!=null?(auOut?t.au:t.en):'['+t.src+'?]'); });
     var str=joinParts(parts);
-    var np=[]; res.tokens.forEach(function(t){ if(t.punct){np.push(t.punct);return;} if(t.au!=null) np.push(t.au); });
-    var ns=joinParts(np); d_lastText=str; d_lastNative=ns;
-    var ipa=ipaText(ns);
-    dOut.innerHTML='<div class="roman">'+escapeHtml(str)+'</div><div class="native">'+escapeHtml(toNative(ns))+'</div>'+(ipa?'<div class="c-ipa">'+escapeHtml(ipa)+'</div>':'');
+    var html='<div class="roman">'+escapeHtml(str)+'</div>';
+    if(auOut){
+      var np=[]; res.tokens.forEach(function(t){ if(t.punct){np.push(t.punct);return;} if(t.au!=null) np.push(t.au); });
+      var ns=joinParts(np); d_lastText=str; d_lastNative=ns;
+      var ipa=ipaText(ns);
+      html+='<div class="native">'+escapeHtml(toNative(ns))+'</div>'+(ipa?'<div class="c-ipa">'+escapeHtml(ipa)+'</div>':'');
+    } else { d_lastText=str; d_lastNative=''; }
+    dOut.innerHTML=html;
     res.tokens.forEach(function(t){
       if(t.punct) return;
-      var d=document.createElement('div'); var miss=(t.au==null);
+      var d=document.createElement('div'); var miss=auOut?(t.au==null):(t.en==null);
       d.className='tok'+(miss?' miss':'');
-      d.innerHTML='<div class="t-au">'+escapeHtml(t.au||'??')+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
+      if(auOut) d.innerHTML='<div class="t-au">'+escapeHtml(t.au||'??')+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
+      else d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.en||'??')+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
       dGloss.appendChild(d);
     });
   }
   dIn.addEventListener('input', dRender);
-  var D_LBL={en2dim:['English','Dimainad'], high2dim:['Audalad','Dimainad']};
-  var D_PH={en2dim:'Type here, e.g. the nobles will know the gold', high2dim:'Type Audalad, e.g. Naduae L\u00faarsarek Shur Yiutalad'};
+  var D_FLIP={en2dim:'dim2en', dim2en:'en2dim', high2dim:'dim2high', dim2high:'high2dim'};
+  var D_PAIR={en2dim:'en', dim2en:'en', high2dim:'au', dim2high:'au'};
+  var D_LBL={en2dim:['English','Dimainad'], dim2en:['Dimainad','English'], high2dim:['Audalad','Dimainad'], dim2high:['Dimainad','Audalad']};
+  var D_PH={en2dim:'Type here, e.g. the nobles will know the gold', dim2en:'Type Dimainad, e.g. Nadoae Luarsarec Sor Otalaead', high2dim:'Type Audalad, e.g. Naduae L\u00faarsarek Shur Yiutalad', dim2high:'Type Dimainad, e.g. Nadoae Luarsarec Sor Otalaead'};
   function applyDMode(){
     var lab=D_LBL[d_mode];
     document.getElementById('d-dirText').innerHTML='<b>'+lab[0]+'</b> &rarr; '+lab[1];
     document.getElementById('d-inLbl').textContent=lab[0]; document.getElementById('d-outLbl').textContent=lab[1];
+    dOut.classList.toggle('show-native', d_mode!=='dim2en');
     dIn.placeholder=D_PH[d_mode];
-    document.getElementById('dpairEN').classList.toggle('on', d_mode==='en2dim');
-    document.getElementById('dpairHI').classList.toggle('on', d_mode==='high2dim');
+    document.getElementById('dpairEN').classList.toggle('on', D_PAIR[d_mode]==='en');
+    document.getElementById('dpairHI').classList.toggle('on', D_PAIR[d_mode]==='au');
     dIn.value=''; dRender(); dIn.focus();
   }
-  document.getElementById('dpairEN').addEventListener('click', function(){ if(d_mode!=='en2dim'){ d_mode='en2dim'; applyDMode(); } });
-  document.getElementById('dpairHI').addEventListener('click', function(){ if(d_mode!=='high2dim'){ d_mode='high2dim'; applyDMode(); } });
+  document.getElementById('dpairEN').addEventListener('click', function(){ if(D_PAIR[d_mode]!=='en'){ d_mode='en2dim'; applyDMode(); } });
+  document.getElementById('dpairHI').addEventListener('click', function(){ if(D_PAIR[d_mode]!=='au'){ d_mode='high2dim'; applyDMode(); } });
+  document.getElementById('d-swap').addEventListener('click', function(){ d_mode=D_FLIP[d_mode]; applyDMode(); });
   document.getElementById('d-copy').addEventListener('click', function(e){ copyText(d_lastText, e.currentTarget); });
   document.getElementById('d-png').addEventListener('click', async function(e){ var b=e.currentTarget; if(!d_lastNative){ var o=b.textContent;b.textContent='Translate first';setTimeout(function(){b.textContent=o;},1200);return;} var o2=b.textContent;b.textContent='Saving\u2026'; await exportNativePNG(d_lastNative,'dimainad-script'); b.textContent=o2; });
 
