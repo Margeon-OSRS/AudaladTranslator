@@ -1774,24 +1774,33 @@ function enableForgeCopy(){
 }
 
 /* ---------- native-script PNG export ---------- */
-async function exportNativePNG(romanText, filenameBase){
+async function exportNativePNG(romanText, filenameBase, slantDeg){
   const native=toNative(romanText||'');
   if(!native.trim()) return false;
   try{ await document.fonts.load("96px 'AudaladScript'"); await document.fonts.ready; }catch(e){}
   const fontPx=96, padX=48, padY=40;
+  const shx=Math.tan(((slantDeg||0)*Math.PI)/180);
   const meas=document.createElement('canvas').getContext('2d');
   meas.font="96px 'AudaladScript'";
   const lines=native.split('\n');
   let maxW=0; lines.forEach(l=>{ maxW=Math.max(maxW, meas.measureText(l).width); });
   const lineH=Math.ceil(fontPx*1.5);
+  const extraX=Math.ceil(Math.abs(shx)*lineH);
   const c=document.createElement('canvas');
-  c.width=Math.ceil(maxW)+padX*2;
+  c.width=Math.ceil(maxW)+padX*2+extraX*2;
   c.height=lineH*lines.length+padY*2;
   const ctx=c.getContext('2d');
   ctx.font="96px 'AudaladScript'";
   ctx.textBaseline='middle';
   ctx.fillStyle='#d4af52';
-  lines.forEach((l,idx)=>{ ctx.fillText(l, padX, padY+lineH*idx+lineH/2); });
+  lines.forEach((l,idx)=>{
+    const cy=padY+lineH*idx+lineH/2;
+    ctx.save();
+    ctx.translate(0,cy);
+    ctx.transform(1,0,shx,1,0,0);
+    ctx.fillText(l, padX+extraX, 0);
+    ctx.restore();
+  });
   await new Promise(res=>c.toBlob(b=>{
     if(b){ const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=(filenameBase||'audalad')+'.png'; a.click(); URL.revokeObjectURL(a.href); }
     res();
@@ -4630,7 +4639,7 @@ updateWantsBadge();
   document.getElementById('dpairHI').addEventListener('click', function(){ if(D_PAIR[d_mode]!=='au'){ d_mode='high2dim'; applyDMode(); } });
   document.getElementById('d-swap').addEventListener('click', function(){ d_mode=D_FLIP[d_mode]; applyDMode(); });
   document.getElementById('d-copy').addEventListener('click', function(e){ copyText(d_lastText, e.currentTarget); });
-  document.getElementById('d-png').addEventListener('click', async function(e){ var b=e.currentTarget; if(!d_lastNative){ var o=b.textContent;b.textContent='Translate first';setTimeout(function(){b.textContent=o;},1200);return;} var o2=b.textContent;b.textContent='Saving\u2026'; await exportNativePNG(d_lastNative,'dimainad-script'); b.textContent=o2; });
+  document.getElementById('d-png').addEventListener('click', async function(e){ var b=e.currentTarget; if(!d_lastNative){ var o=b.textContent;b.textContent='Translate first';setTimeout(function(){b.textContent=o;},1200);return;} var o2=b.textContent;b.textContent='Saving\u2026'; await exportNativePNG(d_lastNative,'dimainad-script',16.70); b.textContent=o2; });
 
   function dimEntries(){ return lex().map(function(d){ return {dim:dimFromHigh(d.au), std:d.au, en:d.en, pos:d.pos}; }).sort(function(a,b){ return a.dim.toLowerCase().localeCompare(b.dim.toLowerCase()); }); }
   var dSearch=document.getElementById('d-search'), dLexList=document.getElementById('d-lexlist'), dCount=document.getElementById('d-count');
