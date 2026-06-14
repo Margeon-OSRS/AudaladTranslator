@@ -408,6 +408,22 @@ select,.vinput{
 .chksmooth{margin-top:14px;border:1px dashed var(--gold-dim);border-radius:4px;padding:14px;text-align:center;}
 .chksmooth .csm-lbl{font-family:'Cinzel',serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-dim);margin-bottom:8px;}
 .chk-reading{font-size:12px;color:var(--ink-dim);text-align:center;margin-top:8px;font-style:italic;}
+.cn-rung{border:1px solid var(--line);border-radius:5px;padding:12px 14px;margin-top:12px;}
+.cn-head{font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:9px;margin-bottom:10px;}
+.cn-step{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border:1px solid var(--gold-dim);border-radius:50%;font-size:11px;color:var(--gold);flex:none;}
+.cn-msg{font-size:13px;color:var(--ink-dim);line-height:1.5;margin-bottom:8px;}
+.cn-sub{font-size:12px;color:var(--ink-dim);font-style:italic;margin-top:2px;}
+.cn-hit{padding:8px 0;border-bottom:1px solid var(--line);}
+.cn-hit:last-child{border-bottom:none;}
+.cn-hit-f{font-size:17px;color:var(--ink);display:flex;align-items:baseline;gap:10px;}
+.cn-hit-n{font-family:'AudaladScript';font-size:22px;color:var(--gold);}
+.cn-hit-m{font-size:13px;color:var(--ink-dim);margin-top:2px;}
+.cn-tag{font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-dim);border:1px solid var(--line);border-radius:2px;padding:1px 6px;margin-left:6px;}
+.cn-cand{margin:10px 0;text-align:center;min-height:26px;}
+.cn-cand-f{font-size:18px;color:var(--ink);}
+.cn-cand-n{font-family:'AudaladScript';font-size:24px;color:var(--gold);margin-right:8px;}
+.cn-plus{color:var(--ink-dim);font-size:18px;}
+#cnRungs .btn:disabled{opacity:.4;cursor:default;}
 .fintro{max-width:640px;margin:0 auto 18px;text-align:center;color:var(--ink-dim);font-size:14px;line-height:1.6;font-style:italic;}
 .fintro b{display:block;margin-bottom:5px;color:var(--gold-soft);font-style:normal;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;}
 .fintro .step{font-style:normal;color:var(--gold-dim);font-weight:700;}
@@ -831,7 +847,8 @@ a{color:var(--gold-soft);}
   <section class="view" id="forge">
     <div class="forgewrap">
       <div class="subtabs">
-        <button class="subtab active" data-fview="compound">Compound</button>
+        <button class="subtab active" data-fview="concept">Concept &rarr; word</button>
+        <button class="subtab" data-fview="compound">Compound</button>
         <button class="subtab" data-fview="verb">Verb</button>
         <button class="subtab" data-fview="pronoun">Pronoun</button>
         <button class="subtab" data-fview="derive">Derive</button>
@@ -843,8 +860,64 @@ a{color:var(--gold-soft);}
         <button class="subtab" data-fview="check">Check &amp; smooth</button>
       </div>
 
+      <!-- concept -->
+      <div class="fview active" id="f-concept">
+        <div class="fintro"><b>Concept &rarr; word</b>The whole forge in one path. <span class="step">Type a meaning</span> and it walks the rungs in order: a word that already exists, a compound of known roots, a derivation, and only then a brand-new root.</div>
+        <div class="builder">
+          <div class="frow">
+            <input class="vinput" id="cnInput" placeholder="What do you want a word for? e.g. lighthouse, golden, sea bird, courage">
+            <button class="btn" id="cnGo">Find options</button>
+          </div>
+          <div id="cnRungs">
+            <div class="emptyhint" id="cnEmpty">Type a meaning to see your options, easiest first.</div>
+            <div class="cn-rung" id="cnR1" style="display:none">
+              <div class="cn-head"><span class="cn-step">1</span> Already in the tongue</div>
+              <div class="cn-body" id="cnR1Body"></div>
+            </div>
+            <div class="cn-rung" id="cnR2" style="display:none">
+              <div class="cn-head"><span class="cn-step">2</span> Compound from roots</div>
+              <div class="cn-body">
+                <div class="cn-msg">Express it as two senses and the forge finds the roots, stacks them, and smooths the seam.</div>
+                <div class="frow" style="gap:8px;flex-wrap:wrap;align-items:center">
+                  <input class="vinput" id="cnC1" placeholder="first sense" style="max-width:170px">
+                  <span class="cn-plus">+</span>
+                  <input class="vinput" id="cnC2" placeholder="second sense" style="max-width:170px">
+                </div>
+                <div class="cn-cand" id="cnR2Cand"></div>
+                <div class="cn-msg" id="cnR2Msg"></div>
+                <button class="btn ghost" id="cnR2Forge" disabled>Forge this compound</button>
+              </div>
+            </div>
+            <div class="cn-rung" id="cnR3" style="display:none">
+              <div class="cn-head"><span class="cn-step">3</span> Derive from a word</div>
+              <div class="cn-body">
+                <div id="cnR3Auto"></div>
+                <div class="cn-msg">Take a word you already have and bend it with one ending.</div>
+                <div class="frow" style="gap:8px;flex-wrap:wrap;align-items:center">
+                  <input class="vinput" id="cnDbase" list="cnAllWords" placeholder="base word" style="max-width:210px">
+                  <datalist id="cnAllWords"></datalist>
+                </div>
+                <div class="affixrow" id="cnDAffixes" style="margin-top:8px"></div>
+                <div class="cn-cand" id="cnR3Cand"></div>
+                <button class="btn ghost" id="cnR3Forge" disabled>Forge this form</button>
+              </div>
+            </div>
+            <div class="cn-rung" id="cnR4" style="display:none">
+              <div class="cn-head"><span class="cn-step">4</span> Mint a fresh root</div>
+              <div class="cn-body">
+                <div class="cn-msg">A last resort, when nothing above fits. Cast valid-sounding roots and pick one for this sense.</div>
+                <button class="btn ghost" id="cnR4Roll">Cast roots</button>
+                <div class="morphgrid" id="cnR4List" style="margin-top:10px;max-height:none"></div>
+                <button class="btn ghost" id="cnR4Forge" style="margin-top:8px" disabled>Forge as new root</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="note"><b>Easiest first.</b> The forge prefers a word that already exists, then a compound of known roots, then a derivation, and mints a brand-new root only as a last resort, so the lexicon stays tight and every coinage is legal by construction. Whatever you forge lands in <i>Forged this session</i> below, ready for the Lexicon and a Council submission.</div>
+      </div>
+
       <!-- compound -->
-      <div class="fview active" id="f-compound">
+      <div class="fview" id="f-compound">
         <div class="fintro"><b>Compound</b>Fuse roots into a brand-new word. <span class="step">Build by meaning</span> (type the senses and let the forge find the roots) or by root (click them yourself), then name it and forge.</div>
         <div class="builder">
           <div class="coinout">
@@ -2650,6 +2723,200 @@ document.getElementById('cmpSmooth').addEventListener('click',function(){
   updateCmpPreview();
 });
 
+/* ---------- CONCEPT -> WORD FUNNEL ---------- */
+function cnShow(id,on){ var e=document.getElementById(id); if(e) e.style.display = on?'block':'none'; }
+function cnNative(form){ try{ return toNative(form); }catch(e){ return ''; } }
+
+function cnFindExisting(q){
+  q=(q||'').trim().toLowerCase(); if(!q) return [];
+  var qv=q.indexOf('to ')===0?q.slice(3):q;
+  function ex(s){ var ss=cmpSenses(s); return ss.indexOf(q)>=0||ss.indexOf(qv)>=0; }
+  var L=lex();
+  var words=L.filter(function(d){return ex(d.en);});
+  if(!words.length) words=L.filter(function(d){return d.en.toLowerCase().indexOf(qv)>=0;}).slice(0,8);
+  var roots=MORPH.filter(function(m){return ex(m.m);});
+  if(!roots.length) roots=MORPH.filter(function(m){return m.m.toLowerCase().indexOf(qv)>=0;}).slice(0,8);
+  var hits=[];
+  words.forEach(function(d){
+    var others=L.filter(function(x){return x.au.toLowerCase()===d.au.toLowerCase() && x.en!==d.en;}).map(function(x){return x.en;});
+    hits.push({form:d.au, sense:d.en, tag:(d.pos||'word'), others:others});
+  });
+  roots.forEach(function(m){ hits.push({form:m.f, sense:m.m, tag:'root', others:[]}); });
+  return hits;
+}
+function cnRenderExisting(q){
+  var hits=cnFindExisting(q);
+  var body=document.getElementById('cnR1Body');
+  if(!hits.length){
+    body.innerHTML='<div class="cn-msg">Nothing in the lexicon or roots carries this sense yet, so a coinage below would be the first.</div>';
+    return;
+  }
+  var html='<div class="cn-msg">These already carry this sense, so you may not need to coin anything:</div>';
+  hits.forEach(function(h){
+    var oth = h.others.length ? '<div class="cn-sub">the form '+escapeHtml(h.form)+' also means: '+escapeHtml(h.others.join('; '))+'</div>' : '';
+    html+='<div class="cn-hit">'+
+      '<div class="cn-hit-f">'+escapeHtml(h.form)+'<span class="cn-hit-n">'+escapeHtml(cnNative(h.form))+'</span></div>'+
+      '<div class="cn-hit-m">'+escapeHtml(h.sense)+'<span class="cn-tag">'+escapeHtml(h.tag)+'</span></div>'+oth+
+    '</div>';
+  });
+  body.innerHTML=html;
+}
+
+function cnSplitConcept(q){
+  return (q||'').split(/\s*\+\s*|\s+of\s+|\s+and\s+|[\s\-]+/i).map(function(s){return s.trim();}).filter(Boolean);
+}
+function cnR2Update(){
+  var a=document.getElementById('cnC1').value.trim();
+  var b=document.getElementById('cnC2').value.trim();
+  var cand=document.getElementById('cnR2Cand');
+  var msg=document.getElementById('cnR2Msg');
+  var btn=document.getElementById('cnR2Forge');
+  var ra=a?cmpResolveMeaning(a):null;
+  var rb=b?cmpResolveMeaning(b):null;
+  var forms=[], notes=[];
+  [{q:a,r:ra},{q:b,r:rb}].forEach(function(p){
+    if(!p.q) return;
+    if(p.r){ forms.push(p.r.f.replace(/['\u2019]/g,'')); notes.push(p.q+' \u2192 '+p.r.f); }
+    else notes.push(p.q+' \u2192 (no root)');
+  });
+  if(forms.length<2){ cand.innerHTML=''; msg.textContent=notes.join('   '); btn.disabled=true; btn.dataset.form=''; return; }
+  var raw=forms.join('');
+  var sm=(window.AUCHK&&window.AUCHK.smoothWord)?window.AUCHK.smoothWord(raw):raw;
+  if(!/['\u2019]$/.test(sm)) sm+="'";
+  cand.innerHTML='<span class="cn-cand-n">'+escapeHtml(cnNative(sm))+'</span><span class="cn-cand-f">'+escapeHtml(sm)+'</span>';
+  msg.textContent=notes.join('   ');
+  btn.disabled=false; btn.dataset.form=sm; btn.dataset.note=(a+' + '+b);
+}
+
+var cnDAffix=null;
+function cnRenderDAffixes(){
+  var g=document.getElementById('cnDAffixes'); if(!g) return; g.innerHTML='';
+  AFFIXES.forEach(function(a){
+    var btn=document.createElement('button'); btn.className='affixbtn'; btn.textContent=a.label;
+    btn.addEventListener('click',function(){
+      cnDAffix=a;
+      g.querySelectorAll('.affixbtn').forEach(function(x){x.classList.remove('active');});
+      btn.classList.add('active'); cnR3Update();
+    });
+    g.appendChild(btn);
+  });
+}
+function cnSelectAffixChip(label){
+  cnDAffix=AFFIXES.find(function(a){return a.label===label;})||null;
+  var g=document.getElementById('cnDAffixes'); if(!g) return;
+  g.querySelectorAll('.affixbtn').forEach(function(x){ x.classList.toggle('active', x.textContent===label); });
+}
+function cnR3Update(){
+  var base=document.getElementById('cnDbase').value.trim();
+  var cand=document.getElementById('cnR3Cand');
+  var btn=document.getElementById('cnR3Forge');
+  if(!base||!cnDAffix){ cand.innerHTML=''; btn.disabled=true; btn.dataset.form=''; return; }
+  var form=cnDAffix.fn(base);
+  cand.innerHTML='<span class="cn-cand-n">'+escapeHtml(cnNative(form))+'</span><span class="cn-cand-f">'+escapeHtml(form)+'</span><span class="cn-tag">'+escapeHtml(cnDAffix.note)+'</span>';
+  btn.disabled=false; btn.dataset.form=form; btn.dataset.note=cnDAffix.note;
+}
+function cnR3Auto(q){
+  var out=document.getElementById('cnR3Auto'); out.innerHTML='';
+  var ql=(q||'').toLowerCase().trim();
+  var rules=[
+    {re:/^(not|non|un|without)\b[\s-]*/, pick:'-ir inverse'},
+    {re:/^(many|plural of)\b[\s-]*/, pick:'-ae plural'},
+    {re:/^(fear of|fear)\b[\s-]*/, pick:'Elsakat- fear'},
+    {re:/^(made of|of|belonging to)\b[\s-]*/, pick:'-ad of-the'}
+  ];
+  for(var i=0;i<rules.length;i++){
+    if(rules[i].re.test(ql)){
+      var baseTxt=ql.replace(rules[i].re,'').trim();
+      if(!baseTxt) continue;
+      var r=cmpResolveMeaning(baseTxt);
+      if(r){
+        var af=AFFIXES.find(function(a){return a.label===rules[i].pick;});
+        var form=af.fn(r.f);
+        out.innerHTML='<div class="cn-msg">Reads as derivable: <b>'+escapeHtml(baseTxt)+'</b> ('+escapeHtml(r.f)+') + '+escapeHtml(af.label)+' \u2192 <span class="cn-cand-f">'+escapeHtml(form)+'</span>. Pre-filled below.</div>';
+        document.getElementById('cnDbase').value=r.f;
+        cnSelectAffixChip(af.label);
+        return;
+      }
+    }
+  }
+}
+
+var cnR4Sel='';
+function cnR4Roll(){
+  var list=document.getElementById('cnR4List'); list.innerHTML=''; cnR4Sel='';
+  var f=document.getElementById('cnR4Forge'); f.disabled=true; f.dataset.form='';
+  var seen={}, n=0, guard=0;
+  while(n<6 && guard<200){
+    guard++;
+    var r=genRoot();
+    if(seen[r]||existsInLexicon(r)) continue;
+    seen[r]=1; n++;
+    var b=document.createElement('button'); b.className='morphbtn';
+    b.innerHTML='<span class="mb-f">'+escapeHtml(r)+'</span><span class="mb-m">'+escapeHtml(cnNative(r))+'</span>';
+    var mm=b.querySelector('.mb-m'); mm.style.fontFamily="'AudaladScript'"; mm.style.fontSize='20px';
+    (function(rr,bb){
+      bb.addEventListener('click',function(){
+        cnR4Sel=rr;
+        list.querySelectorAll('.morphbtn').forEach(function(x){x.classList.remove('active');});
+        bb.classList.add('active');
+        var ff=document.getElementById('cnR4Forge'); ff.disabled=false; ff.dataset.form=rr;
+      });
+    })(r,b);
+    list.appendChild(b);
+  }
+}
+
+function cnRun(){
+  var q=document.getElementById('cnInput').value.trim();
+  document.getElementById('cnEmpty').style.display = q?'none':'block';
+  ['cnR1','cnR2','cnR3','cnR4'].forEach(function(id){ cnShow(id, !!q); });
+  if(!q) return;
+  cnRenderExisting(q);
+  var parts=cnSplitConcept(q);
+  document.getElementById('cnC1').value = parts[0]||q;
+  document.getElementById('cnC2').value = parts[1]||'';
+  cnR2Update();
+  var rWhole=cmpResolveMeaning(q);
+  document.getElementById('cnDbase').value = rWhole?rWhole.f:'';
+  cnDAffix=null;
+  var g=document.getElementById('cnDAffixes'); if(g) g.querySelectorAll('.affixbtn').forEach(function(x){x.classList.remove('active');});
+  document.getElementById('cnR3Cand').innerHTML='';
+  document.getElementById('cnR3Forge').disabled=true;
+  cnR3Auto(q);
+  cnR3Update();
+  document.getElementById('cnR4List').innerHTML=''; cnR4Sel='';
+  var f4=document.getElementById('cnR4Forge'); f4.disabled=true; f4.dataset.form='';
+}
+function cnForgeFlash(btn, label){ btn.textContent='Forged \u2713'; setTimeout(function(){ btn.textContent=label; }, 1200); }
+
+function cnInit(){
+cnRenderDAffixes();
+document.getElementById('cnGo').addEventListener('click',cnRun);
+document.getElementById('cnInput').addEventListener('input',cnRun);
+document.getElementById('cnInput').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); cnRun(); } });
+document.getElementById('cnC1').addEventListener('input',cnR2Update);
+document.getElementById('cnC2').addEventListener('input',cnR2Update);
+document.getElementById('cnDbase').addEventListener('input',cnR3Update);
+document.getElementById('cnR4Roll').addEventListener('click',cnR4Roll);
+document.getElementById('cnR2Forge').addEventListener('click',function(){
+  var form=this.dataset.form; if(!form) return;
+  addCoinage({form:form, mean:document.getElementById('cnInput').value.trim(), kind:'cluster', note:this.dataset.note||'concept compound'});
+  cnForgeFlash(this,'Forge this compound');
+});
+document.getElementById('cnR3Forge').addEventListener('click',function(){
+  var form=this.dataset.form; if(!form) return;
+  addCoinage({form:form, mean:document.getElementById('cnInput').value.trim(), kind:'derived', note:this.dataset.note||'derived'});
+  cnForgeFlash(this,'Forge this form');
+});
+document.getElementById('cnR4Forge').addEventListener('click',function(){
+  var form=this.dataset.form; if(!form) return;
+  addCoinage({form:form, mean:document.getElementById('cnInput').value.trim(), kind:'coined root', note:'generated'});
+  cnForgeFlash(this,'Forge as new root');
+});
+}
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',cnInit); } else { setTimeout(cnInit,0); }
+
+
 
 /* --- verb forge --- */
 let vbType=VERBTYPES.find(t=>t.v==='u');
@@ -3042,7 +3309,7 @@ document.getElementById('nmSave').addEventListener('click',()=>{
 
 /* datalists for derive + regal */
 function fillWordDatalists(){
-  ['allWords','allWords2','allWords3'].forEach(id=>{
+  ['allWords','allWords2','allWords3','cnAllWords'].forEach(id=>{
     const dl=document.getElementById(id);
     if(!dl) return;
     dl.innerHTML='';
