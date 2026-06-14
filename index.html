@@ -854,6 +854,7 @@ a{color:var(--gold-soft);}
         <button class="subtab" data-fview="derive">Derive</button>
         <button class="subtab" data-fview="name">Name</button>
         <button class="subtab" data-fview="regal">Regal name</button>
+        <button class="subtab" data-fview="nativize">Nativize</button>
         <button class="subtab" data-fview="generate">Generate root</button>
         <button class="subtab" data-fview="number">Number</button>
         <button class="subtab" data-fview="analyze">Analyze</button>
@@ -1113,6 +1114,41 @@ a{color:var(--gold-soft);}
           </div>
         </div>
         <div class="note"><b>Regal &amp; divine names.</b> A dictionary word is taken and changed, then an <i>&Acirc;</i> is added to mark that it is a non-literal, regal and divine name, as in the <i>&Acirc;udalad</i> dynasty. <i>Ori</i> is reserved for the dynasty and gods.</div>
+      </div>
+
+      <!-- nativize -->
+      <div class="fview" id="f-nativize">
+        <div class="fintro"><b>Nativize</b>Bring an outside word into the tongue. <span class="step">Paste a foreign term</span> and it is reshaped to Audalad sounds: stray letters swapped, harsh clusters softened, a legal ending set.</div>
+        <div class="builder">
+          <div class="coinout">
+            <div class="c-native" id="natNative"></div>
+            <div class="c-form" id="natForm"></div>
+            <div class="c-gloss" id="natGloss"></div>
+            <div class="c-warn" id="natWarn"></div>
+          </div>
+          <div class="flabel">Foreign word or name</div>
+          <input class="vinput" id="natIn" placeholder="e.g. Christopher, Brooklyn, espresso, smartphone">
+          <div class="frow" style="gap:14px;flex-wrap:wrap;align-items:flex-end;margin-top:10px">
+            <div>
+              <div class="flabel" style="margin:0 0 5px">Ending</div>
+              <select id="natEnd" class="rksel"><option value="auto">Auto-fix</option><option value="keep">Leave as is</option><option value="a">-a</option><option value="i">-i</option><option value="u">-u</option><option value="ai">-ai</option><option value="an">-an</option><option value="ar">-ar</option><option value="el">-el</option><option value="ur">-ur</option><option value="et">-et</option><option value="ina">-ina</option></select>
+            </div>
+            <div class="pickseg" id="natKind">
+              <button class="seg active" data-kind="noun">As noun</button>
+              <button class="seg" data-kind="verb">As verb</button>
+            </div>
+          </div>
+          <div id="natVerbRow" style="display:none;margin-top:12px">
+            <div class="flabel" style="margin:0 0 6px">Verb class (sets the final sound)</div>
+            <div class="affixrow" id="natClass"></div>
+          </div>
+          <div class="cn-msg" id="natChanges" style="margin-top:12px"></div>
+          <div class="frow" style="margin-top:10px">
+            <input class="vinput" id="natMean" placeholder="What it means (optional), then forge it">
+            <button class="btn" id="natSave">Forge word</button>
+          </div>
+        </div>
+        <div class="note"><b>How it reshapes.</b> The tongue has no <i>w, x, q, c, j</i>, so these become their nearest neighbours (v, z, k, k, zh). Stop-on-stop and three-consonant pile-ups are parted with a soft vowel, foreign accents are dropped, and the word is given a vowel or soft <i>n / r / l</i> ending. <i>As verb</i> sets the final by action class instead. The result is a suggestion, fully editable once forged.</div>
       </div>
 
       <!-- generate -->
@@ -2915,6 +2951,116 @@ document.getElementById('cnR4Forge').addEventListener('click',function(){
 });
 }
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',cnInit); } else { setTimeout(cnInit,0); }
+
+/* ---------- NATIVIZE (loanword adapter) ---------- */
+function natCap(s){ return s? s.charAt(0).toUpperCase()+s.slice(1) : s; }
+function natClean(raw){
+  var pre=(raw||'').toLowerCase();
+  var pm={'\u00e6':'ae','\u0153':'oe','\u00f8':'o','\u00df':'ss','\u0111':'d','\u00f0':'d','\u00fe':'th'};
+  pre=pre.replace(/[\u00e6\u0153\u00f8\u00df\u0111\u00f0\u00fe]/g,function(c){return pm[c]||c;});
+  pre=pre.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  pre=pre.replace(/[^a-z]+/g,'');
+  return pre;
+}
+function natEndingFix(s){
+  var last=s.slice(-1).toLowerCase();
+  if(/[aeiou\u0268\u00e1\u00e9\u00ed\u00f3\u00fa]/i.test(last)) return s;
+  if(['n','r','l','s','t','z'].indexOf(last)>=0) return s;
+  var lastV='a'; var m=s.toLowerCase().match(/[aeiou](?=[^aeiou]*$)/); if(m) lastV=m[0];
+  return s+lastV;
+}
+var NAT_TV=/[aeiou\u0268\u00e1\u00e9\u00ed\u00f3\u00fa]$/i;
+function natApplyEnding(s,end){
+  if(/^[aeiou]/i.test(end) && NAT_TV.test(s)) s=s.slice(0,-1);
+  return s+end;
+}
+function natApplyClass(s,v){
+  if(/[aeiou\u0268]/i.test(v)){
+    if(NAT_TV.test(s)) s=s.slice(0,-1);
+    return s+v;
+  }
+  if(!NAT_TV.test(s)){
+    var lastV='a'; var m=s.toLowerCase().match(/[aeiou](?=[^aeiou]*$)/); if(m) lastV=m[0];
+    s=s+lastV;
+  }
+  return s+v;
+}
+var natClassSel=null;
+function natKindMode(){ var b=document.querySelector('#natKind .seg.active'); return b && b.dataset.kind==='verb'; }
+function natRenderClasses(){
+  var g=document.getElementById('natClass'); if(!g) return; g.innerHTML='';
+  VERBTYPES.forEach(function(t){
+    var b=document.createElement('button'); b.className='affixbtn';
+    b.innerHTML=escapeHtml(t.label)+' <span style="opacity:.55">-'+escapeHtml(t.v)+'</span>';
+    b.addEventListener('click',function(){
+      natClassSel=t;
+      g.querySelectorAll('.affixbtn').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active'); natUpdate();
+    });
+    g.appendChild(b);
+  });
+}
+function natUpdate(){
+  var raw=document.getElementById('natIn').value;
+  var pre=natClean(raw);
+  var changes=document.getElementById('natChanges');
+  var save=document.getElementById('natSave');
+  if(!pre){
+    document.getElementById('natForm').textContent='';
+    document.getElementById('natNative').textContent='';
+    document.getElementById('natGloss').textContent='';
+    document.getElementById('natWarn').textContent='';
+    changes.textContent=''; save.dataset.form=''; return;
+  }
+  var sm=(window.AUCHK&&window.AUCHK.smoothWord)?window.AUCHK.smoothWord(pre):natCap(pre);
+  var verb=natKindMode();
+  var endSel=document.getElementById('natEnd');
+  endSel.disabled=verb;
+  var out=sm, note='';
+  if(verb){
+    if(natClassSel){ out=natApplyClass(sm, natClassSel.v); note='verb \u00b7 '+natClassSel.label+' (-'+natClassSel.v+')'; }
+    else { out=sm; note='pick a verb class to set the final sound'; }
+  } else {
+    var mode=endSel.value;
+    if(mode==='keep'){ out=sm; note='ending kept'; }
+    else if(mode==='auto'){ out=natEndingFix(sm); note=(out!==sm)?'soft vowel ending added':'ending already legal'; }
+    else { out=natApplyEnding(sm,mode); note='ending: -'+mode; }
+  }
+  out=natCap(out);
+  document.getElementById('natForm').textContent=out;
+  document.getElementById('natNative').textContent=(function(){try{return toNative(out);}catch(e){return '';}})();
+  document.getElementById('natGloss').textContent=raw.trim()? ('nativized from \u201c'+raw.trim()+'\u201d') : '';
+  var flags=[];
+  if(/[wxqcjy]/.test(pre)) flags.push('foreign sounds swapped');
+  if(/[\u00c0-\u024f]/.test(raw)) flags.push('accents dropped');
+  flags.push(note);
+  changes.innerHTML='<b>'+escapeHtml(pre)+'</b> \u2192 <b>'+escapeHtml(out)+'</b> &middot; '+escapeHtml(flags.join(', '));
+  document.getElementById('natWarn').textContent=(function(){ try{ return dupWarnText(out); }catch(e){ return ''; } })();
+  save.dataset.form=out;
+}
+function natInit(){
+  natRenderClasses();
+  document.getElementById('natIn').addEventListener('input',natUpdate);
+  document.getElementById('natEnd').addEventListener('change',natUpdate);
+  document.querySelectorAll('#natKind .seg').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#natKind .seg').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      document.getElementById('natVerbRow').style.display = (b.dataset.kind==='verb')?'block':'none';
+      natUpdate();
+    });
+  });
+  document.getElementById('natSave').addEventListener('click',function(){
+    var form=this.dataset.form; if(!form) return;
+    var mean=document.getElementById('natMean').value.trim();
+    var raw=document.getElementById('natIn').value.trim();
+    addCoinage({form:form, mean:mean, kind: natKindMode()?'verb':'derived', note:'nativized from '+raw});
+    this.textContent='Forged \u2713'; var self=this; setTimeout(function(){ self.textContent='Forge word'; },1200);
+    document.getElementById('natMean').value='';
+  });
+}
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',natInit); } else { setTimeout(natInit,0); }
+
 
 
 
