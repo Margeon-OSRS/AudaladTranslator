@@ -395,6 +395,19 @@ select,.vinput{
 .subtab.active{color:var(--gold);border-color:var(--gold);background:rgba(212,175,82,0.08);}
 .fview{display:none;}
 .fview.active{display:block;animation:fade .3s ease;}
+.chklist{margin-top:6px;}
+.chk{display:flex;gap:9px;align-items:flex-start;padding:8px 11px;border:1px solid var(--line);border-radius:3px;margin-bottom:7px;font-size:13px;line-height:1.45;}
+.chk .chk-tag{font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:2px;flex:none;margin-top:1px;}
+.chk.warn{border-color:rgba(200,90,70,.5);background:rgba(200,90,70,.07);}
+.chk.warn .chk-tag{color:#c85a46;border:1px solid rgba(200,90,70,.5);}
+.chk.note{border-color:var(--line);background:rgba(255,255,255,.02);}
+.chk.note .chk-tag{color:var(--ink-dim);border:1px solid var(--line);}
+.chk.ok{border-color:rgba(111,154,134,.5);background:rgba(111,154,134,.08);}
+.chk.ok .chk-tag{color:var(--verd);border:1px solid rgba(111,154,134,.5);}
+.chk-msg{color:var(--ink);}
+.chksmooth{margin-top:14px;border:1px dashed var(--gold-dim);border-radius:4px;padding:14px;text-align:center;}
+.chksmooth .csm-lbl{font-family:'Cinzel',serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-dim);margin-bottom:8px;}
+.chk-reading{font-size:12px;color:var(--ink-dim);text-align:center;margin-top:8px;font-style:italic;}
 .fintro{max-width:640px;margin:0 auto 18px;text-align:center;color:var(--ink-dim);font-size:14px;line-height:1.6;font-style:italic;}
 .fintro b{display:block;margin-bottom:5px;color:var(--gold-soft);font-style:normal;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;}
 .fintro .step{font-style:normal;color:var(--gold-dim);font-weight:700;}
@@ -827,6 +840,7 @@ a{color:var(--gold-soft);}
         <button class="subtab" data-fview="generate">Generate root</button>
         <button class="subtab" data-fview="number">Number</button>
         <button class="subtab" data-fview="analyze">Analyze</button>
+        <button class="subtab" data-fview="check">Check &amp; smooth</button>
       </div>
 
       <!-- compound -->
@@ -1042,6 +1056,40 @@ a{color:var(--gold-soft);}
           <div class="anresult" id="anResult"><div class="emptyhint">Enter a word to break it into roots and affixes.</div></div>
         </div>
         <div class="note"><b>Reverse forge.</b> Peels off tense prefixes, plurals, possessive, negation, ordinal, the <i>Elsakat-</i> and <i>&Acirc;</i> markers and the cluster <i>'</i>, then segments the remaining stem into known roots. Multiple segmentations can exist; this shows the cleanest one it finds.</div>
+      </div>
+
+      <!-- check -->
+      <div class="fview" id="f-check">
+        <div class="fintro"><b>Check &amp; smooth</b>Hold a coined word up to the rules of the tongue. <span class="step">Type a candidate</span> and it is checked for stray sounds, harsh clusters and misplaced markers, then offered back smoothed.</div>
+        <div class="builder">
+          <div class="coinout">
+            <div class="c-native" id="chkNative"></div>
+            <div class="c-form" id="chkForm"></div>
+            <div class="c-warn" id="chkDup"></div>
+          </div>
+          <div class="frow" style="gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:4px">
+            <input class="vinput" id="chkInput" placeholder="A coined word to check&hellip; e.g. Brgabk, Wexli, Shurad">
+            <div class="pickseg" id="chkKind">
+              <button class="seg active" data-kind="word">Word</button>
+              <button class="seg" data-kind="verb">Verb</button>
+            </div>
+          </div>
+          <div class="chklist" id="chkFindings"><div class="emptyhint">Type a coined word to check it against the rules.</div></div>
+          <div class="chk-reading" id="chkReading"></div>
+          <div class="chksmooth" id="chkSmooth" style="display:none">
+            <div class="csm-lbl">Smoothed for euphony</div>
+            <div class="c-native" id="chkSmNative"></div>
+            <div class="c-form" id="chkSmForm"></div>
+            <div class="frow" style="justify-content:center;margin-top:10px">
+              <button class="btn ghost" id="chkUse">Use this form</button>
+            </div>
+          </div>
+          <div class="frow" style="margin-top:14px">
+            <input class="vinput" id="chkMean" placeholder="Meaning (optional), then forge it">
+            <button class="btn" id="chkSave">Forge word</button>
+          </div>
+        </div>
+        <div class="note"><b>What it checks.</b> Every sound against the documented inventory (the tongue has no <i>w, x, q, c, j</i>), harsh stop-on-stop and three-consonant clusters, a misplaced regal <i>&Acirc;</i> or clusterification <i>&rsquo;</i> mark, and, in <i>Verb</i> mode, a missing class vowel. The smoothed form parts harsh clusters with a soft vowel and swaps any stray sound for its nearest Audalad neighbour: a suggestion, never a command, since the final form is always yours to shape. The reading line runs Analyze on what you typed.</div>
       </div>
 
       <!-- number -->
@@ -3282,6 +3330,156 @@ function renderAnalyze(){
   out.innerHTML=html;
 }
 document.getElementById('anInput').addEventListener('input',renderAnalyze);
+
+/* ---------- CHECK & SMOOTH (well-formedness validator) ---------- */
+(function(){
+  var VOWEL_RE=/[aeiou\u00e1\u00e9\u00ed\u00f3\u00fa\u00e0\u00e8\u00ec\u00f2\u00f9\u00e2\u00ea\u00ee\u00f4\u00fb\u0268]/i;
+  var DIGRAPHS=['sh','zh','ts'];
+  var CONS=['n','m','r','l','k','t','d','s','z','g','b','p','v','f','h'];
+  var CHK_STOPS=['k','t','d','g','b','p'];
+  var VERBFINALS=VERBTYPES.map(function(t){return t.v.toLowerCase();});
+  var RANKPRE_CHK=[["ori'","Ori'"],["itu'","Itu'"],["ke'","Ke'"]];
+  var SUBS={w:'v',x:'z',q:'k',c:'k',j:'zh',y:'i'};
+
+  function isStop(g){return CHK_STOPS.indexOf(g)>=0;}
+  function baseVowel(g){
+    g=(g||'').toLowerCase();
+    if(g==='\u0268') return 'i';
+    var d=g.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    return /[aeiou]/.test(d)?d:'a';
+  }
+  function tokenize(s){
+    var toks=[],i=0;
+    while(i<s.length){
+      var two=s.substr(i,2).toLowerCase();
+      if(DIGRAPHS.indexOf(two)>=0){ toks.push({t:'C',g:two}); i+=2; continue; }
+      var ch=s[i], lc=ch.toLowerCase();
+      if(/\s|['\u2019]/.test(ch)){ i++; continue; }
+      if(VOWEL_RE.test(ch)){ toks.push({t:'V',g:lc}); }
+      else if(CONS.indexOf(lc)>=0){ toks.push({t:'C',g:lc}); }
+      else if(/[a-z\u00e2]/i.test(ch)){ toks.push({t:'?',g:lc}); }
+      i++;
+    }
+    return toks;
+  }
+  function parts(raw){
+    var w=(raw||'').trim(), regal=false, rank=null, cluster=false, midRegal=false, midApos=false;
+    if(/^[\u00c2\u00e2]/.test(w)){ regal=true; w=w.slice(1); }
+    if(/[\u00c2\u00e2]/.test(w)){ midRegal=true; }
+    for(var i=0;i<RANKPRE_CHK.length;i++){
+      if(w.toLowerCase().indexOf(RANKPRE_CHK[i][0])===0){ rank=RANKPRE_CHK[i][1]; w=w.slice(rank.length); break; }
+    }
+    if(/['\u2019]$/.test(w)){ cluster=true; w=w.replace(/['\u2019]$/,''); }
+    if(/['\u2019]/.test(w)){ midApos=true; }
+    return {stem:w.replace(/['\u2019]/g,''), regal:regal, rank:rank, cluster:cluster, midRegal:midRegal, midApos:midApos};
+  }
+  function checkWord(raw, verbMode){
+    var f=[]; if(!(raw||'').trim()) return {findings:f, parts:parts('')};
+    var p=parts(raw);
+    var toks=tokenize(p.stem);
+    var unk=[]; toks.forEach(function(t){ if(t.t==='?'&&unk.indexOf(t.g)<0)unk.push(t.g); });
+    if(unk.length) f.push({lvl:'warn',msg:'Uses sounds outside the documented inventory: '+unk.join(', ')+'. The tongue carries no '+unk.join(' / ')+'.'});
+    var run=0, prev=null, flaggedSS=false, flagged3=false;
+    toks.forEach(function(t){
+      if(t.t==='C'){
+        if(run>=1 && isStop(prev) && isStop(t.g) && !flaggedSS){ f.push({lvl:'warn',msg:'Harsh cluster: two stops meet ('+prev+t.g+'). Audalad softens these, usually by parting them with a vowel.'}); flaggedSS=true; }
+        run++; prev=t.g;
+        if(run>=3 && !flagged3){ f.push({lvl:'warn',msg:'Three or more consonants run together. The tongue favours looser, softer syllables.'}); flagged3=true; }
+      } else { run=0; prev=null; }
+    });
+    if(p.midRegal) f.push({lvl:'warn',msg:'The regal \u00c2 marker only sits at the very front of a word.'});
+    if(p.midApos) f.push({lvl:'warn',msg:'The clusterification \u2019 mark belongs at the end of the word, not inside it.'});
+    var lastChar=p.stem.slice(-1).toLowerCase();
+    if(verbMode){
+      if(VERBFINALS.indexOf(lastChar)<0) f.push({lvl:'warn',msg:'A verb needs a class marker as its final sound: -u physical, -a emotional, -i abstract, -\u0268 existential, -l revealing, -r selfish, -d neutral, -k completory.'});
+    } else {
+      if(['k','g','b','p'].indexOf(lastChar)>=0) f.push({lvl:'note',msg:'Ends on a hard stop. Most Audalad words close on a vowel or a soft n / r / l (or a documented ending such as -an, -et, -ai).'});
+    }
+    if(/^[a-z]/.test((raw||'').trim())) f.push({lvl:'note',msg:'Forms are normally written with a capital first letter (Nadu, Shur, Verai).'});
+    if(p.regal) f.push({lvl:'note',msg:'Carries the regal \u00c2: this reads as a court or divine name rather than a literal word.'});
+    if(!f.length) f.push({lvl:'ok',msg:'Well formed. Sounds, clusters and markers all sit within the documented rules.'});
+    return {findings:f, parts:p};
+  }
+  function smoothWord(raw, verbMode){
+    var p=parts(raw);
+    var lower=p.stem.toLowerCase().replace(/\u00e2/g,'a'), sub='';
+    for(var i=0;i<lower.length;i++){ var c=lower[i]; sub+=(SUBS[c]!==undefined?SUBS[c]:c); }
+    var toks=tokenize(sub);
+    var out='', run=0, prev=null, lastV='a';
+    toks.forEach(function(t){
+      if(t.t==='V'){ out+=t.g; run=0; prev=null; lastV=baseVowel(t.g); }
+      else if(t.t==='C'){
+        var brk=false;
+        if(run===1 && isStop(prev) && isStop(t.g)) brk=true;
+        if(run>=2) brk=true;
+        if(brk){ out+=lastV; run=0; prev=null; }
+        out+=t.g; run++; prev=t.g;
+      } else { out+=t.g; }
+    });
+    if(!out) return (raw||'').trim();
+    var stem=out.charAt(0).toUpperCase()+out.slice(1);
+    var core=stem;
+    if(p.regal) core='\u00c2'+stem.charAt(0).toLowerCase()+stem.slice(1);
+    else if(p.rank) core=p.rank+stem.charAt(0).toLowerCase()+stem.slice(1);
+    if(p.cluster) core=core+"'";
+    return core;
+  }
+
+  function chkVerbMode(){ var b=document.querySelector('#chkKind .seg.active'); return b && b.dataset.kind==='verb'; }
+  function renderChk(){
+    var raw=document.getElementById('chkInput').value;
+    var t=(raw||'').trim();
+    document.getElementById('chkNative').textContent= t? toNative(t):'';
+    document.getElementById('chkForm').textContent= t;
+    var box=document.getElementById('chkFindings');
+    var smoothBox=document.getElementById('chkSmooth');
+    if(!t){
+      box.innerHTML='<div class="emptyhint">Type a coined word to check it against the rules.</div>';
+      smoothBox.style.display='none';
+      document.getElementById('chkReading').textContent='';
+      document.getElementById('chkDup').textContent='';
+      return;
+    }
+    var verbMode=chkVerbMode();
+    var res=checkWord(raw, verbMode);
+    var html='';
+    res.findings.forEach(function(fd){
+      var tag= fd.lvl==='warn'?'fix': fd.lvl==='note'?'note':'clear';
+      html+='<div class="chk '+fd.lvl+'"><span class="chk-tag">'+tag+'</span><span class="chk-msg">'+escapeHtml(fd.msg)+'</span></div>';
+    });
+    box.innerHTML=html;
+    try{ var a=analyze(t); document.getElementById('chkReading').textContent= (a&&a.gloss)? 'Reading: '+a.gloss : ''; }
+    catch(e){ document.getElementById('chkReading').textContent=''; }
+    var sm=smoothWord(raw, verbMode);
+    if(sm.toLowerCase()===t.toLowerCase()){ smoothBox.style.display='none'; }
+    else {
+      smoothBox.style.display='block';
+      document.getElementById('chkSmNative').textContent=toNative(sm);
+      document.getElementById('chkSmForm').textContent=sm;
+      smoothBox.dataset.form=sm;
+    }
+    document.getElementById('chkDup').textContent=dupWarnText(t);
+  }
+  document.getElementById('chkInput').addEventListener('input',renderChk);
+  document.querySelectorAll('#chkKind .seg').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#chkKind .seg').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active'); renderChk();
+    });
+  });
+  document.getElementById('chkUse').addEventListener('click',function(){
+    var sm=document.getElementById('chkSmooth').dataset.form;
+    if(sm){ document.getElementById('chkInput').value=sm; renderChk(); }
+  });
+  document.getElementById('chkSave').addEventListener('click',function(){
+    var form=document.getElementById('chkInput').value.trim();
+    if(!form) return;
+    var mean=document.getElementById('chkMean').value.trim();
+    addCoinage({form:form, mean:mean, kind: chkVerbMode()?'verb':'derived', note:'checked'});
+    document.getElementById('chkMean').value='';
+  });
+})();
+
 
 /* ---------- PRONOUN builder (uses the chart data defined near the top) ---------- */
 let prRank=PR_RANKS[2], prPov=PR_POVS[0];
