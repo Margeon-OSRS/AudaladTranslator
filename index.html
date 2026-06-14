@@ -1217,7 +1217,7 @@ a{color:var(--gold-soft);}
             <button class="btn" id="chkSave">Forge word</button>
           </div>
         </div>
-        <div class="note"><b>What it checks.</b> Every sound against the documented inventory (the tongue has no <i>w, x, q, c, j</i>), harsh stop-on-stop and three-consonant clusters, a misplaced regal <i>&Acirc;</i> or clusterification <i>&rsquo;</i> mark, and, in <i>Verb</i> mode, a missing class vowel. The smoothed form parts harsh clusters with a soft vowel and swaps any stray sound for its nearest Audalad neighbour: a suggestion, never a command, since the final form is always yours to shape. The reading line runs Analyze on what you typed.</div>
+        <div class="note"><b>What it checks.</b> Every sound against the documented inventory (the tongue has no <i>w, q, c</i>), harsh stop-on-stop and three-consonant clusters, a misplaced regal <i>&Acirc;</i> or clusterification <i>&rsquo;</i> mark, and, in <i>Verb</i> mode, a missing class vowel. The smoothed form parts harsh clusters with a soft vowel and swaps any stray sound for its nearest Audalad neighbour: a suggestion, never a command, since the final form is always yours to shape. The reading line runs Analyze on what you typed.</div>
       </div>
 
       <!-- number -->
@@ -1737,7 +1737,7 @@ function toIPA(s){
     .replace(/[\u2019\u02bc]/g,"'")
     .normalize('NFD').replace(/[\u0300-\u036f]/g,''); // accents are stress only -> base vowel
   const multi={iy:'ɨ',au:'ɒ',ae:'ɪ',th:'θ',sh:'ʂ',zh:'ʐ',ts:'t͡s'};
-  const single={b:'b',d:'d',g:'g',k:'k',h:'χ',j:'d͡ʑ',l:'ɭ',m:'m',n:'n',p:'p',r:'ɾ',s:'s',t:'t',v:'β',z:'z',f:'ɸ',y:'ʎ',x:'x',c:'k',
+  const single={b:'b',d:'d',g:'g',k:'k',h:'χ',j:'d͡ʑ',l:'ɭ',m:'m',n:'n',p:'p',r:'ɾ',s:'s',t:'t',v:'β',z:'z',f:'ɸ',y:'ʎ',x:'x',
                 i:'i',u:'u',a:'a',o:'o',e:'ɛ',"'":'ʔ'};
   let out='', i=0;
   while(i<t.length){
@@ -3863,11 +3863,11 @@ document.getElementById('anInput').addEventListener('input',renderAnalyze);
 (function(){
   var VOWEL_RE=/[aeiou\u00e1\u00e9\u00ed\u00f3\u00fa\u00e0\u00e8\u00ec\u00f2\u00f9\u00e2\u00ea\u00ee\u00f4\u00fb\u0268]/i;
   var DIGRAPHS=['sh','zh','ts'];
-  var CONS=['n','m','r','l','k','t','d','s','z','g','b','p','v','f','h'];
+  var CONS=['n','m','r','l','k','t','d','s','z','g','b','p','v','f','h','j','x','y'];
   var CHK_STOPS=['k','t','d','g','b','p'];
   var VERBFINALS=VERBTYPES.map(function(t){return t.v.toLowerCase();});
   var RANKPRE_CHK=[["ori'","Ori'"],["itu'","Itu'"],["ke'","Ke'"]];
-  var SUBS={w:'v',x:'z',q:'k',c:'k',j:'zh',y:'i'};
+  var SUBS={w:'v',q:'k',c:'k'};
 
   function isStop(g){return CHK_STOPS.indexOf(g)>=0;}
   function baseVowel(g){
