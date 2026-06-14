@@ -845,7 +845,7 @@ a{color:var(--gold-soft);}
 
       <!-- compound -->
       <div class="fview active" id="f-compound">
-        <div class="fintro"><b>Compound</b>Fuse existing roots into a brand-new word. <span class="step">Click roots</span> below to stack them, smooth the joined form for sound, name what it means, then forge.</div>
+        <div class="fintro"><b>Compound</b>Fuse roots into a brand-new word. <span class="step">Build by meaning</span> (type the senses and let the forge find the roots) or by root (click them yourself), then name it and forge.</div>
         <div class="builder">
           <div class="coinout">
             <div class="c-native" id="cmpNative"></div>
@@ -853,18 +853,35 @@ a{color:var(--gold-soft);}
             <div class="c-gloss" id="cmpGloss"></div>
             <div class="c-warn" id="cmpWarn"></div>
           </div>
+          <div style="text-align:center;margin-bottom:12px">
+            <div class="pickseg" id="cmpMode">
+              <button class="seg active" data-mode="root">By root</button>
+              <button class="seg" data-mode="meaning">By meaning</button>
+            </div>
+          </div>
+          <div id="cmpMeanRow" style="display:none;margin-bottom:6px">
+            <div class="flabel" style="margin-top:0">Meanings to fuse (separate with +)</div>
+            <div class="frow">
+              <input class="vinput" id="cmpMeanIn" placeholder="e.g. water + house, or fire + person">
+              <button class="btn" id="cmpMeanBuild">Build word</button>
+            </div>
+            <div class="chk-reading" id="cmpMeanMsg" style="text-align:left;margin-top:6px"></div>
+          </div>
           <div class="stack" id="cmpStack"></div>
           <div class="frow">
             <input class="vinput" id="cmpFinal" placeholder="Final form (editable, smooth it for euphony)">
+            <button class="btn ghost" id="cmpSmooth" title="Soften harsh seams using the sound rules">Smooth</button>
           </div>
           <div class="frow" style="margin-top:10px">
             <input class="vinput" id="cmpMean" placeholder="What does it mean?">
             <button class="btn" id="cmpSave">Forge word</button>
           </div>
         </div>
+        <div id="cmpRootPicker">
         <div class="flabel">Roots &amp; morphemes: click to add</div>
         <input class="morphsearch" id="morphSearch" placeholder="Filter roots by form or meaning&hellip;">
         <div class="morphgrid" id="morphGrid"></div>
+        </div>
         <div class="note"><b>Cluster rule.</b> New cluster words are built from original Audalad roots, and an apostrophe (<i>'</i>) is added at the end to mark that clusterification was used. The final form is editable so you can drop a vowel or soften a cluster. Audalad favors soft sounds and avoids harsh clusters.</div>
         <div class="note" style="margin-top:8px;">A <span style="color:var(--gold);opacity:.7;">&#9873;</span> on a root means no lexicon word carries that sense yet, so the translator won't recognize it. Forge it into a word (or coin one) to make it translatable.</div>
       </div>
@@ -2547,6 +2564,93 @@ document.getElementById('cmpSave').addEventListener('click',()=>{
   cmpStack=[];document.getElementById('cmpFinal').dataset.auto='1';document.getElementById('cmpMean').value='';renderCmp();
 });
 
+/* ---------- COMPOUND BY MEANING ---------- */
+function cmpSenses(s){
+  return (s||'').toLowerCase().split(/[\/,;]/).map(function(x){
+    return x.replace(/\([^)]*\)/g,'').trim();
+  }).filter(Boolean);
+}
+function cmpResolveMeaning(q){
+  q=(q||'').trim().toLowerCase();
+  if(!q) return null;
+  var qv = q.indexOf('to ')===0 ? q.slice(3) : q;
+  var hit;
+  // 1: a root whose sense is exactly this meaning
+  hit=MORPH.find(function(m){ var s=cmpSenses(m.m); return s.indexOf(q)>=0 || s.indexOf(qv)>=0; });
+  if(hit) return {f:hit.f, m:hit.m, src:'root'};
+  // 2: a root sense that contains this word as a whole token
+  hit=MORPH.find(function(m){ return cmpSenses(m.m).some(function(s){ return s.split(/\s+/).indexOf(qv)>=0; }); });
+  if(hit) return {f:hit.f, m:hit.m, src:'root'};
+  // 3: an exact lexicon word
+  var L=lex();
+  var w=L.find(function(d){ var s=cmpSenses(d.en); return s.indexOf(q)>=0 || s.indexOf(qv)>=0; });
+  if(w) return {f:w.au, m:w.en, src:'word'};
+  // 4: a root sense that merely includes the text
+  hit=MORPH.find(function(m){ return m.m.toLowerCase().indexOf(qv)>=0; });
+  if(hit) return {f:hit.f, m:hit.m, src:'root'};
+  // 5: a lexicon word that merely includes the text
+  w=L.find(function(d){ return d.en.toLowerCase().indexOf(qv)>=0; });
+  if(w) return {f:w.au, m:w.en, src:'word'};
+  return null;
+}
+function cmpStripApos(s){ return (s||'').replace(/['\u2019]/g,''); }
+function cmpBuildFromMeaning(){
+  var inp=document.getElementById('cmpMeanIn').value;
+  var pieces=inp.split('+').map(function(s){return s.trim();}).filter(Boolean);
+  var msg=document.getElementById('cmpMeanMsg');
+  if(!pieces.length){ msg.textContent='Type one or more meanings, parted with +.'; return; }
+  var resolved=[], misses=[];
+  pieces.forEach(function(p){
+    var r=cmpResolveMeaning(p);
+    if(r) resolved.push({f:cmpStripApos(r.f), m:r.m, _q:p, _src:r.src});
+    else misses.push(p);
+  });
+  if(misses.length){
+    msg.innerHTML='No root or word found for: <b>'+escapeHtml(misses.join(', '))+'</b>. Try a simpler sense, or add that part by root.';
+  } else {
+    msg.innerHTML=resolved.map(function(r){
+      return escapeHtml(r._q)+' \u2192 '+escapeHtml(r.f)+' ('+(r._src==='root'?'root':'word')+')';
+    }).join(' &middot; ');
+  }
+  if(!resolved.length) return;
+  // feed the very same stack the click-roots flow uses
+  cmpStack=resolved.map(function(r){ return {f:r.f, m:r.m}; });
+  renderCmp();
+  // smooth the seam automatically, then re-mark the cluster
+  var raw=cmpStack.map(function(m){ return cmpStripApos(m.f); }).join('');
+  var smoothed=(window.AUCHK&&window.AUCHK.smoothWord)?window.AUCHK.smoothWord(raw):raw;
+  if(!/['\u2019]$/.test(smoothed)) smoothed=smoothed+"'";
+  var fin=document.getElementById('cmpFinal');
+  fin.value=smoothed; fin.dataset.auto='0';
+  updateCmpPreview();
+  document.getElementById('cmpGloss').textContent=resolved.map(function(r){return r._q;}).join(' + ');
+  var mf=document.getElementById('cmpMean');
+  if(!mf.value.trim()) mf.value=resolved.map(function(r){return r._q;}).join(' ');
+}
+function cmpSetMode(mode){
+  document.querySelectorAll('#cmpMode .seg').forEach(function(b){
+    b.classList.toggle('active', b.dataset.mode===mode);
+  });
+  document.getElementById('cmpMeanRow').style.display = mode==='meaning'?'block':'none';
+  document.getElementById('cmpRootPicker').style.display = mode==='meaning'?'none':'block';
+}
+document.querySelectorAll('#cmpMode .seg').forEach(function(b){
+  b.addEventListener('click',function(){ cmpSetMode(b.dataset.mode); });
+});
+document.getElementById('cmpMeanBuild').addEventListener('click',cmpBuildFromMeaning);
+document.getElementById('cmpMeanIn').addEventListener('keydown',function(e){
+  if(e.key==='Enter'){ e.preventDefault(); cmpBuildFromMeaning(); }
+});
+document.getElementById('cmpSmooth').addEventListener('click',function(){
+  var fin=document.getElementById('cmpFinal');
+  var v=fin.value.trim();
+  if(!v) return;
+  var sm=(window.AUCHK&&window.AUCHK.smoothWord)?window.AUCHK.smoothWord(v):v;
+  fin.value=sm; fin.dataset.auto='0';
+  updateCmpPreview();
+});
+
+
 /* --- verb forge --- */
 let vbType=VERBTYPES.find(t=>t.v==='u');
 function renderVbTypes(){
@@ -3478,6 +3582,7 @@ document.getElementById('anInput').addEventListener('input',renderAnalyze);
     addCoinage({form:form, mean:mean, kind: chkVerbMode()?'verb':'derived', note:'checked'});
     document.getElementById('chkMean').value='';
   });
+  window.AUCHK={smoothWord:smoothWord, checkWord:checkWord};
 })();
 
 
