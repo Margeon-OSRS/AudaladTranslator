@@ -630,6 +630,67 @@ a{color:var(--gold-soft);}
 #dimainad .d-sline.hi .tx{color:var(--oldgold);}
 #dimainad .d-sline.di .tx{color:var(--patina-soft);}
 @media (max-width:560px){ #dimainad .l-row{grid-template-columns:1fr;gap:3px;} }
+/* ===== Shavur-Audalad (the reconstructed ancestor) ===== */
+#shavuraudalad{ --ember:#b8704e; --ember-soft:#d99a73; --ember-dim:#7c4731; --stone:#c9b487; --stone-dim:#6d5c39; --ink-faint:#7d756a; }
+#shavuraudalad .la-intro{text-align:center;margin-bottom:16px;}
+#shavuraudalad .la-crest{font-family:'AudaladScript';font-size:38px;color:var(--ember);line-height:1;letter-spacing:2px;opacity:.9;}
+#shavuraudalad .la-title{font-family:'Cinzel',serif;font-weight:700;letter-spacing:6px;font-size:23px;margin:6px 0 2px;color:var(--ink);}
+#shavuraudalad .la-sub{color:var(--ink-dim);font-style:italic;font-size:14px;max-width:600px;margin:0 auto;line-height:1.5;}
+#shavuraudalad .lsub{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:18px 0 22px;}
+#shavuraudalad .lsub button{font-family:'Cinzel',serif;letter-spacing:1.5px;text-transform:uppercase;font-size:11px;background:transparent;border:1px solid var(--line);color:var(--ink-dim);padding:8px 15px;border-radius:3px;cursor:pointer;transition:.15s;}
+#shavuraudalad .lsub button:hover{color:var(--ink);border-color:var(--ember-dim);}
+#shavuraudalad .lsub button.active{background:linear-gradient(180deg,var(--panel),var(--bg2));color:var(--ember-soft);border-color:var(--ember-dim);}
+#shavuraudalad .lpairsel{display:flex;gap:6px;justify-content:center;margin-bottom:12px;flex-wrap:wrap;}
+#shavuraudalad .lpairsel button{font-family:'Cinzel',serif;letter-spacing:1px;text-transform:uppercase;font-size:10px;background:transparent;border:1px solid var(--line);color:var(--ink-dim);padding:6px 12px;border-radius:3px;cursor:pointer;transition:.15s;}
+#shavuraudalad .lpairsel button:hover{color:var(--ink);border-color:var(--ember-dim);}
+#shavuraudalad .lpairsel button.on{background:linear-gradient(180deg,var(--panel),var(--bg2));color:var(--ember-soft);border-color:var(--ember-dim);}
+#shavuraudalad .chip.active{background:rgba(184,112,78,.14);border-color:var(--ember);color:var(--ember-soft);}
+#shavuraudalad .lview{display:none;}
+#shavuraudalad .lview.active{display:block;}
+#shavuraudalad .native{color:var(--ember);}
+#shavuraudalad .t-au{color:var(--ember-soft);}
+#shavuraudalad .la-dirbar{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:14px;}
+#shavuraudalad .la-dirlabel{font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-dim);}
+#shavuraudalad .la-dirlabel b{color:var(--ember-soft);font-weight:400;}
+#shavuraudalad .la-swap{background:var(--panel);border:1px solid var(--line);color:var(--ember);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:17px;transition:.18s;}
+#shavuraudalad .la-swap:hover{border-color:var(--ember-dim);color:var(--ember-soft);}
+#shavuraudalad .l-search{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:'EB Garamond',serif;font-size:16px;padding:10px 13px;margin-bottom:6px;}
+#shavuraudalad .l-search:focus{outline:none;border-color:var(--ember-dim);}
+#shavuraudalad .l-count{color:var(--ink-faint);font-size:13px;font-style:italic;margin-bottom:12px;}
+#shavuraudalad .l-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
+#shavuraudalad .l-row{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:4px;padding:12px 14px;transition:.18s;}
+#shavuraudalad .l-row:hover{border-color:var(--ember-dim);transform:translateY(-2px);}
+#shavuraudalad .l-dia{color:var(--ember-soft);font-size:18px;}
+#shavuraudalad .l-dia .au{display:inline-block;color:var(--ember);font-size:24px;line-height:1.3;font-family:'AudaladScript';opacity:.85;margin-left:6px;vertical-align:bottom;}
+#shavuraudalad .l-mean{color:var(--ink);font-size:15px;margin-top:2px;}
+#shavuraudalad .l-from{color:var(--ink-faint);font-size:12px;font-style:italic;text-align:left;margin-top:4px;}
+#shavuraudalad .l-from b{color:var(--stone);font-style:normal;font-weight:400;}
+#shavuraudalad .l-prose p{margin:0 0 14px;}
+#shavuraudalad .l-lede{font-size:18px;color:var(--ember-soft);font-style:italic;line-height:1.55;margin-bottom:20px;}
+#shavuraudalad .l-sec{font-family:'Cinzel',serif;font-size:12.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ember-soft);margin:26px 0 12px;display:flex;align-items:center;gap:12px;}
+#shavuraudalad .l-sec::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent);}
+#shavuraudalad .l-law{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-left:3px solid var(--ember-dim);border-radius:5px;padding:14px 17px;margin:0 0 13px;}
+#shavuraudalad .l-law h4{font-family:'Cinzel',serif;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;color:var(--ember-soft);margin:0 0 6px;display:flex;align-items:baseline;gap:10px;}
+#shavuraudalad .l-law h4 .rn{font-family:'EB Garamond',serif;font-size:12px;letter-spacing:0;color:var(--ember-dim);border:1px solid var(--ember-dim);border-radius:4px;padding:0 7px;}
+#shavuraudalad .l-law p{margin:0 0 10px;color:var(--ink-dim);font-size:14.5px;line-height:1.55;}
+#shavuraudalad .l-law p:last-child{margin-bottom:0;}
+#shavuraudalad .d-fix{display:flex;flex-wrap:wrap;align-items:center;gap:9px 13px;font-size:14.5px;padding:9px 13px;border-radius:5px;background:rgba(0,0,0,.25);margin-top:6px;}
+#shavuraudalad .d-fix .old{color:var(--stone);text-decoration:line-through;text-decoration-color:rgba(201,180,135,.5);opacity:.72;}
+#shavuraudalad .d-fix .arr{color:var(--ember-dim);}
+#shavuraudalad .d-fix .new{color:var(--ember-soft);}
+#shavuraudalad .d-fix .gl{color:var(--ink-dim);font-style:italic;}
+#shavuraudalad .l-note{background:var(--bg2);border:1px dashed var(--line);border-radius:5px;padding:12px 15px;color:var(--ink-dim);font-size:14px;margin-top:10px;}
+#shavuraudalad .l-note b{color:var(--ember-soft);font-weight:400;}
+#shavuraudalad .d-sample{border:1px solid var(--line);border-radius:8px;padding:18px 20px;background:linear-gradient(180deg,var(--panel),var(--bg2));margin-top:6px;}
+#shavuraudalad .d-sline{margin-bottom:12px;}
+#shavuraudalad .d-sline .tg{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:3px;}
+#shavuraudalad .d-sline.hi .tg{color:var(--stone);}
+#shavuraudalad .d-sline.di .tg{color:var(--ember);}
+#shavuraudalad .d-sline .tx{font-size:20px;}
+#shavuraudalad .d-sline.hi .tx{color:var(--stone);}
+#shavuraudalad .d-sline.di .tx{color:var(--ember-soft);}
+@media (max-width:560px){ #shavuraudalad .l-row{grid-template-columns:1fr;gap:3px;} }
+
 
 </style>
 </head>
@@ -1437,6 +1498,7 @@ a{color:var(--gold-soft);}
     <div class="dia-pick">
       <button class="active" data-dialect="lowaudalad">Low&#8209;Audalad</button>
       <button data-dialect="dimainad">Dimainad</button>
+      <button data-dialect="shavuraudalad">Shavur&#8209;Audalad</button>
     </div>
   <section class="dia-panel active" id="lowaudalad">
     <div class="la-intro">
@@ -1667,6 +1729,86 @@ a{color:var(--gold-soft);}
     </div>
 
   </section>
+
+  <section class="dia-panel" id="shavuraudalad">
+    <div class="la-intro">
+      <div class="la-crest">Shavur-Audalad</div>
+      <div class="la-title">SHAVUR-AUDALAD</div>
+      <div class="la-sub">The reconstructed ancestor: the classical tongue the court&rsquo;s Audalad grew out of. The same roots, run backwards through the wear, then set down in the old hand (&scaron;, &zcaron;, c) and the old long vowels. Every form is derived live from the shared lexicon. No dictionary of its own.</div>
+    </div>
+    <div class="lsub">
+      <button class="active" data-sview="translate">Translate</button>
+      <button data-sview="lexicon">Lexicon</button>
+      <button data-sview="old">The Old Tongue</button>
+    </div>
+
+    <div class="lview active" id="s-translate">
+      <div class="lpairsel">
+        <button class="on" id="spairEN" data-spair="en">English &rarr; Shavur-Audalad</button>
+        <button id="spairHI" data-spair="hi">Audalad &rarr; Shavur-Audalad</button>
+      </div>
+      <div class="la-dirbar">
+        <span class="la-dirlabel" id="s-dirText"><b>English</b> &rarr; Shavur-Audalad</span>
+        <button class="la-swap" id="s-swap" title="Swap direction">&#8646;</button>
+      </div>
+      <div class="io">
+        <div class="field">
+          <div class="lbl"><span id="s-inLbl">English</span><span></span></div>
+          <textarea id="s-input" placeholder="Type here, e.g. fire water and king"></textarea>
+        </div>
+        <div class="field">
+          <div class="lbl"><span id="s-outLbl">Shavur-Audalad</span></div>
+          <div class="out show-native" id="s-output"><div class="placeholder">Translation appears here&hellip;</div></div>
+          <div class="gloss" id="s-gloss"></div>
+        </div>
+      </div>
+      <div class="toolbar">
+        <button class="btn ghost mini" id="s-copy" title="Copy the translation text">Copy</button>
+        <button class="btn ghost mini" id="s-png" title="Save the native script as a PNG">&#8595; Script PNG</button>
+      </div>
+      <div class="note"><b>How it reads.</b> Word-by-word from the shared lexicon, then run backwards through the five restorations: old letters, held glides, hard medial stops, the full long tail, and the old quill&rsquo;s c. Roots already in their oldest shape pass through unchanged. Words it can&rsquo;t find are marked in red. The reverse directions read the displayed form, with or without the macrons.</div>
+    </div>
+
+    <div class="lview" id="s-lexicon">
+      <input class="l-search" id="s-search" placeholder="Search in English or Audalad&hellip;">
+      <div class="posfilter" id="s-posfilter"></div>
+      <div class="l-count" id="s-count"></div>
+      <div id="s-lexlist"></div>
+      <div class="l-note" style="margin-top:16px;"><b>Note.</b> Each word is the high-tongue word reconstructed back to the old form by the five laws. Change a word in the court and its old form changes with it. See <b>The Old Tongue</b> for the laws.</div>
+    </div>
+
+    <div class="lview" id="s-old">
+      <div class="l-prose">
+        <p class="l-lede">Audalad is the high tongue, but it is not the first. Before the court guarded it, the tongue was older, harder, and fuller. Shavur-Audalad is that ancestor, reconstructed from the wear its children still show.</p>
+
+        <div class="l-sec">How it is read back</div>
+        <p>Keshir-Audalad, the harbour tongue, shows which way Audalad wears when no Council guards it: glides collapse, medial stops soften, the long tails fall away. Shavur-Audalad is that same arrow run backwards, one step past the court. Where the harbour lets a sound fall, the old tongue holds it. Nothing here is invented: every law either mirrors a documented harbour law or restores the old hand the modern scribes set aside.</p>
+
+        <div class="l-sec">The five restorations</div>
+
+        <div class="l-law"><h4><span class="rn">i</span> The old letters for the hushed sibilants</h4><p><span style="color:var(--stone)">sh</span> is written <span style="color:var(--ember-soft)">&scaron;</span>, <span style="color:var(--stone)">zh</span> is written <span style="color:var(--ember-soft)">&zcaron;</span>, in the old hand the modern scribes abandoned.</p><div class="d-fix"><span class="old">Zhurak</span><span class="arr">&rarr;</span><span class="new">&Zcaron;urak</span><span class="gl">fire</span></div></div>
+
+        <div class="l-law"><h4><span class="rn">ii</span> The glides were held long</h4><p>Where the harbour collapses them (ai &rarr; e, au &rarr; o), the old tongue held the first element full: <span style="color:var(--stone)">ai</span> &rarr; <span style="color:var(--ember-soft)">&amacr;i</span>, <span style="color:var(--stone)">au</span> &rarr; <span style="color:var(--ember-soft)">&amacr;u</span>.</p><div class="d-fix"><span class="old">Au</span><span class="arr">&rarr;</span><span class="new">&Amacr;u</span><span class="gl">water</span></div></div>
+
+        <div class="l-law"><h4><span class="rn">iii</span> The medial stops were kept hard</h4><p>The court softened the old voiceless stops between vowels. The old tongue kept them: between vowels, <span style="color:var(--stone)">g</span> traces to <span style="color:var(--ember-soft)">k</span>, <span style="color:var(--stone)">d</span> to <span style="color:var(--ember-soft)">t</span>. The mirror of the harbour&rsquo;s lenition.</p><div class="d-fix"><span class="old">Lugal</span><span class="arr">&rarr;</span><span class="new">Lukal</span><span class="gl">king</span></div></div>
+
+        <div class="l-law"><h4><span class="rn">iv</span> The full long tail</h4><p>The worn final the harbour drops was, in the old tongue, a full long vowel: a final vowel after one consonant lengthens (<span style="color:var(--stone)">-Ca</span> &rarr; <span style="color:var(--ember-soft)">-C&amacr;</span>, and so on).</p><div class="d-fix"><span class="old">Rinu</span><span class="arr">&rarr;</span><span class="new">Rin&umacr;</span><span class="gl">to cut</span></div></div>
+
+        <div class="l-law"><h4><span class="rn">v</span> The old quill&rsquo;s c</h4><p>A word&rsquo;s opening <span style="color:var(--stone)">k</span> was cut in the old hand as <span style="color:var(--ember-soft)">c</span>.</p><div class="d-fix"><span class="old">Kel</span><span class="arr">&rarr;</span><span class="new">Cel</span><span class="gl">circle</span></div></div>
+
+        <div class="l-sec">The laws, all at once</div>
+        <div class="d-sample">
+          <div class="d-sline hi"><span class="tg">Audalad</span><span class="tx">Zhurak, Au, dar Lugal</span></div>
+          <div class="d-sline di"><span class="tg">Shavur-Audalad</span><span class="tx">&Zcaron;urak, &Amacr;u, dar Lukal</span></div>
+          <p style="margin:14px 0 0;color:var(--ink-dim);font-size:14px;">&ldquo;Fire, water, and king.&rdquo; The same words, in the voice they were carried in before the court.</p>
+        </div>
+
+        <div class="l-note" style="margin-top:18px;"><b>How this works.</b> Nothing here is a separate dictionary. Every word is the high-tongue word read back through the five laws, so the old tongue stays in step with the official lexicon as it grows. Change a word in the court and its old form changes with it.</div>
+      </div>
+    </div>
+
+  </section>
+
 
 
   </section>
@@ -4680,6 +4822,243 @@ updateWantsBadge();
   });
 
   applyDMode();
+})();
+
+
+/* ================= SHAVUR-AUDALAD TAB (reconstructed ancestor - laws read back over the shared lexicon) ================= */
+(function(){
+  var V='[aeiou\u0101\u0113\u012b\u014d\u016b]';
+  var FINAL=new RegExp('([bcdfghjklmnpqrstvwxz\u017e\u0161])([aeiou])$');
+  var LONG={a:'\u0101',e:'\u0113',i:'\u012b',o:'\u014d',u:'\u016b'};
+  /* the five locked restorations: modern Audalad -> Shavur-Audalad */
+  function oldFromModern(w){
+    if(!w) return w;
+    var c0=w.charAt(0); var cap=(c0!==c0.toLowerCase());
+    var s=w.toLowerCase();
+    s=s.replace(/zh/g,'\u017e').replace(/sh/g,'\u0161');                                   // i  old letters
+    s=s.replace(/ai/g,'\u0101i').replace(/au/g,'\u0101u');                                 // ii glides held long
+    s=s.replace(new RegExp('('+V+')g(?='+V+')','g'),'$1k')                                 // iii medial stops hard
+       .replace(new RegExp('('+V+')d(?='+V+')','g'),'$1t');
+    s=s.replace(FINAL,function(m,k,v){ return k+(LONG[v]||v); });                          // iv full long tail
+    s=s.replace(/^k/,'c');                                                                 // v  the old quill's c
+    if(cap && s) s=s.charAt(0).toUpperCase()+s.slice(1);
+    return s;
+  }
+  /* native script / IPA read the underlying sounds: the old letters are an orthographic flourish */
+  function oldBase(s){
+    return (s||'').replace(/\u017d/g,'Zh').replace(/\u017e/g,'zh').replace(/\u0160/g,'Sh').replace(/\u0161/g,'sh')
+                  .replace(/C/g,'K').replace(/c/g,'k')
+                  .normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  }
+  function oldNative(s){ return toNative(oldBase(s)); }
+  function oldIpa(s){ return ipaText(oldBase(s)); }
+  function oldDeacc(s){ return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
+
+  /* ---- forward: English -> Shavur, Audalad -> Shavur ---- */
+  function translateEnToOld(text){
+    var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
+    var words=raw.match(/[A-Za-z']+|[.,!?;:]/g)||[]; var out=[]; var i=0, prevNum=false;
+    while(i<words.length){
+      var w=words[i];
+      if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); i++; continue; }
+      var matched=null, span=1;
+      for(var n=Math.min(3,words.length-i);n>=1;n--){
+        var phrase=words.slice(i,i+n).filter(function(x){return !/^[.,!?;:]$/.test(x);}).join(' ').toLowerCase();
+        if(enToAu[phrase]){ matched=enToAu[phrase][0]; span=n; break; }
+      }
+      var srcText=words.slice(i,i+span).join(' ');
+      if(matched){ out.push({src:srcText, au:oldFromModern(matched.au), en:matched.full, note:matched.full}); prevNum=(matched.pos==='num'||matched.pos==='ord'); }
+      else { var rr=resolveEng(w,{afterNumber:prevNum}); if(rr){ out.push({src:srcText, au:oldFromModern(rr.au), en:rr.en, note:rr.en}); } else out.push({src:srcText, au:null}); prevNum=false; }
+      i+=span;
+    }
+    return {tokens:out};
+  }
+  function translateHighToOld(text){
+    var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
+    var words=raw.match(/[^\s.,!?;:]+|[.,!?;:]/g)||[]; var out=[];
+    words.forEach(function(w){
+      if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
+      var oi=oldFromModern(w);
+      var m=lookupAu(w);
+      var en=m?glossEn(m.en,m.notes):null;
+      out.push({src:w, au:oi, en:en, note:en});
+    });
+    return {tokens:out};
+  }
+
+  /* ---- reverse map: keyed on the de-accented old form, so input reads with or without macrons ---- */
+  function oldToAuMap(){
+    var map={}, seen={};
+    lex().forEach(function(d){
+      var id=d.au.toLowerCase(); if(seen[id]) return; seen[id]=1;
+      var of=oldDeacc(oldFromModern(d.au));
+      (map[of]=map[of]||[]).push(d);
+    });
+    var rk=function(po){ return (po in _POSRANK)?_POSRANK[po]:8; };
+    Object.keys(map).forEach(function(k){ map[k].sort(function(a,b){ return rk(a.pos)-rk(b.pos); }); });
+    return map;
+  }
+  function oldBareLook(stem, map){ var k=oldDeacc(stem); if(map[k] && map[k].length) return {list:map[k], notes:[]}; return null; }
+  function oldAffixLook(stem, map){
+    var hit=oldBareLook(stem, map); if(hit) return hit;
+    var lw=oldDeacc(stem);
+    if(lw.length>4 && lw.slice(-4)==='adae'){ var h0=oldBareLook(lw.slice(0,-4), map); if(h0){ h0.notes=['of-the','plural']; return h0; } }
+    if(lw.length>2 && lw.slice(-2)==='ae'){ var h1=oldBareLook(lw.slice(0,-2), map); if(h1){ h1.notes=['plural']; return h1; } }
+    if(lw.indexOf('yi')===0 && lw.length>2){ var h2=oldBareLook(lw.slice(2), map); if(h2){ h2.notes=['plural (Yi-)']; return h2; } }
+    if(lw.length>3 && lw.slice(-3)==='adi'){ var h3=oldBareLook(lw.slice(0,-3), map); if(h3){ h3.notes=['of-the']; return h3; } }
+    if(lw.length>2 && lw.slice(-2)==='id'){ var h4=oldBareLook(lw.slice(0,-2), map); if(h4){ h4.notes=['of-the']; return h4; } }
+    if(lw.length>2 && lw.slice(-2)==='ad'){ var h5=oldBareLook(lw.slice(0,-2), map); if(h5){ h5.notes=['of-the']; return h5; } }
+    if(lw.length>2 && lw.slice(-2)==='ir'){ var h6=oldBareLook(lw.slice(0,-2), map); if(h6){ h6.notes=['negated']; return h6; } }
+    return null;
+  }
+  var OTEN=[['asar','near-past'],['luar','near-future'],['zhear','present'],['as','far-past'],['lu','far-future'],['zhe','continuous']];
+  function oldResolve(w, map){
+    var hit=oldAffixLook(w, map); if(hit) return hit;
+    var dw=oldDeacc(w);
+    for(var i=0;i<OTEN.length;i++){
+      var pre=OTEN[i][0], label=OTEN[i][1];
+      if(dw.indexOf(pre)===0 && dw.length>pre.length){
+        var rest=w.slice(w.length-(dw.length-pre.length));
+        var r=oldAffixLook(rest, map); if(r){ r.notes=[label].concat(r.notes); return r; }
+      }
+    }
+    return null;
+  }
+  function oldNoteLabel(notes){
+    var human={'plural (Yi-)':'plural','plural':'plural','of-the':'possessive','negated':'negation','near-past':'near past','far-past':'past','near-future':'near future','far-future':'future','present':'present','continuous':'continuous'};
+    return notes.map(function(n){ return human[n]||n; }).join(', ');
+  }
+  function translateOldToEn(text){
+    var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
+    var map=oldToAuMap(); var words=raw.match(/[^\s.,!?;:]+|[.,!?;:]/g)||[]; var out=[];
+    words.forEach(function(orig){
+      var w=orig;
+      if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
+      var court=''; var cm=w.match(/^(ori|itu|ke|ce)['\u2019\u02bc]/i);
+      if(cm){ var h=cm[1].toLowerCase(); court=(h==='ori')?'exalted':(h==='itu')?'to a greater':'to a lesser'; w=w.slice(cm[0].length); }
+      var hit=oldResolve(w, map);
+      if(hit && hit.list && hit.list.length){
+        var notes=hit.notes.slice();
+        var uniq=[]; hit.list.forEach(function(x){ if(uniq.indexOf(x.en)<0) uniq.push(x.en); });
+        var en=glossEn(uniq[0], notes);
+        var lab=oldNoteLabel(notes); if(court) lab=(lab?court+', '+lab:court);
+        var extras=[]; if(lab) extras.push('['+lab+']');
+        if(uniq.length>1) extras.push('also: '+uniq.slice(1).join('; '));
+        out.push({src:orig, en:en, au:hit.list[0].au, note:extras.length?extras.join(' \u00b7 '):null});
+      } else { out.push({src:orig, en:null, au:null}); }
+    });
+    return {tokens:out};
+  }
+  function translateOldToHigh(text){
+    var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
+    var map=oldToAuMap(); var words=raw.match(/[^\s.,!?;:]+|[.,!?;:]/g)||[]; var out=[];
+    words.forEach(function(w){
+      if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
+      var hit=oldResolve(w, map);
+      if(hit && hit.list && hit.list.length){
+        var notes=hit.notes.slice();
+        var main=hit.list[0];
+        var au=buildHighForm(main.au, notes);
+        var en=glossEn(main.en, notes);
+        var note=en; var lab=oldNoteLabel(notes); if(lab) note=en+' \u00b7 ['+lab+']';
+        if(hit.list.length>1) note=note+' \u00b7 also: '+hit.list.slice(1).map(function(x){ return x.au+' ('+x.en+')'; }).join(', ');
+        out.push({src:w, au:au, en:en, note:note});
+      } else { out.push({src:w, au:null, en:null}); }
+    });
+    return {tokens:out};
+  }
+
+  /* ---- UI ---- */
+  var s_mode='en2old', s_lastText='', s_lastNative='';
+  var sIn=document.getElementById('s-input'), sOut=document.getElementById('s-output'), sGloss=document.getElementById('s-gloss');
+  function joinParts(parts){ var s=''; parts.forEach(function(p){ if(/^[.,!?;:]$/.test(p)) s=s.replace(/\s$/,'')+p+' '; else s+=p+' '; }); return s.trim(); }
+  function sRender(){
+    var text=sIn.value; var auOut=(s_mode!=='old2en');
+    var res = s_mode==='en2old'?translateEnToOld(text)
+            : s_mode==='high2old'?translateHighToOld(text)
+            : s_mode==='old2en'?translateOldToEn(text)
+            : translateOldToHigh(text);
+    sGloss.innerHTML='';
+    if(!res.tokens.length){ s_lastText='';s_lastNative=''; sOut.innerHTML='<div class="placeholder">Translation appears here\u2026</div>'; return; }
+    var parts=res.tokens.map(function(t){ return t.punct? t.punct : ((auOut?t.au:t.en)!=null?(auOut?t.au:t.en):'['+t.src+'?]'); });
+    var str=joinParts(parts);
+    var html='<div class="roman">'+escapeHtml(str)+'</div>';
+    if(auOut){
+      var np=[]; res.tokens.forEach(function(t){ if(t.punct){np.push(t.punct);return;} if(t.au!=null) np.push(t.au); });
+      var ns=joinParts(np); s_lastText=str; s_lastNative=oldBase(ns);
+      var ipa=oldIpa(ns);
+      html+='<div class="native">'+escapeHtml(oldNative(ns))+'</div>'+(ipa?'<div class="c-ipa">'+escapeHtml(ipa)+'</div>':'');
+    } else { s_lastText=str; s_lastNative=''; }
+    sOut.innerHTML=html;
+    res.tokens.forEach(function(t){
+      if(t.punct) return;
+      var d=document.createElement('div'); var miss=auOut?(t.au==null):(t.en==null);
+      d.className='tok'+(miss?' miss':'');
+      if(auOut) d.innerHTML='<div class="t-au">'+escapeHtml(t.au||'??')+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
+      else d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.en||'??')+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
+      sGloss.appendChild(d);
+    });
+  }
+  sIn.addEventListener('input', sRender);
+  var S_FLIP={en2old:'old2en', old2en:'en2old', high2old:'old2high', old2high:'high2old'};
+  var S_PAIR={en2old:'en', old2en:'en', high2old:'au', old2high:'au'};
+  var S_LBL={en2old:['English','Shavur-Audalad'], old2en:['Shavur-Audalad','English'], high2old:['Audalad','Shavur-Audalad'], old2high:['Shavur-Audalad','Audalad']};
+  var S_PH={en2old:'Type here, e.g. fire water and king', old2en:'Type Shavur-Audalad, e.g. \u017durak \u0101u dar Lukal', high2old:'Type Audalad, e.g. Zhurak Au dar Lugal', old2high:'Type Shavur-Audalad, e.g. \u017durak \u0101u dar Lukal'};
+  function applySMode(){
+    var lab=S_LBL[s_mode];
+    document.getElementById('s-dirText').innerHTML='<b>'+lab[0]+'</b> &rarr; '+lab[1];
+    document.getElementById('s-inLbl').textContent=lab[0]; document.getElementById('s-outLbl').textContent=lab[1];
+    sOut.classList.toggle('show-native', s_mode!=='old2en');
+    sIn.placeholder=S_PH[s_mode];
+    document.getElementById('spairEN').classList.toggle('on', S_PAIR[s_mode]==='en');
+    document.getElementById('spairHI').classList.toggle('on', S_PAIR[s_mode]==='au');
+    sIn.value=''; sRender(); sIn.focus();
+  }
+  document.getElementById('spairEN').addEventListener('click', function(){ if(S_PAIR[s_mode]!=='en'){ s_mode='en2old'; applySMode(); } });
+  document.getElementById('spairHI').addEventListener('click', function(){ if(S_PAIR[s_mode]!=='au'){ s_mode='high2old'; applySMode(); } });
+  document.getElementById('s-swap').addEventListener('click', function(){ s_mode=S_FLIP[s_mode]; applySMode(); });
+  document.getElementById('s-copy').addEventListener('click', function(e){ copyText(s_lastText, e.currentTarget); });
+  document.getElementById('s-png').addEventListener('click', async function(e){ var b=e.currentTarget; if(!s_lastNative){ var o=b.textContent;b.textContent='Translate first';setTimeout(function(){b.textContent=o;},1200);return;} var o2=b.textContent;b.textContent='Saving\u2026'; await exportNativePNG(s_lastNative,'shavur-audalad-script',0); b.textContent=o2; });
+
+  function oldEntries(){ return lex().map(function(d){ return {old:oldFromModern(d.au), std:d.au, en:d.en, pos:d.pos}; }).sort(function(a,b){ return a.old.toLowerCase().localeCompare(b.old.toLowerCase()); }); }
+  var sSearch=document.getElementById('s-search'), sLexList=document.getElementById('s-lexlist'), sCount=document.getElementById('s-count');
+  function sRowHtml(e){ var changed=e.old!==e.std; return '<div class="l-row"><div class="l-dia">'+escapeHtml(e.old)+'<span class="au">'+escapeHtml(oldNative(e.old))+'</span></div><div class="l-mean">'+escapeHtml(e.en)+'</div><div class="l-from">'+(changed?('from <b>'+escapeHtml(e.std)+'</b>'):'unchanged')+'</div></div>'; }
+  var SPOS_ORDER=['all','n','v','adj','adv','prep','conj','det','pron','num','ord','q','intj','title'];
+  var activeOldPos='all', sPosBuilt=false;
+  function buildOldPosFilter(){
+    var pf=document.getElementById('s-posfilter'); pf.innerHTML='';
+    var present=new Set(lex().map(function(d){return d.pos;}));
+    SPOS_ORDER.forEach(function(p){
+      if(p!=='all' && !present.has(p)) return;
+      var b=document.createElement('button');
+      b.className='chip'+(p===activeOldPos?' active':'');
+      b.textContent = p==='all'?'All':(POS_LABEL[p]||p);
+      b.addEventListener('click',function(){ activeOldPos=p; pf.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active');}); b.classList.add('active'); buildOldLex(); });
+      pf.appendChild(b);
+    });
+    sPosBuilt=true;
+  }
+  function buildOldLex(){
+    if(!sPosBuilt) buildOldPosFilter();
+    var all=oldEntries(); var q=sSearch.value.trim().toLowerCase();
+    var rows=all.filter(function(e){ return (activeOldPos==='all'||e.pos===activeOldPos) && (!q||e.old.toLowerCase().indexOf(q)>=0||e.std.toLowerCase().indexOf(q)>=0||e.en.toLowerCase().indexOf(q)>=0); });
+    sCount.textContent=rows.length+' of '+all.length+' words'+((q||activeOldPos!=='all')?' shown':'');
+    sLexList.innerHTML = rows.length ? ('<div class="l-grid">'+rows.map(sRowHtml).join('')+'</div>') : '<div class="l-count" style="text-align:center;padding:20px">No words match that.</div>';
+  }
+  sSearch.addEventListener('input', buildOldLex);
+
+  var sLexInit=false;
+  document.querySelectorAll('#shavuraudalad .lsub button').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('#shavuraudalad .lsub button').forEach(function(x){x.classList.remove('active');});
+      document.querySelectorAll('#shavuraudalad .lview').forEach(function(x){x.classList.remove('active');});
+      btn.classList.add('active');
+      document.getElementById('s-'+btn.dataset.sview).classList.add('active');
+      if(btn.dataset.sview==='lexicon' && !sLexInit){ buildOldLex(); sLexInit=true; }
+    });
+  });
+
+  applySMode();
 })();
 
 </script>
