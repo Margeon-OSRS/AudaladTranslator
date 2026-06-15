@@ -1651,7 +1651,7 @@ a{color:var(--gold-soft);}
         <button class="btn ghost mini" id="d-copy" title="Copy the translation text">Copy</button>
         <button class="btn ghost mini" id="d-png" title="Save the native script as a PNG">&#8595; Script PNG</button>
       </div>
-      <div class="note"><b>How it reads.</b> Word-by-word from the shared lexicon, then run through Filurdu&rsquo;s reforms: the clarified phonology, one plural, one possessive, free negation, the rebuilt verb, phonemic spelling, head-first word order (the noun leads, its qualities trail), and the re-cut glue (<i>se</i> the, <i>da</i> and, <i>ze</i> of/from, <i>so</i> is/are). Words it can&rsquo;t find are marked in red. The two forward directions (from English, from Audalad) carry every reform; reverse reads the re-cut glue back.</div>
+      <div class="note"><b>How it reads.</b> Word-by-word from the shared lexicon, then run through Filurdu&rsquo;s reforms: the clarified phonology, one plural, one possessive, free negation, the rebuilt verb, and phonemic spelling. Words it can&rsquo;t find are marked in red. This first build runs the two forward directions (from English, from Audalad); reverse parsing is the next patch.</div>
     </div>
 
     <div class="lview" id="d-lexicon">
@@ -1683,7 +1683,7 @@ a{color:var(--gold-soft);}
         <div class="l-law"><h4><span class="rn">vi</span> Final a settles to e</h4><p>A trailing <span style="color:var(--oldgold)">a</span> closes to <span style="color:var(--patina-soft)">e</span>.</p><div class="d-fix"><span class="old">Sahra</span><span class="arr">&rarr;</span><span class="new">Sahre</span><span class="gl">town</span></div></div>
         <div class="l-law"><h4><span class="rn">vii</span> Light endings</h4><p>A final <span style="color:var(--oldgold)">-ad</span> lightens to <span style="color:var(--patina-soft)">-id</span>. This is what carries the possessive (below) and re-voices the register&rsquo;s own name.</p><div class="d-fix"><span class="old">Sorad</span><span class="arr">&rarr;</span><span class="new">Sorid</span><span class="gl">golden</span></div></div>
 
-        <div class="l-sec">The eight reforms</div>
+        <div class="l-sec">The six reforms</div>
 
         <div class="l-law">
           <h4><span class="rn">01</span> One plural, for everything</h4>
@@ -1734,29 +1734,11 @@ a{color:var(--gold-soft);}
           <div class="d-fix"><span class="old">&Aacute;sar- / L&uacute;-</span><span class="arr">&rarr;</span><span class="new">asar- / lu-</span></div>
         </div>
 
-        <div class="l-law">
-          <h4><span class="rn">07</span> The thing first, then its colour</h4>
-          <p>The court sets a quality before the thing it marks (<i>golden crown</i>). Dimanaid names the thing first and lets its qualities trail after, so a noun always leads its own phrase. Articles and numbers still stand in front; only the describing words move.</p>
-          <div class="d-fix"><span class="old">Sorid Elumaz</span><span class="arr">&rarr;</span><span class="new">Elumaz Sorid</span><span class="gl">golden crown &rarr; crown golden</span></div>
-        </div>
-
-        <div class="l-law">
-          <h4><span class="rn">08</span> The glue, cut to one light syllable</h4>
-          <p>The court spells its joining-words out in full. Filurdu clipped the four that carry a sentence to a single open syllable, so the weight falls on the words that mean something, not on the joints between them.</p>
-          <div class="d-fix"><span class="old">sei</span><span class="arr">&rarr;</span><span class="new">se</span><span class="gl">the</span><span class="old">Dar</span><span class="arr">&rarr;</span><span class="new">da</span><span class="gl">and</span></div>
-          <div class="d-fix"><span class="old">Dez</span><span class="arr">&rarr;</span><span class="new">ze</span><span class="gl">of / from</span><span class="old">Shul</span><span class="arr">&rarr;</span><span class="new">so</span><span class="gl">is / are</span></div>
-        </div>
-
         <div class="l-sec">The reforms, all at once</div>
         <div class="d-sample">
           <div class="d-sline hi"><span class="tg">Audalad</span><span class="tx">Naduae L&uacute;arsarek Shur Yiutalad</span></div>
           <div class="d-sline di"><span class="tg">Dimainad</span><span class="tx">Nadoae Luarsarec Sor Otaladae</span></div>
-          <p style="margin:14px 0 0;color:var(--ink-dim);font-size:14px;">&ldquo;The nobles will soon know the houses&rsquo; gold.&rdquo; The same meaning, in Dimanaid&rsquo;s own voice and rules.</p>
-        </div>
-        <div class="d-sample">
-          <div class="d-sline hi"><span class="tg">Audalad</span><span class="tx">Sei Rodezum Shur, Dar sei Falir Zhavulor</span></div>
-          <div class="d-sline di"><span class="tg">Dimanaid</span><span class="tx">Se Sor Rodezom, da se Zavolor Falir</span></div>
-          <p style="margin:14px 0 0;color:var(--ink-dim);font-size:14px;">&ldquo;The great gold, and the small ship.&rdquo; Same roots: the article and conjunction clipped, and each colour falls in behind its thing.</p>
+          <p style="margin:14px 0 0;color:var(--ink-dim);font-size:14px;">&ldquo;The nobles will soon know the houses&rsquo; gold.&rdquo; The same meaning, in Dimainad&rsquo;s own voice and rules.</p>
         </div>
 
       </div>
@@ -4597,28 +4579,9 @@ updateWantsBadge();
     return null;
   }
   function keepCase(s){ return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
-  var DIM_GLUE={ 'sei':'se', 'dar':'da', 'dez':'ze', 'dezum':'ze', 'shul':'so' }; // 8 the glue, cut to one light syllable
-  function dimGlue(w){ var k=deaccent(w||'').toLowerCase(); if(DIM_GLUE.hasOwnProperty(k)){ var g=DIM_GLUE[k]; return (/^[A-Z]/.test(w)? g.charAt(0).toUpperCase()+g.slice(1) : g); } return null; }
-  function enPosOf(word){ if(!word) return null; var lw=word.toLowerCase(); if(enToAu[lw]&&enToAu[lw][0]) return enToAu[lw][0].pos; var t=[lw.replace(/ies$/,'y'),lw.replace(/es$/,''),lw.replace(/s$/,''),lw.replace(/ed$/,''),lw.replace(/ing$/,'')]; for(var i=0;i<t.length;i++){ if(t[i]!==lw&&enToAu[t[i]]&&enToAu[t[i]][0]) return enToAu[t[i]][0].pos; } return null; }
-  function dimIsMod(t){ return !!t && !t.punct && t.pos==='adj'; }       // 7 head-first: adjectives trail the noun
-  function dimIsHead(t){ return !!t && !t.punct && (t.pos==='n'||t.pos==='title'); }
-  function dimReorder(toks){
-    var res=[];
-    for(var i=0;i<toks.length;i++){
-      if(dimIsMod(toks[i])){
-        var mods=[], j=i;
-        while(j<toks.length && dimIsMod(toks[j])){ mods.push(toks[j]); j++; }
-        if(j<toks.length && dimIsHead(toks[j])){ res.push(toks[j]); for(var k=0;k<mods.length;k++) res.push(mods[k]); i=j; continue; }
-        for(var k2=0;k2<mods.length;k2++) res.push(mods[k2]); i=j-1; continue;
-      }
-      res.push(toks[i]);
-    }
-    return res;
-  }
   function dimFromHigh(w){
     if(!w) return w;
     if(/^ori['\u2019\u02bc]/i.test(w)) return keepCase(w);
-    var glue=dimGlue(w); if(glue!==null) return glue;
     var r=dimRank(w); w=r.base;
     var c0=w.charAt(0); var cap=(c0!==c0.toLowerCase());
     var dl=deaccent(w);
@@ -4682,11 +4645,11 @@ updateWantsBadge();
         if(enToAu[phrase]){ matched=enToAu[phrase][0]; span=n; break; }
       }
       var srcText=words.slice(i,i+span).join(' ');
-      if(matched){ out.push({src:srcText, au:dimFromHigh(matched.au), en:matched.full, note:matched.full, pos:matched.pos}); prevNum=(matched.pos==='num'||matched.pos==='ord'); }
-      else { var rr=resolveEng(w,{afterNumber:prevNum}); if(rr){ out.push({src:srcText, au:dimFromHigh(rr.au), en:rr.en, note:rr.en, pos:enPosOf(w)}); } else out.push({src:srcText, au:null}); prevNum=false; }
+      if(matched){ out.push({src:srcText, au:dimFromHigh(matched.au), en:matched.full, note:matched.full}); prevNum=(matched.pos==='num'||matched.pos==='ord'); }
+      else { var rr=resolveEng(w,{afterNumber:prevNum}); if(rr){ out.push({src:srcText, au:dimFromHigh(rr.au), en:rr.en, note:rr.en}); } else out.push({src:srcText, au:null}); prevNum=false; }
       i+=span;
     }
-    return {tokens:dimReorder(out)};
+    return {tokens:out};
   }
   function translateHighToDim(text){
     var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
@@ -4696,10 +4659,9 @@ updateWantsBadge();
       var di=dimFromHigh(w);
       var m=lookupAu(w);
       var en=m?glossDim(m.en,m.notes):null;
-      var bp=m?((auToEn[deaccent(m.au).toLowerCase()]||auToEn[m.au.toLowerCase()]||{}).pos):null;
-      out.push({src:w, au:di, en:en, note:en, pos:bp});
+      out.push({src:w, au:di, en:en, note:en});
     });
-    return {tokens:dimReorder(out)};
+    return {tokens:out};
   }
 
   function dimToAuMap(){
@@ -4708,11 +4670,6 @@ updateWantsBadge();
       var id=d.au.toLowerCase(); if(seen[id]) return; seen[id]=1;
       var df=dimLight(dimSound(deaccent(d.au)));
       (map[df]=map[df]||[]).push(d);
-    });
-    [['se','sei'],['da','dar'],['ze','dez'],['so','shul']].forEach(function(g){
-      var df=g[0], srcId=g[1], hit=null;
-      lex().forEach(function(d){ if(!hit && d.au.toLowerCase()===srcId) hit=d; });
-      if(hit){ map[df]=map[df]||[]; if(map[df].indexOf(hit)<0) map[df].unshift(hit); }
     });
     var rk=function(po){ return (po in _POSRANK)?_POSRANK[po]:8; };
     Object.keys(map).forEach(function(k){ map[k].sort(function(a,b){ return rk(a.pos)-rk(b.pos); }); });
