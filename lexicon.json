@@ -1168,5 +1168,119 @@
     "en": "to Trust",
     "pos": "n",
     "by": "Sage"
+  },
+  {
+    "au": "Nashoni",
+    "en": "parent",
+    "pos": "n",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Shalak",
+    "en": "sister",
+    "pos": "n",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Shalok",
+    "en": "sibling",
+    "pos": "n",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Nenyimif'",
+    "en": "single",
+    "pos": "adj",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Dinyimif'",
+    "en": "double",
+    "pos": "adj",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Viridyimif'",
+    "en": "triple",
+    "pos": "adj",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Tarayimif'",
+    "en": "quadruple",
+    "pos": "adj",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Shumiyimif'",
+    "en": "quintuple",
+    "pos": "adj",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Lormus",
+    "en": "week",
+    "pos": "n",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Rinshu",
+    "en": "month",
+    "pos": "n",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Shyru",
+    "en": "minute",
+    "pos": "n",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Khedarif",
+    "en": "seasonal",
+    "pos": "adj",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Verar",
+    "en": "summer",
+    "pos": "n",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Razum",
+    "en": "autumn",
+    "pos": "n",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Progu",
+    "en": "speed",
+    "pos": "n",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Shetal",
+    "en": "last",
+    "pos": "n",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Oniserush",
+    "en": "rule",
+    "pos": "n",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Yim'oniserush",
+    "en": "constitution",
+    "pos": "n",
+    "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Kairum",
+    "en": "justice",
+    "pos": "n",
+    "by": "MegaMasterBloc"
   }
 ]
