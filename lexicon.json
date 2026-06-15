@@ -1282,5 +1282,749 @@
     "en": "justice",
     "pos": "n",
     "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Imushu",
+    "en": "son",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Imusha",
+    "en": "daughter",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Shetshu",
+    "en": "uncle",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Shetsha",
+    "en": "aunt",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Shavshu",
+    "en": "grandfather",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Shavsha",
+    "en": "grandmother",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Shetpla",
+    "en": "neighbour",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Vasenir",
+    "en": "guest",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Yimpla",
+    "en": "crowd",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Uyad",
+    "en": "leader",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Satsel",
+    "en": "lip",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mumshet",
+    "en": "cheek",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mumke",
+    "en": "chin",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Korel",
+    "en": "throat",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ramsik",
+    "en": "shoulder",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rambru",
+    "en": "elbow",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ramkel",
+    "en": "wrist",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ramshi",
+    "en": "finger",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rammid",
+    "en": "thumb",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Kekai",
+    "en": "chest",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Kebru",
+    "en": "waist",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Kenav",
+    "en": "hip",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Korektu",
+    "en": "lung",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Shufae",
+    "en": "beard",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Endai",
+    "en": "skull",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Veraku",
+    "en": "to bake",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Auvraku",
+    "en": "to boil",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Zhidir",
+    "en": "hungry",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Audir",
+    "en": "thirsty",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Zhikish",
+    "en": "to taste",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Umarim",
+    "en": "sweet",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Tsirim",
+    "en": "sour",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Karekim",
+    "en": "bitter",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Esunim",
+    "en": "salty",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mabai",
+    "en": "milk",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Yelmu",
+    "en": "oil",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Bisumar",
+    "en": "honey",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Zhilun",
+    "en": "meal",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Daku",
+    "en": "pot",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Elkai",
+    "en": "cup",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Plutai",
+    "en": "plate",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Onkai",
+    "en": "bowl",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rinai",
+    "en": "knife",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Utamel",
+    "en": "evening",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Sankai",
+    "en": "noon",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Durabru",
+    "en": "midnight",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Nebir",
+    "en": "early",
+    "pos": "adv",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Arun",
+    "en": "late",
+    "pos": "adv",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rurin",
+    "en": "soon",
+    "pos": "adv",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Hazezha",
+    "en": "thunder",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Hazutura",
+    "en": "lightning",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Auzhav",
+    "en": "flood",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Azurau",
+    "en": "dew",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Razel",
+    "en": "frost",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Aderik",
+    "en": "shadow",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rudmes",
+    "en": "field",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Itonai",
+    "en": "hope",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Verash",
+    "en": "anger",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Itosha",
+    "en": "joy",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Velanai",
+    "en": "sorrow",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Kharesh",
+    "en": "shame",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Alushar",
+    "en": "pride",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ozhai",
+    "en": "doubt",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Aderai",
+    "en": "wish",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Sarku",
+    "en": "to learn",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Karval",
+    "en": "price",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Karduri",
+    "en": "debt",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Urdvis",
+    "en": "promise",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Shurkar",
+    "en": "wealth",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ramprok",
+    "en": "to carry",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Prosu",
+    "en": "to send",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ektaru",
+    "en": "to receive",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Kalmu",
+    "en": "to find",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Durisu",
+    "en": "to keep",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Aruku",
+    "en": "to follow",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Alaku",
+    "en": "to meet",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Zhelu",
+    "en": "to ask",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ifshu",
+    "en": "to answer",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Lukar",
+    "en": "to read",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Izuru",
+    "en": "to measure",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ifgash",
+    "en": "to grow",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Lashku",
+    "en": "to use",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ifri",
+    "en": "to become",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Kairu",
+    "en": "tall",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Kedru",
+    "en": "deep",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Falkeru",
+    "en": "shallow",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Inirdu",
+    "en": "empty",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Igushir",
+    "en": "clean",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Uturim",
+    "en": "bright",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ezhrod",
+    "en": "loud",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Iguir",
+    "en": "fast",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Vair",
+    "en": "slow",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Falasir",
+    "en": "easy",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Hashril",
+    "en": "brave",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Narir",
+    "en": "kind",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Narkir",
+    "en": "cruel",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Sarkir",
+    "en": "wise",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Inishufir",
+    "en": "foolish",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Roden",
+    "en": "very",
+    "pos": "adv",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Nenu",
+    "en": "only",
+    "pos": "adv",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Daru",
+    "en": "also",
+    "pos": "adv",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Stulir",
+    "en": "still",
+    "pos": "adv",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Invaru",
+    "en": "almost",
+    "pos": "adv",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Sunu",
+    "en": "enough",
+    "pos": "adv",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Yimdir",
+    "en": "more",
+    "pos": "adv",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mudir",
+    "en": "less",
+    "pos": "adv",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Dinya",
+    "en": "both",
+    "pos": "det",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Isbru",
+    "en": "between",
+    "pos": "prep",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Arzar",
+    "en": "behind",
+    "pos": "prep",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ishzar",
+    "en": "front",
+    "pos": "prep",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Atru",
+    "en": "then",
+    "pos": "adv",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Elsher",
+    "en": "until",
+    "pos": "prep",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Dezneb",
+    "en": "since",
+    "pos": "prep",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Kelis",
+    "en": "around",
+    "pos": "prep",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Korez",
+    "en": "about",
+    "pos": "prep",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Brua",
+    "en": "half",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Uhyu",
+    "en": "whole",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Yimshi",
+    "en": "most",
+    "pos": "adv",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Uludai",
+    "en": "door",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Urdutar",
+    "en": "book",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Alshel",
+    "en": "paper",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Prosurdu",
+    "en": "letter",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Zherai",
+    "en": "picture",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Kortai",
+    "en": "story",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
   }
 ]
