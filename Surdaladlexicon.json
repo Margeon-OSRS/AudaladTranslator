@@ -838,5 +838,125 @@
     "en": "mother",
     "pos": "n",
     "by": ""
+  },
+  {
+    "su": "Seyog",
+    "en": "present",
+    "pos": "n",
+    "by": ""
+  },
+  {
+    "su": "Shanere",
+    "en": "past",
+    "pos": "n",
+    "by": ""
+  },
+  {
+    "su": "Uruden",
+    "en": "future",
+    "pos": "n",
+    "by": ""
+  },
+  {
+    "su": "nebphen",
+    "en": "before",
+    "pos": "prep",
+    "by": ""
+  },
+  {
+    "su": "Aruthon",
+    "en": "after",
+    "pos": "prep",
+    "by": ""
+  },
+  {
+    "su": "Urwen",
+    "en": "age",
+    "pos": "n",
+    "by": ""
+  },
+  {
+    "su": "shavog",
+    "en": "year",
+    "pos": "n",
+    "by": ""
+  },
+  {
+    "su": "Rinsheth",
+    "en": "month",
+    "pos": "n",
+    "by": ""
+  },
+  {
+    "su": "Lormog",
+    "en": "week",
+    "pos": "n",
+    "by": ""
+  },
+  {
+    "su": "Serigo",
+    "en": "day",
+    "pos": "n",
+    "by": ""
+  },
+  {
+    "su": "Faseyoth",
+    "en": "yesterday",
+    "pos": "n",
+    "by": ""
+  },
+  {
+    "su": "Seyene",
+    "en": "today",
+    "pos": "n",
+    "by": ""
+  },
+  {
+    "su": "Welwen",
+    "en": "tomorrow",
+    "pos": "n",
+    "by": ""
+  },
+  {
+    "su": "tasilgo",
+    "en": "early",
+    "pos": "adv",
+    "by": ""
+  },
+  {
+    "su": "Velere",
+    "en": "late",
+    "pos": "adv",
+    "by": ""
+  },
+  {
+    "su": "preth",
+    "en": "soon",
+    "pos": "adv",
+    "by": ""
+  },
+  {
+    "su": "Muvesere",
+    "en": "often",
+    "pos": "adv",
+    "by": ""
+  },
+  {
+    "su": "Asvethon",
+    "en": "sometimes",
+    "pos": "adv",
+    "by": ""
+  },
+  {
+    "su": "Normawen",
+    "en": "usually",
+    "pos": "adv",
+    "by": ""
+  },
+  {
+    "su": "Ekirthon",
+    "en": "until",
+    "pos": "prep",
+    "by": ""
   }
 ]
