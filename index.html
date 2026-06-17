@@ -1886,39 +1886,39 @@ a{color:var(--gold-soft);}
       <div class="la-sub">A kindred creole of the wider world, woven from five tongues with Audalad among them. Unlike the harbour dialect or the reformed register, Surdalad is a language in its own right: it keeps its own words and its own written hand, and so carries a lexicon all of its own.</div>
     </div>
     <div class="lsub">
-      <button class="active" data-sview="translate">Translate</button>
-      <button data-sview="lexicon">Lexicon</button>
-      <button data-sview="tongue">The Tongue</button>
+      <button class="active" data-suview="translate">Translate</button>
+      <button data-suview="lexicon">Lexicon</button>
+      <button data-suview="tongue">The Tongue</button>
     </div>
 
-    <div class="lview active" id="s-translate">
+    <div class="lview active" id="su-translate">
       <div class="la-dirbar">
-        <span class="la-dirlabel" id="s-dirText"><b>English</b> &rarr; Surdalad</span>
-        <button class="la-swap" id="s-swap" title="Swap direction">&#8646;</button>
+        <span class="la-dirlabel" id="su-dirText"><b>English</b> &rarr; Surdalad</span>
+        <button class="la-swap" id="su-swap" title="Swap direction">&#8646;</button>
       </div>
       <div class="s-io">
         <div>
-          <div class="s-lbl" id="s-inLbl">English</div>
-          <textarea id="s-input" placeholder="Type here, e.g. the dragon crossed the sea"></textarea>
+          <div class="s-lbl" id="su-inLbl">English</div>
+          <textarea id="su-input" placeholder="Type here, e.g. the dragon crossed the sea"></textarea>
         </div>
         <div>
-          <div class="s-lbl" id="s-outLbl">Surdalad</div>
-          <div class="s-out" id="s-output"><span style="color:var(--ink-faint);font-style:italic">Translation appears here&hellip;</span></div>
+          <div class="s-lbl" id="su-outLbl">Surdalad</div>
+          <div class="s-out" id="su-output"><span style="color:var(--ink-faint);font-style:italic">Translation appears here&hellip;</span></div>
         </div>
       </div>
       <div class="toolbar" style="margin-top:12px;">
-        <button class="btn ghost mini" id="s-copy" title="Copy the translation text">Copy</button>
+        <button class="btn ghost mini" id="su-copy" title="Copy the translation text">Copy</button>
       </div>
       <div class="note"><b>How it reads.</b> Surdalad keeps its own vocabulary, so this is a straight word-by-word lookup in the Surdalad lexicon, not a sound-law derivation from Audalad. Words with no Surdalad entry are marked in red. The native hand is shown beneath the reading. Use the swap to turn the lookup around.</div>
     </div>
 
-    <div class="lview" id="s-lexicon">
-      <input class="l-search" id="s-search" placeholder="Search in English or Surdalad&hellip;">
-      <div class="l-count" id="s-count"></div>
-      <div id="s-lexlist"></div>
+    <div class="lview" id="su-lexicon">
+      <input class="l-search" id="su-search" placeholder="Search in English or Surdalad&hellip;">
+      <div class="l-count" id="su-count"></div>
+      <div id="su-lexlist"></div>
     </div>
 
-    <div class="lview" id="s-tongue">
+    <div class="lview" id="su-tongue">
       <div class="l-prose">
         <p class="l-lede">Surdalad is not Audalad worn smooth or made over. It is a separate tongue that grew up among many peoples, taking a little from each, until it could stand on its own.</p>
 
@@ -4687,13 +4687,13 @@ updateWantsBadge();
   }
 
   var dir='es';
-  var sInput=document.getElementById('s-input');
-  var sOutput=document.getElementById('s-output');
-  var sDirText=document.getElementById('s-dirText');
-  var sInLbl=document.getElementById('s-inLbl');
-  var sOutLbl=document.getElementById('s-outLbl');
-  var sSwap=document.getElementById('s-swap');
-  var sCopy=document.getElementById('s-copy');
+  var sInput=document.getElementById('su-input');
+  var sOutput=document.getElementById('su-output');
+  var sDirText=document.getElementById('su-dirText');
+  var sInLbl=document.getElementById('su-inLbl');
+  var sOutLbl=document.getElementById('su-outLbl');
+  var sSwap=document.getElementById('su-swap');
+  var sCopy=document.getElementById('su-copy');
 
   function lookupEnToSu(t){ var h=enMap[norm(t)]; return (h&&h.length)?h[0].su:null; }
   function lookupSuToEn(t){ var h=suMap[deacc(t)]; return (h&&h.length)?h[0].en:null; }
@@ -4727,9 +4727,9 @@ updateWantsBadge();
   if(sInput) sInput.addEventListener('input',doTranslate);
   if(sCopy) sCopy.addEventListener('click',function(){ try{ navigator.clipboard.writeText((sOutput.textContent||'').trim()); }catch(e){} });
 
-  var sSearch=document.getElementById('s-search');
-  var sCount=document.getElementById('s-count');
-  var sList=document.getElementById('s-lexlist');
+  var sSearch=document.getElementById('su-search');
+  var sCount=document.getElementById('su-count');
+  var sList=document.getElementById('su-lexlist');
   function rowHtml(w){
     return '<div class="l-row"><div class="l-dia">'+esc(w.su)+'<span class="su">'+esc(w.su)+'</span></div>'+
       '<div class="l-mean">'+esc(w.en)+'</div>'+
@@ -4750,7 +4750,7 @@ updateWantsBadge();
       document.querySelectorAll('#surdalad .lsub button').forEach(function(x){x.classList.remove('active');});
       document.querySelectorAll('#surdalad .lview').forEach(function(x){x.classList.remove('active');});
       btn.classList.add('active');
-      var t=document.getElementById('s-'+btn.dataset.sview); if(t) t.classList.add('active');
+      var t=document.getElementById('su-'+btn.dataset.suview); if(t) t.classList.add('active');
     });
   });
 
