@@ -584,10 +584,10 @@ a{color:var(--gold-soft);}
 #surdalad .l-search:focus{outline:none;border-color:var(--iris-dim);}
 #surdalad .l-count{color:var(--ink-faint);font-size:13px;font-style:italic;margin-bottom:12px;}
 #surdalad .l-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
-#surdalad .l-row{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:4px;padding:12px 14px;transition:.18s;}
+#surdalad .l-row{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:4px;padding:12px 14px;transition:.18s;min-width:0;overflow:hidden;}
 #surdalad .l-row:hover{border-color:var(--iris-dim);transform:translateY(-2px);}
-#surdalad .l-dia{color:var(--iris-soft);font-size:18px;}
-#surdalad .l-dia .su{display:inline-block;color:var(--iris);font-size:26px;line-height:1.3;font-family:'SurdaladScript';opacity:.9;margin-left:8px;vertical-align:bottom;}
+#surdalad .l-dia{color:var(--iris-soft);font-size:18px;overflow-wrap:anywhere;word-break:break-word;}
+#surdalad .l-dia .su{display:block;color:var(--iris);font-size:24px;line-height:1.4;font-family:'SurdaladScript';opacity:.9;margin-top:5px;overflow-wrap:anywhere;word-break:break-word;}
 #surdalad .l-mean{color:var(--ink);font-size:15px;margin-top:2px;}
 #surdalad .l-pos{color:var(--ink-faint);font-style:italic;font-size:12px;margin-top:3px;}
 #surdalad .l-prose p{margin:0 0 14px;}
@@ -597,7 +597,16 @@ a{color:var(--gold-soft);}
 #surdalad .l-note{background:var(--bg2);border:1px dashed var(--line);border-radius:5px;padding:12px 15px;color:var(--ink-dim);font-size:14px;margin-top:14px;}
 #surdalad .l-note b{color:var(--iris-soft);font-weight:400;}
 #surdalad .s-out{min-height:60px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:12px 14px;font-size:18px;color:var(--ink);}
-#surdalad .s-out .native{font-size:30px;line-height:1.5;display:block;margin-top:10px;}
+#surdalad .s-out .native{font-size:30px;line-height:1.5;display:block;margin-top:10px;overflow-wrap:anywhere;word-break:break-word;}
+#surdalad .field .lbl{color:var(--iris-soft);}
+#surdalad .out .roman{color:var(--ink);}
+#surdalad .out .miss{color:#c97a7a;}
+#surdalad .out .su-native{font-family:'SurdaladScript';color:var(--iris);font-size:34px;line-height:1.5;margin-top:6px;display:block;overflow-wrap:anywhere;word-break:break-word;max-width:100%;text-shadow:0 0 18px rgba(154,134,212,0.18);}
+#surdalad .out .c-ipa{color:var(--ink-dim);font-family:'EB Garamond',serif;font-size:15px;margin-top:6px;letter-spacing:.3px;}
+#surdalad .gloss .tok .t-su{color:var(--iris-soft);font-size:15px;}
+#surdalad .gloss .tok .t-su-native{font-family:'SurdaladScript';color:var(--iris);font-size:20px;line-height:1.35;margin-top:2px;}
+#surdalad .gloss .tok .t-ipa{color:var(--ink-dim);font-family:'EB Garamond',serif;font-size:11px;letter-spacing:.3px;margin-top:3px;}
+#surdalad .gloss .tok.miss .t-su{color:var(--err);}
 #surdalad .s-out .miss{color:#c97a7a;}
 #surdalad .s-io{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 #surdalad .s-io textarea{width:100%;min-height:90px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:'EB Garamond',serif;font-size:16px;padding:10px 13px;resize:vertical;}
@@ -1896,20 +1905,21 @@ a{color:var(--gold-soft);}
         <span class="la-dirlabel" id="su-dirText"><b>English</b> &rarr; Surdalad</span>
         <button class="la-swap" id="su-swap" title="Swap direction">&#8646;</button>
       </div>
-      <div class="s-io">
-        <div>
-          <div class="s-lbl" id="su-inLbl">English</div>
+      <div class="io">
+        <div class="field">
+          <div class="lbl"><span id="su-inLbl">English</span><span></span></div>
           <textarea id="su-input" placeholder="Type here, e.g. the dragon crossed the sea"></textarea>
         </div>
-        <div>
-          <div class="s-lbl" id="su-outLbl">Surdalad</div>
-          <div class="s-out" id="su-output"><span style="color:var(--ink-faint);font-style:italic">Translation appears here&hellip;</span></div>
+        <div class="field">
+          <div class="lbl"><span id="su-outLbl">Surdalad</span></div>
+          <div class="out" id="su-output"><div class="placeholder">Translation appears here&hellip;</div></div>
+          <div class="gloss" id="su-gloss"></div>
         </div>
       </div>
       <div class="toolbar" style="margin-top:12px;">
         <button class="btn ghost mini" id="su-copy" title="Copy the translation text">Copy</button>
       </div>
-      <div class="note"><b>How it reads.</b> Surdalad keeps its own vocabulary, so this is a straight word-by-word lookup in the Surdalad lexicon, not a sound-law derivation from Audalad. Words with no Surdalad entry are marked in red. The native hand is shown beneath the reading. Use the swap to turn the lookup around.</div>
+      <div class="note"><b>How it reads.</b> Surdalad keeps its own vocabulary, so this is a word-by-word lookup in the Surdalad lexicon, not a sound-law derivation from Audalad. Each word's meaning and pronunciation appear in the breakdown beneath, with the native hand and a phonetic reading under the translation. Words with no Surdalad entry are marked in red. Use the swap to turn the lookup around.</div>
     </div>
 
     <div class="lview" id="su-lexicon">
@@ -4698,23 +4708,56 @@ updateWantsBadge();
   function lookupEnToSu(t){ var h=enMap[norm(t)]; return (h&&h.length)?h[0].su:null; }
   function lookupSuToEn(t){ var h=suMap[deacc(t)]; return (h&&h.length)?h[0].en:null; }
 
+  function ipaOf(w){ try{ return (typeof ipaText==='function') ? ipaText(w) : ''; }catch(e){ return ''; } }
   function doTranslate(){
     if(!sInput||!sOutput) return;
+    var glossEl=document.getElementById('su-gloss');
+    if(glossEl) glossEl.innerHTML='';
     var raw=sInput.value||'';
-    if(!raw.trim()){ sOutput.innerHTML='<span style="color:var(--ink-faint);font-style:italic">Translation appears here&hellip;</span>'; return; }
+    if(!raw.trim()){ sOutput.innerHTML='<div class="placeholder">Translation appears here&hellip;</div>'; return; }
     var parts=raw.split(/(\s+)/);
-    var roman=[], plainArr=[];
+    var toks=[];
     parts.forEach(function(p){
-      if(p===''||/^\s+$/.test(p)){ roman.push(p); plainArr.push(p); return; }
+      if(p===''||/^\s+$/.test(p)){ toks.push({sp:p}); return; }
       var m=p.match(/^([^0-9A-Za-z\u00c0-\u024f]*)([\s\S]*?)([^0-9A-Za-z\u00c0-\u024f]*)$/);
       var pre=m?m[1]:'', core=m?m[2]:p, post=m?m[3]:'';
-      var out=(dir==='es')?lookupEnToSu(core):lookupSuToEn(core);
-      if(out){ roman.push(esc(pre)+esc(out)+esc(post)); plainArr.push(pre+out+post); }
-      else { roman.push(esc(pre)+'<span class="miss">'+esc(core)+'</span>'+esc(post)); plainArr.push(pre+core+post); }
+      var entry=(dir==='es')?((enMap[norm(core)]||[])[0]):((suMap[deacc(core)]||[])[0]);
+      toks.push({pre:pre,post:post,src:core,entry:entry||null});
     });
-    var html=roman.join('');
-    if(dir==='es'){ html+='<span class="native">'+esc(plainArr.join(''))+'</span>'; }
+    var romanParts=[], natWords=[];
+    toks.forEach(function(t){
+      if(t.sp!==undefined){ romanParts.push(esc(t.sp)); return; }
+      if(t.entry){
+        var word=(dir==='es')?t.entry.su:t.entry.en;
+        romanParts.push(esc(t.pre)+esc(word)+esc(t.post));
+        if(dir==='es') natWords.push(t.entry.su);
+      } else {
+        romanParts.push(esc(t.pre)+'<span class="miss">'+esc(t.src)+'</span>'+esc(t.post));
+      }
+    });
+    var html='<div class="roman">'+romanParts.join('')+'</div>';
+    if(dir==='es'){
+      var natStr=natWords.join(' ');
+      if(natStr){
+        html+='<div class="su-native">'+esc(natStr)+'</div>';
+        var ph=ipaOf(natStr); if(ph) html+='<div class="c-ipa">'+esc(ph)+'</div>';
+      }
+    }
     sOutput.innerHTML=html;
+    if(glossEl){
+      toks.forEach(function(t){
+        if(t.sp!==undefined) return;
+        var d=document.createElement('div');
+        if(!t.entry){ d.className='tok miss'; d.innerHTML='<div class="t-su">'+esc(t.src)+'</div><div class="t-en">no entry</div>'; glossEl.appendChild(d); return; }
+        var su=t.entry.su, mean=t.entry.en, ipa=ipaOf(su);
+        d.className='tok';
+        d.innerHTML='<div class="t-su">'+esc(su)+'</div>'+
+                    '<div class="t-su-native">'+esc(su)+'</div>'+
+                    '<div class="t-en">'+esc(mean)+'</div>'+
+                    (ipa?'<div class="t-ipa">'+esc(ipa)+'</div>':'');
+        glossEl.appendChild(d);
+      });
+    }
   }
 
   function setDir(d){
@@ -4725,7 +4768,7 @@ updateWantsBadge();
   }
   if(sSwap) sSwap.addEventListener('click',function(){ setDir(dir==='es'?'se':'es'); });
   if(sInput) sInput.addEventListener('input',doTranslate);
-  if(sCopy) sCopy.addEventListener('click',function(){ try{ navigator.clipboard.writeText((sOutput.textContent||'').trim()); }catch(e){} });
+  if(sCopy) sCopy.addEventListener('click',function(){ try{ var r=sOutput.querySelector('.roman'); navigator.clipboard.writeText(((r?r.textContent:sOutput.textContent)||'').trim()); }catch(e){} });
 
   var sSearch=document.getElementById('su-search');
   var sCount=document.getElementById('su-count');
