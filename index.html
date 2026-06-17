@@ -572,7 +572,6 @@ a{color:var(--gold-soft);}
 #surdalad .lsub button{font-family:'Cinzel',serif;letter-spacing:1.5px;text-transform:uppercase;font-size:11px;background:transparent;border:1px solid var(--line);color:var(--ink-dim);padding:8px 15px;border-radius:3px;cursor:pointer;transition:.15s;}
 #surdalad .lsub button:hover{color:var(--ink);border-color:var(--iris-dim);}
 #surdalad .lsub button.active{background:linear-gradient(180deg,var(--panel),var(--bg2));color:var(--iris-soft);border-color:var(--iris-dim);}
-#surdalad .chip.active{background:rgba(154,134,212,.14);border-color:var(--iris);color:var(--iris-soft);}
 #surdalad .lview{display:none;}
 #surdalad .lview.active{display:block;}
 #surdalad .la-dirbar{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:14px;}
@@ -778,6 +777,36 @@ a{color:var(--gold-soft);}
 #shavuraudalad .l-morph .cap{color:var(--ink-faint);font-size:12px;font-style:italic;margin-top:7px;}
 
 
+/* surdalad forge (loan-hall) */
+#surdalad .su-forge-wrap{max-width:680px;margin:0 auto;}
+#surdalad .su-forge-wrap .builder{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:6px;padding:20px;margin-bottom:18px;}
+#surdalad .su-forge-wrap .fintro{max-width:640px;margin:0 auto 18px;text-align:center;color:var(--ink-dim);font-size:14px;line-height:1.6;font-style:italic;}
+#surdalad .su-forge-wrap .fintro b{display:block;font-family:'Cinzel',serif;font-style:normal;letter-spacing:2px;text-transform:uppercase;color:var(--iris-soft);font-size:13px;margin-bottom:4px;}
+#surdalad .su-forge-wrap .fintro .step{font-style:normal;color:var(--iris-soft);font-weight:700;}
+#surdalad .su-forge-wrap .flabel{font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--iris-soft);margin:14px 0 7px;}
+#surdalad .su-forge-wrap .btn{font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;background:var(--iris);color:var(--bg);border:none;border-radius:3px;padding:10px 18px;cursor:pointer;font-weight:700;transition:.18s;}
+#surdalad .su-forge-wrap .btn.mini{padding:7px 13px;}
+#surdalad .su-forge-wrap .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink-dim);font-weight:500;}
+#surdalad .su-forge-wrap .btn.ghost:hover{border-color:var(--iris-dim);color:var(--iris-soft);}
+#surdalad .su-forge-wrap .btn.ghost.danger:hover{border-color:var(--err);color:var(--err);}
+#surdalad .su-coinout{text-align:center;padding:6px 6px 4px;min-height:34px;}
+#surdalad .su-coinout .c-form{font-size:26px;color:var(--iris-soft);letter-spacing:1px;}
+#surdalad .su-coinout .c-form .su{font-family:'SurdaladScript';color:var(--iris);margin-left:12px;opacity:.9;}
+#surdalad .su-coinout .c-gloss{color:var(--ink-dim);font-style:italic;margin-top:3px;font-size:13px;min-height:18px;}
+#surdalad .su-chips{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0;}
+#surdalad .su-chip{font-family:'EB Garamond',serif;font-size:15px;background:var(--bg2);border:1px solid var(--line);color:var(--ink);padding:6px 12px;border-radius:14px;cursor:pointer;transition:.15s;}
+#surdalad .su-chip:hover{border-color:var(--iris-dim);color:var(--iris-soft);}
+#surdalad .su-chip.sel{background:linear-gradient(180deg,var(--panel),var(--bg2));border-color:var(--iris-dim);color:var(--iris-soft);}
+#surdalad .su-chip .tag{font-size:10px;color:var(--ink-faint);font-style:italic;margin-left:7px;text-transform:uppercase;letter-spacing:.5px;}
+#surdalad .su-flist{margin-top:6px;}
+#surdalad .su-frow{display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:4px;padding:9px 13px;margin-bottom:7px;}
+#surdalad .su-frow .fw{color:var(--iris-soft);font-size:16px;font-weight:600;min-width:0;overflow-wrap:anywhere;}
+#surdalad .su-frow .fw .su{font-family:'SurdaladScript';color:var(--iris);margin-left:8px;opacity:.85;}
+#surdalad .su-frow .fm{color:var(--ink);font-size:14px;flex:1;min-width:0;overflow-wrap:anywhere;}
+#surdalad .su-frow .fp{color:var(--ink-faint);font-style:italic;font-size:12px;flex:none;}
+#surdalad .su-frow .fx{background:transparent;border:1px solid var(--line);color:var(--ink-dim);border-radius:3px;width:26px;height:26px;line-height:1;cursor:pointer;flex:none;font-size:16px;}
+#surdalad .su-frow .fx:hover{border-color:var(--err);color:var(--err);}
+#surdalad .su-fmsg{color:var(--iris-soft);font-style:italic;font-size:13px;min-height:18px;margin-top:8px;text-align:center;}
 </style>
 </head>
 <body>
@@ -1915,6 +1944,7 @@ a{color:var(--gold-soft);}
     <div class="lsub">
       <button class="active" data-suview="translate">Translate</button>
       <button data-suview="lexicon">Lexicon</button>
+      <button data-suview="forge">Forge</button>
       <button data-suview="tongue">The Tongue</button>
     </div>
 
@@ -1948,9 +1978,67 @@ a{color:var(--gold-soft);}
 
     <div class="lview" id="su-lexicon">
       <input class="l-search" id="su-search" placeholder="Search in English or Surdalad&hellip;">
-      <div class="posfilter" id="su-posfilter"></div>
       <div class="l-count" id="su-count"></div>
       <div id="su-lexlist"></div>
+    </div>
+
+    <div class="lview" id="su-forge">
+      <div class="su-forge-wrap">
+        <div class="fintro"><b>Loan-hall</b>Surdalad makes words by taking them in. <span class="step">Name a word from one of the five tongues</span> and what it means, and the forge works it the Surdalad way: kept close, the hard front sometimes shed, a familiar tail fixed on, the old ending guarded. Choose the shape you like, then forge it into your lexicon.</div>
+        <div class="builder">
+          <div class="su-coinout">
+            <div class="c-form"><span class="rom" id="suf-rom"></span><span class="su" id="suf-nat"></span></div>
+            <div class="c-gloss" id="suf-gloss"></div>
+          </div>
+          <div class="flabel">Source word</div>
+          <div class="frow">
+            <input class="vinput" id="suf-src" placeholder="e.g. Kastel, Corran, ardath&hellip;">
+            <select class="vinput" id="suf-donor" style="flex:none;max-width:175px">
+              <option value="Audalad">from Audalad</option>
+              <option value="Castellan" selected>from Castellan</option>
+              <option value="Corrian">from Corrian</option>
+              <option value="Rethian">from Rethian</option>
+              <option value="Atalian">from Atalian</option>
+              <option value="">other tongue</option>
+            </select>
+          </div>
+          <div class="flabel">Shapes the forge offers (click one)</div>
+          <div class="su-chips" id="suf-chips"></div>
+          <div class="flabel">Surdalad form (editable)</div>
+          <input class="vinput" id="suf-final" placeholder="Pick a shape above, or type your own">
+          <div class="frow" style="margin-top:10px">
+            <input class="vinput" id="suf-mean" placeholder="What it means (English)">
+            <select class="vinput" id="suf-pos" style="flex:none;max-width:155px">
+              <option value="n">noun</option>
+              <option value="v">verb</option>
+              <option value="adj">adjective</option>
+              <option value="adv">adverb</option>
+              <option value="prep">preposition</option>
+              <option value="conj">conjunction</option>
+              <option value="pron">pronoun</option>
+              <option value="det">determiner</option>
+              <option value="num">number</option>
+              <option value="intj">interjection</option>
+              <option value="title">title</option>
+              <option value="q">question</option>
+            </select>
+          </div>
+          <div class="frow" style="margin-top:10px">
+            <input class="vinput" id="suf-by" placeholder="Forged by (optional, remembered)">
+            <button class="btn" id="suf-save">Forge word</button>
+          </div>
+          <div class="su-fmsg" id="suf-msg"></div>
+        </div>
+
+        <div class="flabel" style="text-align:center">Your forged Surdalad words</div>
+        <div class="su-flist" id="suf-list"></div>
+        <div class="toolbar" style="justify-content:center;margin-top:10px">
+          <button class="btn ghost mini" id="suf-export" title="Download just your forged words as JSON to send in for review">&#8595; Export forged (JSON)</button>
+          <button class="btn ghost mini" id="suf-publish" title="Download the whole lexicon as Surdaladlexicon.json to commit beside index.html">Publish &rarr; Surdaladlexicon.json</button>
+          <button class="btn ghost mini danger" id="suf-clear" title="Delete your forged words (export or publish first to keep them)">Clear forged</button>
+        </div>
+        <div class="note"><b>How it works.</b> Forged words live in this browser only, and become translatable and searchable at once, shown in the native hand beside their Roman spelling. To propose them, Export the forged set and send it in for the keepers. Once a word is approved, Publish writes a full <code>Surdaladlexicon.json</code> (the file the site reads at startup) for committing beside the page.</div>
+      </div>
     </div>
 
     <div class="lview" id="su-tongue">
@@ -4810,10 +4898,10 @@ updateWantsBadge();
       .then(function(r){ return r.ok?r.json():[]; })
       .then(function(arr){
         if(Array.isArray(arr)){
-          WORDS=arr.filter(function(x){return x&&x.su;}).map(function(x){
+          SU_BASE=arr.filter(function(x){return x&&x.su;}).map(function(x){
             return {su:String(x.su),en:String(x.en||'(unglossed)'),pos:x.pos||'n',by:x.by||''};
           });
-          buildMaps(); renderLex(); doTranslate();
+          recompose();
         }
       }).catch(function(){});
   }
@@ -4954,40 +5042,17 @@ updateWantsBadge();
   var sSearch=document.getElementById('su-search');
   var sCount=document.getElementById('su-count');
   var sList=document.getElementById('su-lexlist');
-  var SU_POS_LABEL={n:'Noun',v:'Verb',adj:'Adjective',adv:'Adverb',prep:'Preposition',conj:'Conjunction',det:'Determiner',num:'Number',ord:'Ordinal',pron:'Pronoun',interj:'Interjection',intj:'Interjection',q:'Question',title:'Title',name:'Name'};
-  function suPosLabel(p){ return SU_POS_LABEL[p] || (typeof POS_LABEL!=='undefined'&&POS_LABEL[p]) || p; }
-  var SUPOS_ORDER=['all','n','v','adj','adv','prep','conj','det','pron','num','ord','interj','intj','q','title','name'];
-  var activeSuPos='all', suPosBuilt=false;
-  function buildSuPosFilter(){
-    var pf=document.getElementById('su-posfilter'); if(!pf) return;
-    pf.innerHTML='';
-    var present={}; WORDS.forEach(function(w){ present[w.pos]=1; });
-    SUPOS_ORDER.forEach(function(p){
-      if(p!=='all' && !present[p]) return;
-      var b=document.createElement('button');
-      b.className='chip'+(p===activeSuPos?' active':'');
-      b.textContent = p==='all'?'All':suPosLabel(p);
-      b.addEventListener('click',function(){ activeSuPos=p; pf.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active');}); b.classList.add('active'); renderLex(); });
-      pf.appendChild(b);
-    });
-    suPosBuilt=true;
-  }
   function rowHtml(w){
     return '<div class="l-row"><div class="l-dia">'+esc(w.su)+'<span class="su">'+esc(w.su)+'</span></div>'+
       '<div class="l-mean">'+esc(w.en)+'</div>'+
-      '<div class="l-pos">'+esc(suPosLabel(w.pos))+(w.by?(' &middot; '+esc(w.by)):'')+'</div></div>';
+      '<div class="l-pos">'+esc(w.pos)+(w.by?(' &middot; '+esc(w.by)):'')+'</div></div>';
   }
   function renderLex(){
     if(!sList) return;
-    if(!suPosBuilt) buildSuPosFilter();
     var q=norm(sSearch?sSearch.value:'');
-    var rows=WORDS.filter(function(w){
-      if(activeSuPos!=='all' && w.pos!==activeSuPos) return false;
-      if(!q) return true;
-      return norm(w.en).indexOf(q)>=0 || deacc(w.su).indexOf(deacc(q))>=0;
-    });
+    var rows=WORDS.filter(function(w){ if(!q) return true; return norm(w.en).indexOf(q)>=0 || deacc(w.su).indexOf(deacc(q))>=0; });
     rows.sort(function(a,b){ return a.en.localeCompare(b.en); });
-    if(sCount) sCount.textContent=rows.length+' of '+WORDS.length+' words'+((q||activeSuPos!=='all')?' shown':'');
+    if(sCount) sCount.textContent=rows.length+' of '+WORDS.length+' words'+(q?' shown':'');
     sList.innerHTML=rows.length?('<div class="l-grid">'+rows.map(rowHtml).join('')+'</div>'):'<div class="l-count" style="text-align:center;padding:20px">No words match that.</div>';
   }
   if(sSearch) sSearch.addEventListener('input',renderLex);
@@ -5000,6 +5065,138 @@ updateWantsBadge();
       var t=document.getElementById('su-'+btn.dataset.suview); if(t) t.classList.add('active');
     });
   });
+
+  /* ----- Surdalad forge (loan-hall): borrow a word, work it the Surdalad way ----- */
+  var SU_BASE=[];                 // from Surdaladlexicon.json
+  var FORGED=[];                  // {su,en,pos,by} forged in this browser
+  var LS_SF='surdalad_forged_v1';
+  var SU_TAILS=['thon','on','og','go','eth','wen','den','ene','ere','phen'];
+  var HARD_ONSET=/^(?:sh|ch|th|ph|kh|zh|ts|[kgtdpbqxc])/i;
+  function loadForged(){ try{ var r=localStorage.getItem(LS_SF); FORGED=r?JSON.parse(r):[]; }catch(e){ FORGED=[]; } if(!Array.isArray(FORGED)) FORGED=[]; }
+  function saveForged(){ try{ localStorage.setItem(LS_SF, JSON.stringify(FORGED)); }catch(e){} }
+  function recompose(){ WORDS=SU_BASE.concat(FORGED); buildMaps(); renderLex(); doTranslate(); }
+
+  function isVowelCh(c){ return /[aeiouy\u00e0\u00e1\u00e2\u00e4\u00e3\u00e9\u00e8\u00ea\u00eb\u00ed\u00ec\u00ee\u00ef\u00f3\u00f2\u00f4\u00f6\u00f5\u00fa\u00f9\u00fb\u00fc]/i.test(c||''); }
+  function capLike(model, str){ return /^[A-Z]/.test(model||'') ? (str.charAt(0).toUpperCase()+str.slice(1)) : str; }
+  function shedFront(str){
+    var m=str.match(HARD_ONSET); if(!m) return null;
+    var rest=str.slice(m[0].length); if(rest.length<2) return null;
+    return capLike(str, rest);
+  }
+  function graft(base, tail){
+    if(!base) return '';
+    var b=base, t=tail;
+    if(isVowelCh(b.slice(-1)) && isVowelCh(t.charAt(0))){ var t2=t.replace(/^[aeiou]+/i,''); if(t2) t=t2; }
+    return b+t;
+  }
+  function candidates(src){
+    var str=(src||'').trim().replace(/\s+/g,''); if(!str) return [];
+    var out=[], seen={};
+    function push(form, tag){ if(!form) return; var k=form.toLowerCase(); if(seen[k]) return; seen[k]=1; out.push({f:form, tag:tag}); }
+    push(str,'kept close');
+    var sh=shedFront(str); if(sh) push(sh,'front shed');
+    var bases=[str]; if(sh) bases.push(sh);
+    bases.forEach(function(b){ SU_TAILS.forEach(function(t){ push(graft(b,t), 'tail -'+t); }); });
+    return out.slice(0,18);
+  }
+
+  var sfSrc=document.getElementById('suf-src');
+  var sfDonor=document.getElementById('suf-donor');
+  var sfChips=document.getElementById('suf-chips');
+  var sfFinal=document.getElementById('suf-final');
+  var sfMean=document.getElementById('suf-mean');
+  var sfPos=document.getElementById('suf-pos');
+  var sfBy=document.getElementById('suf-by');
+  var sfSave=document.getElementById('suf-save');
+  var sfMsg=document.getElementById('suf-msg');
+  var sfList=document.getElementById('suf-list');
+  var sfRom=document.getElementById('suf-rom');
+  var sfNat=document.getElementById('suf-nat');
+  var sfGloss=document.getElementById('suf-gloss');
+
+  function previewCoin(){
+    var f=((sfFinal&&sfFinal.value)||'').trim();
+    if(sfRom) sfRom.textContent=f;
+    if(sfNat) sfNat.textContent=f;
+    if(sfGloss){
+      var m=((sfMean&&sfMean.value)||'').trim();
+      var dn=(sfDonor&&sfDonor.value)||'';
+      sfGloss.textContent = f ? ((m?('\u201c'+m+'\u201d'):'give it a meaning, then forge')+(dn?('  \u00b7  from '+dn):'')) : '';
+    }
+  }
+  function renderChips(){
+    if(!sfChips) return;
+    var cs=candidates(sfSrc?sfSrc.value:'');
+    if(!cs.length){ sfChips.innerHTML='<span class="l-pos" style="font-style:italic">Name a source word above to see shapes.</span>'; return; }
+    var cur=((sfFinal&&sfFinal.value)||'').trim().toLowerCase();
+    sfChips.innerHTML=cs.map(function(c){
+      var sel=(c.f.toLowerCase()===cur)?' sel':'';
+      return '<button class="su-chip'+sel+'" data-f="'+esc(c.f)+'">'+esc(c.f)+'<span class="tag">'+esc(c.tag)+'</span></button>';
+    }).join('');
+    sfChips.querySelectorAll('.su-chip').forEach(function(b){
+      b.addEventListener('click',function(){ if(sfFinal){ sfFinal.value=b.dataset.f; } renderChips(); previewCoin(); });
+    });
+  }
+  function renderForgedList(){
+    if(!sfList) return;
+    if(!FORGED.length){ sfList.innerHTML='<div class="l-count" style="text-align:center;padding:14px;font-style:italic">Nothing forged yet. Take a word in above.</div>'; return; }
+    sfList.innerHTML=FORGED.map(function(w,i){
+      return '<div class="su-frow"><div class="fw">'+esc(w.su)+'<span class="su">'+esc(w.su)+'</span></div>'+
+             '<div class="fm">'+esc(w.en)+'</div>'+
+             '<div class="fp">'+esc(w.pos)+(w.by?(' &middot; '+esc(w.by)):'')+'</div>'+
+             '<button class="fx" data-i="'+i+'" title="Delete">&times;</button></div>';
+    }).join('');
+    sfList.querySelectorAll('.fx').forEach(function(b){
+      b.addEventListener('click',function(){ var i=+b.dataset.i; FORGED.splice(i,1); saveForged(); recompose(); renderForgedList(); });
+    });
+  }
+  function flashSf(m){ if(sfMsg){ sfMsg.textContent=m; setTimeout(function(){ if(sfMsg.textContent===m) sfMsg.textContent=''; },2800); } }
+
+  if(sfSrc) sfSrc.addEventListener('input',renderChips);
+  if(sfFinal) sfFinal.addEventListener('input',function(){ renderChips(); previewCoin(); });
+  if(sfMean) sfMean.addEventListener('input',previewCoin);
+  if(sfDonor) sfDonor.addEventListener('change',previewCoin);
+  if(sfBy){ try{ sfBy.value=(typeof currentAuthor==='function'?currentAuthor():'')||''; }catch(e){} }
+
+  if(sfSave) sfSave.addEventListener('click',function(){
+    var f=((sfFinal&&sfFinal.value)||'').trim();
+    var m=((sfMean&&sfMean.value)||'').trim();
+    if(!f){ flashSf('Pick or type a Surdalad form first.'); return; }
+    if(!m){ flashSf('Give it a meaning first.'); return; }
+    var by=((sfBy&&sfBy.value)||'').trim();
+    if(by && typeof setAuthor==='function'){ try{ setAuthor(by); }catch(e){} }
+    var dup=WORDS.some(function(w){ return deacc(w.su)===deacc(f) && norm(w.en)===norm(m); });
+    if(dup){ flashSf('That word already carries that meaning.'); return; }
+    FORGED.push({su:f, en:m, pos:(sfPos&&sfPos.value)||'n', by:by});
+    saveForged(); recompose(); renderForgedList();
+    flashSf('Forged \u201c'+f+'\u201d \u00b7 now translatable and searchable.');
+    if(sfFinal) sfFinal.value=''; if(sfSrc) sfSrc.value=''; if(sfMean) sfMean.value='';
+    renderChips(); previewCoin();
+  });
+
+  function cleanSf(arr){ return arr.map(function(w){ return {su:String(w.su), en:String(w.en||''), pos:w.pos||'n', by:w.by||''}; }); }
+  var sfExport=document.getElementById('suf-export');
+  var sfPublish=document.getElementById('suf-publish');
+  var sfClear=document.getElementById('suf-clear');
+  if(sfExport) sfExport.addEventListener('click',function(){
+    if(!FORGED.length){ flashSf('Forge some words first.'); return; }
+    if(typeof downloadFile==='function') downloadFile('Surdaladlexicon.forged.json', JSON.stringify(cleanSf(FORGED),null,2), 'application/json');
+    flashSf('Saved your forged words. Send them in for the keepers.');
+  });
+  if(sfPublish) sfPublish.addEventListener('click',function(){
+    var full=cleanSf(SU_BASE.concat(FORGED));
+    if(typeof downloadFile==='function') downloadFile('Surdaladlexicon.json', JSON.stringify(full,null,2), 'application/json');
+    flashSf('Saved Surdaladlexicon.json. Commit it beside index.html to publish.');
+  });
+  if(sfClear) sfClear.addEventListener('click',function(){
+    if(!FORGED.length){ flashSf('Nothing to clear.'); return; }
+    if(!window.confirm('Delete all your forged Surdalad words? Export or publish first to keep them.')) return;
+    FORGED=[]; saveForged(); recompose(); renderForgedList(); flashSf('Cleared your forged words.');
+  });
+
+  loadForged();
+  recompose();
+  renderChips(); renderForgedList(); previewCoin();
 
   loadSurdalad();
 })();
