@@ -572,6 +572,7 @@ a{color:var(--gold-soft);}
 #surdalad .lsub button{font-family:'Cinzel',serif;letter-spacing:1.5px;text-transform:uppercase;font-size:11px;background:transparent;border:1px solid var(--line);color:var(--ink-dim);padding:8px 15px;border-radius:3px;cursor:pointer;transition:.15s;}
 #surdalad .lsub button:hover{color:var(--ink);border-color:var(--iris-dim);}
 #surdalad .lsub button.active{background:linear-gradient(180deg,var(--panel),var(--bg2));color:var(--iris-soft);border-color:var(--iris-dim);}
+#surdalad .chip.active{background:rgba(154,134,212,.14);border-color:var(--iris);color:var(--iris-soft);}
 #surdalad .lview{display:none;}
 #surdalad .lview.active{display:block;}
 #surdalad .la-dirbar{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:14px;}
@@ -1947,6 +1948,7 @@ a{color:var(--gold-soft);}
 
     <div class="lview" id="su-lexicon">
       <input class="l-search" id="su-search" placeholder="Search in English or Surdalad&hellip;">
+      <div class="posfilter" id="su-posfilter"></div>
       <div class="l-count" id="su-count"></div>
       <div id="su-lexlist"></div>
     </div>
@@ -4952,17 +4954,40 @@ updateWantsBadge();
   var sSearch=document.getElementById('su-search');
   var sCount=document.getElementById('su-count');
   var sList=document.getElementById('su-lexlist');
+  var SU_POS_LABEL={n:'Noun',v:'Verb',adj:'Adjective',adv:'Adverb',prep:'Preposition',conj:'Conjunction',det:'Determiner',num:'Number',ord:'Ordinal',pron:'Pronoun',interj:'Interjection',intj:'Interjection',q:'Question',title:'Title',name:'Name'};
+  function suPosLabel(p){ return SU_POS_LABEL[p] || (typeof POS_LABEL!=='undefined'&&POS_LABEL[p]) || p; }
+  var SUPOS_ORDER=['all','n','v','adj','adv','prep','conj','det','pron','num','ord','interj','intj','q','title','name'];
+  var activeSuPos='all', suPosBuilt=false;
+  function buildSuPosFilter(){
+    var pf=document.getElementById('su-posfilter'); if(!pf) return;
+    pf.innerHTML='';
+    var present={}; WORDS.forEach(function(w){ present[w.pos]=1; });
+    SUPOS_ORDER.forEach(function(p){
+      if(p!=='all' && !present[p]) return;
+      var b=document.createElement('button');
+      b.className='chip'+(p===activeSuPos?' active':'');
+      b.textContent = p==='all'?'All':suPosLabel(p);
+      b.addEventListener('click',function(){ activeSuPos=p; pf.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active');}); b.classList.add('active'); renderLex(); });
+      pf.appendChild(b);
+    });
+    suPosBuilt=true;
+  }
   function rowHtml(w){
     return '<div class="l-row"><div class="l-dia">'+esc(w.su)+'<span class="su">'+esc(w.su)+'</span></div>'+
       '<div class="l-mean">'+esc(w.en)+'</div>'+
-      '<div class="l-pos">'+esc(w.pos)+(w.by?(' &middot; '+esc(w.by)):'')+'</div></div>';
+      '<div class="l-pos">'+esc(suPosLabel(w.pos))+(w.by?(' &middot; '+esc(w.by)):'')+'</div></div>';
   }
   function renderLex(){
     if(!sList) return;
+    if(!suPosBuilt) buildSuPosFilter();
     var q=norm(sSearch?sSearch.value:'');
-    var rows=WORDS.filter(function(w){ if(!q) return true; return norm(w.en).indexOf(q)>=0 || deacc(w.su).indexOf(deacc(q))>=0; });
+    var rows=WORDS.filter(function(w){
+      if(activeSuPos!=='all' && w.pos!==activeSuPos) return false;
+      if(!q) return true;
+      return norm(w.en).indexOf(q)>=0 || deacc(w.su).indexOf(deacc(q))>=0;
+    });
     rows.sort(function(a,b){ return a.en.localeCompare(b.en); });
-    if(sCount) sCount.textContent=rows.length+' of '+WORDS.length+' words'+(q?' shown':'');
+    if(sCount) sCount.textContent=rows.length+' of '+WORDS.length+' words'+((q||activeSuPos!=='all')?' shown':'');
     sList.innerHTML=rows.length?('<div class="l-grid">'+rows.map(rowHtml).join('')+'</div>'):'<div class="l-count" style="text-align:center;padding:20px">No words match that.</div>';
   }
   if(sSearch) sSearch.addEventListener('input',renderLex);
