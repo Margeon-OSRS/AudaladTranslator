@@ -1,0 +1,842 @@
+[
+  {
+    "su": "nog",
+    "en": "land",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "Urulaph",
+    "en": "world",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "Daralgo",
+    "en": "underground",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ôg",
+    "en": "nation",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ogwul",
+    "en": "province",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "naglaru",
+    "en": "town",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ogwe",
+    "en": "city",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "lasodenyogwe",
+    "en": "free city",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "aissuth",
+    "en": "fortress",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ardathon",
+    "en": "kingdom",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "kopan",
+    "en": "mine",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "wasan",
+    "en": "cave",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "aurty",
+    "en": "sea",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "itásog",
+    "en": "market",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "elnam",
+    "en": "forest",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "essucdam",
+    "en": "desert",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "erdaph",
+    "en": "swamp",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "owpathn",
+    "en": "plain",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "arzeth",
+    "en": "mountain",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ankoph",
+    "en": "hill",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "amnohe",
+    "en": "river",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "eranty",
+    "en": "lake",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "nograsy",
+    "en": "savanna",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ganabr",
+    "en": "farmlands",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "Kasrelar",
+    "en": "castell",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "zaduru",
+    "en": "east",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "zarphen",
+    "en": "west",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ortsaph",
+    "en": "north",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "tepluwen",
+    "en": "south",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ilakaph",
+    "en": "port",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "og",
+    "en": "home",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "asago",
+    "en": "street",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "naleru",
+    "en": "square",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "irvathon",
+    "en": "palace",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "wlasog",
+    "en": "wall",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ursalden",
+    "en": "tower",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "afusere",
+    "en": "bridge",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "oreth",
+    "en": "air",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "umeth",
+    "en": "earth",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "arhon",
+    "en": "water",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "elhephen",
+    "en": "fire",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "aguthn",
+    "en": "mud",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "erguluden",
+    "en": "rot",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "omagan",
+    "en": "clan",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "urath",
+    "en": "night",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "oliph",
+    "en": "sun",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "insru",
+    "en": "moon",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ertam",
+    "en": "star",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "uarty",
+    "en": "sky",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "úr",
+    "en": "soul",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "agulhon",
+    "en": "dust",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ugophen",
+    "en": "tear",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "alguhe",
+    "en": "rain",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "anored",
+    "en": "lightning strike",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "uturam",
+    "en": "lives",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "anguith",
+    "en": "blood",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "essucwen",
+    "en": "sand",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "wveth",
+    "en": "grass",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "abaph",
+    "en": "dirt",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "antabr",
+    "en": "stone",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "éred",
+    "en": "iron",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "opusru",
+    "en": "copper",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "irylam",
+    "en": "bronze",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "suru",
+    "en": "gold",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "iristaph",
+    "en": "gem",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "eraldan",
+    "en": "emerald",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "elabirth",
+    "en": "coal",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ivath",
+    "en": "wood",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "arene",
+    "en": "bone",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "esaph",
+    "en": "ice",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "aelam",
+    "en": "wheat",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "adired",
+    "en": "red",
+    "pos": "adj",
+    "by": "Sage44"
+  },
+  {
+    "su": "eru",
+    "en": "green",
+    "pos": "adj",
+    "by": "Sage44"
+  },
+  {
+    "su": "ularu",
+    "en": "blue",
+    "pos": "adj",
+    "by": "Sage44"
+  },
+  {
+    "su": "urlury",
+    "en": "yellow",
+    "pos": "adj",
+    "by": "Sage44"
+  },
+  {
+    "su": "iryu",
+    "en": "orange",
+    "pos": "adj",
+    "by": "Sage44"
+  },
+  {
+    "su": "umeturluhon",
+    "en": "brown",
+    "pos": "adj",
+    "by": "Sage44"
+  },
+  {
+    "su": "ultog",
+    "en": "white",
+    "pos": "adj",
+    "by": "Sage44"
+  },
+  {
+    "su": "otham",
+    "en": "purple",
+    "pos": "adj",
+    "by": "Sage44"
+  },
+  {
+    "su": "arog",
+    "en": "black",
+    "pos": "adj",
+    "by": "Sage44"
+  },
+  {
+    "su": "ernyc",
+    "en": "dark",
+    "pos": "adj",
+    "by": "Sage44"
+  },
+  {
+    "su": "ori",
+    "en": "light",
+    "pos": "adj",
+    "by": "Sage44"
+  },
+  {
+    "su": "urenaraygo",
+    "en": "pale",
+    "pos": "adj",
+    "by": "Sage44"
+  },
+  {
+    "su": "adaty",
+    "en": "gray",
+    "pos": "adj",
+    "by": "Sage44"
+  },
+  {
+    "su": "oro",
+    "en": "person",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "akiru",
+    "en": "human",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "uro",
+    "en": "animal",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "efasene",
+    "en": "beast",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "efawpath",
+    "en": "monster",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "aleswen",
+    "en": "cow",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "owere",
+    "en": "sheep",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "awath",
+    "en": "chicken",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "etru",
+    "en": "horse",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "velanyakirwen",
+    "en": "dog",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "aakared",
+    "en": "cat",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "aderriru",
+    "en": "bat",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "immuyaviru",
+    "en": "spider",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "erguludayirty",
+    "en": "corpse",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "arekayirty",
+    "en": "skeleton",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "asuru",
+    "en": "fish",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ukaru",
+    "en": "bird",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "eidraihon",
+    "en": "pig",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "alunyakirwen",
+    "en": "wolf",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "orcsalty",
+    "en": "bear",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "eagladam",
+    "en": "snake",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "admalaph",
+    "en": "dragon",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "uirakaphon",
+    "en": "arrow",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ùra",
+    "en": "tree",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "reg",
+    "en": "thing",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "Ogakiaduk",
+    "en": "princess",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "er",
+    "en": "child",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "am",
+    "en": "below",
+    "pos": "prep",
+    "by": "Sage44"
+  },
+  {
+    "su": "ur",
+    "en": "life",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "urê",
+    "en": "nature",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "le",
+    "en": "yes",
+    "pos": "interj",
+    "by": "Sage44"
+  },
+  {
+    "su": "mer",
+    "en": "no",
+    "pos": "interj",
+    "by": "Sage44"
+  },
+  {
+    "su": "ayn",
+    "en": "to be",
+    "pos": "v",
+    "by": "Sage44"
+  },
+  {
+    "su": "avidan",
+    "en": "give",
+    "pos": "v",
+    "by": "Sage44"
+  },
+  {
+    "su": "amaere",
+    "en": "love",
+    "pos": "v",
+    "by": "Sage44"
+  },
+  {
+    "su": "uryn",
+    "en": "live",
+    "pos": "v",
+    "by": "Sage44"
+  },
+  {
+    "su": "erù",
+    "en": "father",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "gwed",
+    "en": "wind",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "gwèd",
+    "en": "current",
+    "pos": "adj",
+    "by": "Sage44"
+  },
+  {
+    "su": "owl",
+    "en": "place",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "úro",
+    "en": "plant",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "anere",
+    "en": "song",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ôg",
+    "en": "country",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "rêdu",
+    "en": "metal",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ogyn",
+    "en": "host",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "xurago",
+    "en": "journey",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "sarù",
+    "en": "example",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "eru",
+    "en": "origin",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "gwethyn",
+    "en": "run",
+    "pos": "v",
+    "by": "Sage44"
+  },
+  {
+    "su": "óg",
+    "en": "roof",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ogu",
+    "en": "village",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "ogyn",
+    "en": "shelter",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "Darfak",
+    "en": "should",
+    "pos": "v",
+    "by": "Sage44"
+  },
+  {
+    "su": "anitere",
+    "en": "wound",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "nog",
+    "en": "territory",
+    "pos": "n",
+    "by": "Sage44"
+  },
+  {
+    "su": "eher",
+    "en": "mother",
+    "pos": "n",
+    "by": "Sage44"
+  }
+]

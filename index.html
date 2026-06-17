@@ -6,6 +6,11 @@
 <title>Audalad Translator</title>
 <style>
 @font-face {
+  font-family: 'SurdaladScript';
+  src: url(data:font/truetype;charset=utf-8;base64,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) format('truetype');
+  font-display: swap;
+}
+@font-face {
   font-family: 'AudaladScript';
   src: url(data:font/truetype;charset=utf-8;base64,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) format('truetype');
   font-display: swap;
@@ -558,6 +563,48 @@ a{color:var(--gold-soft);}
 #dialects .dia-pick button.active{background:linear-gradient(180deg,var(--panel),var(--bg2));color:var(--gold);border-color:var(--gold-dim);}
 #dialects .dia-panel{display:none;}
 #dialects .dia-panel.active{display:block;}
+#surdalad{ --iris:#9a86d4; --iris-soft:#bcaef0; --iris-dim:#5d4f93; --ink-faint:#7a7488; }
+#surdalad .la-intro{text-align:center;margin-bottom:16px;}
+#surdalad .la-crest{font-family:'SurdaladScript';font-size:46px;color:var(--iris);line-height:1.2;letter-spacing:3px;opacity:.92;}
+#surdalad .la-title{font-family:'Cinzel',serif;font-weight:700;letter-spacing:6px;font-size:23px;margin:6px 0 2px;color:var(--ink);}
+#surdalad .la-sub{color:var(--ink-dim);font-style:italic;font-size:14px;max-width:600px;margin:0 auto;line-height:1.5;}
+#surdalad .lsub{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:18px 0 22px;}
+#surdalad .lsub button{font-family:'Cinzel',serif;letter-spacing:1.5px;text-transform:uppercase;font-size:11px;background:transparent;border:1px solid var(--line);color:var(--ink-dim);padding:8px 15px;border-radius:3px;cursor:pointer;transition:.15s;}
+#surdalad .lsub button:hover{color:var(--ink);border-color:var(--iris-dim);}
+#surdalad .lsub button.active{background:linear-gradient(180deg,var(--panel),var(--bg2));color:var(--iris-soft);border-color:var(--iris-dim);}
+#surdalad .lview{display:none;}
+#surdalad .lview.active{display:block;}
+#surdalad .la-dirbar{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:14px;}
+#surdalad .la-dirlabel{font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-dim);}
+#surdalad .la-dirlabel b{color:var(--iris-soft);font-weight:400;}
+#surdalad .la-swap{background:var(--panel);border:1px solid var(--line);color:var(--iris);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:17px;transition:.18s;}
+#surdalad .la-swap:hover{border-color:var(--iris-dim);color:var(--iris-soft);}
+#surdalad .native{font-family:'SurdaladScript';color:var(--iris);}
+#surdalad .l-search{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:'EB Garamond',serif;font-size:16px;padding:10px 13px;margin-bottom:6px;}
+#surdalad .l-search:focus{outline:none;border-color:var(--iris-dim);}
+#surdalad .l-count{color:var(--ink-faint);font-size:13px;font-style:italic;margin-bottom:12px;}
+#surdalad .l-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
+#surdalad .l-row{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:4px;padding:12px 14px;transition:.18s;}
+#surdalad .l-row:hover{border-color:var(--iris-dim);transform:translateY(-2px);}
+#surdalad .l-dia{color:var(--iris-soft);font-size:18px;}
+#surdalad .l-dia .su{display:inline-block;color:var(--iris);font-size:26px;line-height:1.3;font-family:'SurdaladScript';opacity:.9;margin-left:8px;vertical-align:bottom;}
+#surdalad .l-mean{color:var(--ink);font-size:15px;margin-top:2px;}
+#surdalad .l-pos{color:var(--ink-faint);font-style:italic;font-size:12px;margin-top:3px;}
+#surdalad .l-prose p{margin:0 0 14px;}
+#surdalad .l-lede{font-size:18px;color:var(--iris-soft);font-style:italic;line-height:1.55;margin-bottom:20px;}
+#surdalad .l-sec{font-family:'Cinzel',serif;font-size:12.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--iris-soft);margin:26px 0 12px;display:flex;align-items:center;gap:12px;}
+#surdalad .l-sec::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent);}
+#surdalad .l-note{background:var(--bg2);border:1px dashed var(--line);border-radius:5px;padding:12px 15px;color:var(--ink-dim);font-size:14px;margin-top:14px;}
+#surdalad .l-note b{color:var(--iris-soft);font-weight:400;}
+#surdalad .s-out{min-height:60px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:12px 14px;font-size:18px;color:var(--ink);}
+#surdalad .s-out .native{font-size:30px;line-height:1.5;display:block;margin-top:10px;}
+#surdalad .s-out .miss{color:#c97a7a;}
+#surdalad .s-io{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+#surdalad .s-io textarea{width:100%;min-height:90px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:'EB Garamond',serif;font-size:16px;padding:10px 13px;resize:vertical;}
+#surdalad .s-io textarea:focus{outline:none;border-color:var(--iris-dim);}
+#surdalad .s-lbl{font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--ink-dim);margin-bottom:6px;}
+@media (max-width:560px){ #surdalad .s-io{grid-template-columns:1fr;} }
+
 /* ---------- DIMAINAD (reformed daughter) ---------- */
 #dimainad{ --patina:#6fb3a3; --patina-soft:#8fd4c2; --patina-dim:#3a665d; --oldgold:#d4af52; --oldgold-dim:#6e5a2c; --ink-faint:#6a7d7a; }
 #dimainad .la-intro{text-align:center;margin-bottom:16px;}
@@ -1508,11 +1555,12 @@ a{color:var(--gold-soft);}
   </section>
 
   <section class="view" id="dialects">
-    <p class="dia-lede">Audalad&rsquo;s kin: the harbor&rsquo;s worn dialect and House Dimaina&rsquo;s reform, each derived live from the shared lexicon.</p>
+    <p class="dia-lede">Audalad&rsquo;s kin: the harbor&rsquo;s worn dialect, the old tongue beneath it and House Dimaina&rsquo;s reform, each derived live from the shared lexicon: and Surdalad, a kindred creole that keeps a lexicon all its own.</p>
     <div class="dia-pick">
       <button class="active" data-dialect="lowaudalad">Keshir Audalad</button>
       <button data-dialect="shavuraudalad">Shavur&#8209;Audalad</button>
       <button data-dialect="dimainad">Dimainad</button>
+      <button data-dialect="surdalad">Surdalad</button>
     </div>
   <section class="dia-panel active" id="lowaudalad">
     <div class="la-intro">
@@ -1831,12 +1879,70 @@ a{color:var(--gold-soft);}
 
   </section>
 
+  <section class="dia-panel" id="surdalad">
+    <div class="la-intro">
+      <div class="la-crest">Surdalad</div>
+      <div class="la-title">SURDALAD</div>
+      <div class="la-sub">A kindred creole of the wider world, woven from five tongues with Audalad among them. Unlike the harbour dialect or the reformed register, Surdalad is a language in its own right: it keeps its own words and its own written hand, and so carries a lexicon all of its own.</div>
+    </div>
+    <div class="lsub">
+      <button class="active" data-sview="translate">Translate</button>
+      <button data-sview="lexicon">Lexicon</button>
+      <button data-sview="tongue">The Tongue</button>
+    </div>
+
+    <div class="lview active" id="s-translate">
+      <div class="la-dirbar">
+        <span class="la-dirlabel" id="s-dirText"><b>English</b> &rarr; Surdalad</span>
+        <button class="la-swap" id="s-swap" title="Swap direction">&#8646;</button>
+      </div>
+      <div class="s-io">
+        <div>
+          <div class="s-lbl" id="s-inLbl">English</div>
+          <textarea id="s-input" placeholder="Type here, e.g. the dragon crossed the sea"></textarea>
+        </div>
+        <div>
+          <div class="s-lbl" id="s-outLbl">Surdalad</div>
+          <div class="s-out" id="s-output"><span style="color:var(--ink-faint);font-style:italic">Translation appears here&hellip;</span></div>
+        </div>
+      </div>
+      <div class="toolbar" style="margin-top:12px;">
+        <button class="btn ghost mini" id="s-copy" title="Copy the translation text">Copy</button>
+      </div>
+      <div class="note"><b>How it reads.</b> Surdalad keeps its own vocabulary, so this is a straight word-by-word lookup in the Surdalad lexicon, not a sound-law derivation from Audalad. Words with no Surdalad entry are marked in red. The native hand is shown beneath the reading. Use the swap to turn the lookup around.</div>
+    </div>
+
+    <div class="lview" id="s-lexicon">
+      <input class="l-search" id="s-search" placeholder="Search in English or Surdalad&hellip;">
+      <div class="l-count" id="s-count"></div>
+      <div id="s-lexlist"></div>
+    </div>
+
+    <div class="lview" id="s-tongue">
+      <div class="l-prose">
+        <p class="l-lede">Surdalad is not Audalad worn smooth or made over. It is a separate tongue that grew up among many peoples, taking a little from each, until it could stand on its own.</p>
+
+        <div class="l-sec">A tongue woven from many</div>
+        <p>Where the harbour dialect and the reformed register are Audalad in other clothes, Surdalad is a meeting-place of languages. It draws on five in all: Castellan and Audalad most of all, with Rethian, Atalian and Corrian lending their own colour, the last of these folded in almost whole. The result is its own speech, close enough to its neighbours to be followed, distinct enough to be counted a language and not a mere patois.</p>
+
+        <div class="l-sec">How its words are made</div>
+        <p>A word coming into Surdalad keeps as much of its old shape as it can. Most often a hard sound is shed from the front, and a familiar ending is added to the back: tails such as -thon, -on, -og, -go, -eth, -wen, -den, -ene, -ere and -phen recur again and again, so that words of very different origin come to rhyme and sit together as kin. Through all of it the final sound of the original is guarded, so a borrowed word still answers to its source.</p>
+
+        <div class="l-sec">Its own hand</div>
+        <p>Surdalad is written in the Vel Suradas Kestelal hand, a script of its own quite apart from the court&rsquo;s. Every reading on the Translate tab and every entry in the Lexicon is shown in that hand beside its plain spelling. A few rarer marked vowels fall outside the carved letters and will show in the plain face instead.</p>
+
+        <div class="l-note"><b>How this works.</b> Surdalad keeps a lexicon of its own, loaded separately from the court&rsquo;s. It does not change when an Audalad word changes; it grows on its own terms as new words are agreed.</div>
+      </div>
+    </div>
+  </section>
+
+
 
 
   </section>
 
 
-  <footer>Audalad Language Toolkit &middot; v1.2 &middot; coded by Philly<br>Built from the Bastardized Audalad linguistic accord &middot; script font: Audalad v1 (juno)</footer>
+  <footer>Audalad Language Toolkit &middot; v1.2 &middot; coded by Philly<br>Built from the Bastardized Audalad linguistic accord &middot; script fonts: Audalad v1 (juno), Surdalad (Vel Suradas Kestelal)</footer>
 </div>
 
 <script>
@@ -4549,6 +4655,106 @@ updateWantsBadge();
   spin(); setInterval(spin, 2600);
 
   lRender();
+})();
+
+/* ================= SURDALAD (kindred creole - its own lexicon & script) ================= */
+(function(){
+  var WORDS=[];          // {su,en,pos,by}
+  var enMap={}, suMap={};
+  function norm(s){ return (s||'').toLowerCase().trim(); }
+  function deacc(s){ return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim(); }
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function buildMaps(){
+    enMap={}; suMap={};
+    WORDS.forEach(function(w){
+      var ek=norm(w.en);
+      (enMap[ek]=enMap[ek]||[]).push(w);
+      var sk=deacc(w.su);
+      (suMap[sk]=suMap[sk]||[]).push(w);
+    });
+  }
+  function loadSurdalad(){
+    fetch('Surdaladlexicon.json',{cache:'no-store'})
+      .then(function(r){ return r.ok?r.json():[]; })
+      .then(function(arr){
+        if(Array.isArray(arr)){
+          WORDS=arr.filter(function(x){return x&&x.su;}).map(function(x){
+            return {su:String(x.su),en:String(x.en||'(unglossed)'),pos:x.pos||'n',by:x.by||''};
+          });
+          buildMaps(); renderLex(); doTranslate();
+        }
+      }).catch(function(){});
+  }
+
+  var dir='es';
+  var sInput=document.getElementById('s-input');
+  var sOutput=document.getElementById('s-output');
+  var sDirText=document.getElementById('s-dirText');
+  var sInLbl=document.getElementById('s-inLbl');
+  var sOutLbl=document.getElementById('s-outLbl');
+  var sSwap=document.getElementById('s-swap');
+  var sCopy=document.getElementById('s-copy');
+
+  function lookupEnToSu(t){ var h=enMap[norm(t)]; return (h&&h.length)?h[0].su:null; }
+  function lookupSuToEn(t){ var h=suMap[deacc(t)]; return (h&&h.length)?h[0].en:null; }
+
+  function doTranslate(){
+    if(!sInput||!sOutput) return;
+    var raw=sInput.value||'';
+    if(!raw.trim()){ sOutput.innerHTML='<span style="color:var(--ink-faint);font-style:italic">Translation appears here&hellip;</span>'; return; }
+    var parts=raw.split(/(\s+)/);
+    var roman=[], plainArr=[];
+    parts.forEach(function(p){
+      if(p===''||/^\s+$/.test(p)){ roman.push(p); plainArr.push(p); return; }
+      var m=p.match(/^([^0-9A-Za-z\u00c0-\u024f]*)([\s\S]*?)([^0-9A-Za-z\u00c0-\u024f]*)$/);
+      var pre=m?m[1]:'', core=m?m[2]:p, post=m?m[3]:'';
+      var out=(dir==='es')?lookupEnToSu(core):lookupSuToEn(core);
+      if(out){ roman.push(esc(pre)+esc(out)+esc(post)); plainArr.push(pre+out+post); }
+      else { roman.push(esc(pre)+'<span class="miss">'+esc(core)+'</span>'+esc(post)); plainArr.push(pre+core+post); }
+    });
+    var html=roman.join('');
+    if(dir==='es'){ html+='<span class="native">'+esc(plainArr.join(''))+'</span>'; }
+    sOutput.innerHTML=html;
+  }
+
+  function setDir(d){
+    dir=d;
+    if(dir==='es'){ sDirText.innerHTML='<b>English</b> &rarr; Surdalad'; sInLbl.textContent='English'; sOutLbl.textContent='Surdalad'; sInput.placeholder='Type here, e.g. the dragon crossed the sea'; }
+    else { sDirText.innerHTML='<b>Surdalad</b> &rarr; English'; sInLbl.textContent='Surdalad'; sOutLbl.textContent='English'; sInput.placeholder='Type a Surdalad word, e.g. admalaph'; }
+    doTranslate();
+  }
+  if(sSwap) sSwap.addEventListener('click',function(){ setDir(dir==='es'?'se':'es'); });
+  if(sInput) sInput.addEventListener('input',doTranslate);
+  if(sCopy) sCopy.addEventListener('click',function(){ try{ navigator.clipboard.writeText((sOutput.textContent||'').trim()); }catch(e){} });
+
+  var sSearch=document.getElementById('s-search');
+  var sCount=document.getElementById('s-count');
+  var sList=document.getElementById('s-lexlist');
+  function rowHtml(w){
+    return '<div class="l-row"><div class="l-dia">'+esc(w.su)+'<span class="su">'+esc(w.su)+'</span></div>'+
+      '<div class="l-mean">'+esc(w.en)+'</div>'+
+      '<div class="l-pos">'+esc(w.pos)+(w.by?(' &middot; '+esc(w.by)):'')+'</div></div>';
+  }
+  function renderLex(){
+    if(!sList) return;
+    var q=norm(sSearch?sSearch.value:'');
+    var rows=WORDS.filter(function(w){ if(!q) return true; return norm(w.en).indexOf(q)>=0 || deacc(w.su).indexOf(deacc(q))>=0; });
+    rows.sort(function(a,b){ return a.en.localeCompare(b.en); });
+    if(sCount) sCount.textContent=rows.length+' of '+WORDS.length+' words'+(q?' shown':'');
+    sList.innerHTML=rows.length?('<div class="l-grid">'+rows.map(rowHtml).join('')+'</div>'):'<div class="l-count" style="text-align:center;padding:20px">No words match that.</div>';
+  }
+  if(sSearch) sSearch.addEventListener('input',renderLex);
+
+  document.querySelectorAll('#surdalad .lsub button').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('#surdalad .lsub button').forEach(function(x){x.classList.remove('active');});
+      document.querySelectorAll('#surdalad .lview').forEach(function(x){x.classList.remove('active');});
+      btn.classList.add('active');
+      var t=document.getElementById('s-'+btn.dataset.sview); if(t) t.classList.add('active');
+    });
+  });
+
+  loadSurdalad();
 })();
 
 /* dialect group (Kindred Tongues) switcher */
