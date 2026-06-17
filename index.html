@@ -579,6 +579,11 @@ a{color:var(--gold-soft);}
 #surdalad .la-dirlabel b{color:var(--iris-soft);font-weight:400;}
 #surdalad .la-swap{background:var(--panel);border:1px solid var(--line);color:var(--iris);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:17px;transition:.18s;}
 #surdalad .la-swap:hover{border-color:var(--iris-dim);color:var(--iris-soft);}
+#surdalad .su-pivotbar{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 0 16px;flex-wrap:wrap;}
+#surdalad .su-pivotlbl{font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-faint);}
+#surdalad .su-pivot{font-family:'Cinzel',serif;letter-spacing:1.2px;text-transform:uppercase;font-size:11px;background:transparent;border:1px solid var(--line);color:var(--ink-dim);padding:6px 14px;border-radius:3px;cursor:pointer;transition:.15s;}
+#surdalad .su-pivot:hover{color:var(--ink);border-color:var(--iris-dim);}
+#surdalad .su-pivot.active{background:linear-gradient(180deg,var(--panel),var(--bg2));color:var(--iris-soft);border-color:var(--iris-dim);}
 #surdalad .native{font-family:'SurdaladScript';color:var(--iris);}
 #surdalad .l-search{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:'EB Garamond',serif;font-size:16px;padding:10px 13px;margin-bottom:6px;}
 #surdalad .l-search:focus{outline:none;border-color:var(--iris-dim);}
@@ -1917,6 +1922,11 @@ a{color:var(--gold-soft);}
         <span class="la-dirlabel" id="su-dirText"><b>English</b> &rarr; Surdalad</span>
         <button class="la-swap" id="su-swap" title="Swap direction">&#8646;</button>
       </div>
+      <div class="su-pivotbar">
+        <span class="su-pivotlbl">Pair Surdalad with</span>
+        <button class="su-pivot active" data-pivot="en" title="Translate between English and Surdalad">English</button>
+        <button class="su-pivot" data-pivot="au" title="Translate between Audalad and Surdalad">Audalad</button>
+      </div>
       <div class="io">
         <div class="field">
           <div class="lbl"><span id="su-inLbl">English</span><span></span></div>
@@ -1930,6 +1940,7 @@ a{color:var(--gold-soft);}
       </div>
       <div class="toolbar" style="margin-top:12px;">
         <button class="btn ghost mini" id="su-copy" title="Copy the translation text">Copy</button>
+        <button class="btn ghost mini" id="su-png" title="Save the Surdalad native script as a PNG (for signs, books, banners)">&#8595; Script PNG</button>
       </div>
       <div class="note"><b>How it reads.</b> Surdalad keeps its own vocabulary, so this is a word-by-word lookup in the Surdalad lexicon, not a sound-law derivation from Audalad. Each word's meaning and pronunciation appear in the breakdown beneath, with the native hand and a phonetic reading under the translation. Words with no Surdalad entry are marked in red. Use the swap to turn the lookup around.</div>
     </div>
@@ -2158,6 +2169,32 @@ async function exportNativePNG(romanText, filenameBase, slantDeg){
     if(b){ const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=(filenameBase||'audalad')+'.png'; a.click(); URL.revokeObjectURL(a.href); }
     res();
   },'image/png'));
+  return true;
+}
+
+/* ---------- Surdalad native-script PNG export (carved Vel Suradas Kestelal hand) ---------- */
+async function exportSurdaladPNG(romanText, filenameBase){
+  var txt=(romanText||'').trim();
+  if(!txt) return false;
+  try{ await document.fonts.load("96px 'SurdaladScript'"); await document.fonts.ready; }catch(e){}
+  var fontPx=96, padX=48, padY=40;
+  var meas=document.createElement('canvas').getContext('2d');
+  meas.font="96px 'SurdaladScript'";
+  var lines=txt.split('\n');
+  var maxW=0; lines.forEach(function(l){ maxW=Math.max(maxW, meas.measureText(l).width); });
+  var lineH=Math.ceil(fontPx*1.5);
+  var c=document.createElement('canvas');
+  c.width=Math.ceil(maxW)+padX*2;
+  c.height=lineH*lines.length+padY*2;
+  var ctx=c.getContext('2d');
+  ctx.font="96px 'SurdaladScript'";
+  ctx.textBaseline='middle';
+  ctx.fillStyle='#9a86d4';
+  lines.forEach(function(l,idx){ ctx.fillText(l, padX, padY+lineH*idx+lineH/2); });
+  await new Promise(function(res){ c.toBlob(function(b){
+    if(b){ var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=(filenameBase||'surdalad')+'.png'; a.click(); URL.revokeObjectURL(a.href); }
+    res();
+  },'image/png'); });
   return true;
 }
 
@@ -4747,11 +4784,21 @@ updateWantsBadge();
   function norm(s){ return (s||'').toLowerCase().trim(); }
   function deacc(s){ return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim(); }
   function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function glossKeys(en){
+    var out=[], seen={};
+    function add(x){ x=norm(x); if(x&&!seen[x]){ seen[x]=1; out.push(x); } }
+    add(en);
+    String(en||'').split(/[\/,]/).forEach(function(part){
+      var p=part.replace(/\([^)]*\)/g,'').trim();
+      add(p);
+      if(p.indexOf('to ')===0) add(p.slice(3));
+    });
+    return out;
+  }
   function buildMaps(){
     enMap={}; suMap={};
     WORDS.forEach(function(w){
-      var ek=norm(w.en);
-      (enMap[ek]=enMap[ek]||[]).push(w);
+      glossKeys(w.en).forEach(function(k){ (enMap[k]=enMap[k]||[]).push(w); });
       var sk=deacc(w.su);
       (suMap[sk]=suMap[sk]||[]).push(w);
     });
@@ -4769,7 +4816,9 @@ updateWantsBadge();
       }).catch(function(){});
   }
 
-  var dir='es';
+  /* direction state: toSurd = output is Surdalad; pivot = the language paired with Surdalad */
+  var toSurd=true, pivot='en';   // default: English -> Surdalad (preserves prior behaviour)
+  var suLastNative='';           // roman Surdalad of the last result, only when output is Surdalad
   var sInput=document.getElementById('su-input');
   var sOutput=document.getElementById('su-output');
   var sDirText=document.getElementById('su-dirText');
@@ -4777,13 +4826,51 @@ updateWantsBadge();
   var sOutLbl=document.getElementById('su-outLbl');
   var sSwap=document.getElementById('su-swap');
   var sCopy=document.getElementById('su-copy');
-
-  function lookupEnToSu(t){ var h=enMap[norm(t)]; return (h&&h.length)?h[0].su:null; }
-  function lookupSuToEn(t){ var h=suMap[deacc(t)]; return (h&&h.length)?h[0].en:null; }
+  var sPng=document.getElementById('su-png');
 
   function ipaOf(w){ try{ return (typeof ipaText==='function') ? ipaText(w) : ''; }catch(e){ return ''; } }
+
+  /* pivot helpers: both lexicons gloss in English, so cross-register lookups go through the gloss */
+  function surByGloss(en){
+    var ks=glossKeys(en);
+    for(var i=0;i<ks.length;i++){ var h=enMap[ks[i]]; if(h&&h.length) return h[0]; }
+    return null;
+  }
+  function auByGloss(en){
+    if(typeof enToAu==='undefined') return null;
+    var ks=glossKeys(en);
+    for(var i=0;i<ks.length;i++){ var h=enToAu[ks[i]]; if(h&&h.length) return h[0].au; }
+    return null;
+  }
+  function auRec(core){
+    if(typeof auToEn==='undefined') return null;
+    return auToEn[core.toLowerCase()] || auToEn[deacc(core)] || null;
+  }
+
+  /* translate one core token. returns {out, sur} where sur is the Surdalad entry in play (for the breakdown) */
+  function trToken(core){
+    if(toSurd){
+      if(pivot==='en'){
+        var e=(enMap[norm(core)]||[])[0];
+        return {out:e?e.su:null, sur:e||null};
+      } else {
+        var rec=auRec(core);
+        if(!rec) return {out:null, sur:null};
+        var se=surByGloss(rec.en);
+        return {out:se?se.su:null, sur:se||null};
+      }
+    } else {
+      var s0=(suMap[deacc(core)]||[])[0];
+      if(!s0) return {out:null, sur:null};
+      if(pivot==='en') return {out:s0.en, sur:s0};
+      var au=auByGloss(s0.en);
+      return {out:au||null, sur:s0};
+    }
+  }
+
   function doTranslate(){
     if(!sInput||!sOutput) return;
+    suLastNative='';
     var glossEl=document.getElementById('su-gloss');
     if(glossEl) glossEl.innerHTML='';
     var raw=sInput.value||'';
@@ -4794,24 +4881,24 @@ updateWantsBadge();
       if(p===''||/^\s+$/.test(p)){ toks.push({sp:p}); return; }
       var m=p.match(/^([^0-9A-Za-z\u00c0-\u024f]*)([\s\S]*?)([^0-9A-Za-z\u00c0-\u024f]*)$/);
       var pre=m?m[1]:'', core=m?m[2]:p, post=m?m[3]:'';
-      var entry=(dir==='es')?((enMap[norm(core)]||[])[0]):((suMap[deacc(core)]||[])[0]);
-      toks.push({pre:pre,post:post,src:core,entry:entry||null});
+      var r=trToken(core);
+      toks.push({pre:pre,post:post,src:core,out:r.out,sur:r.sur});
     });
     var romanParts=[], natWords=[];
     toks.forEach(function(t){
       if(t.sp!==undefined){ romanParts.push(esc(t.sp)); return; }
-      if(t.entry){
-        var word=(dir==='es')?t.entry.su:t.entry.en;
-        romanParts.push(esc(t.pre)+esc(word)+esc(t.post));
-        if(dir==='es') natWords.push(t.entry.su);
+      if(t.out){
+        romanParts.push(esc(t.pre)+esc(t.out)+esc(t.post));
+        if(toSurd) natWords.push(t.out);
       } else {
         romanParts.push(esc(t.pre)+'<span class="miss">'+esc(t.src)+'</span>'+esc(t.post));
       }
     });
     var html='<div class="roman">'+romanParts.join('')+'</div>';
-    if(dir==='es'){
+    if(toSurd){
       var natStr=natWords.join(' ');
       if(natStr){
+        suLastNative=natStr;
         html+='<div class="su-native">'+esc(natStr)+'</div>';
         var ph=ipaOf(natStr); if(ph) html+='<div class="c-ipa">'+esc(ph)+'</div>';
       }
@@ -4821,8 +4908,8 @@ updateWantsBadge();
       toks.forEach(function(t){
         if(t.sp!==undefined) return;
         var d=document.createElement('div');
-        if(!t.entry){ d.className='tok miss'; d.innerHTML='<div class="t-su">'+esc(t.src)+'</div><div class="t-en">no entry</div>'; glossEl.appendChild(d); return; }
-        var su=t.entry.su, mean=t.entry.en, ipa=ipaOf(su);
+        if(!t.sur){ d.className='tok miss'; d.innerHTML='<div class="t-su">'+esc(t.src)+'</div><div class="t-en">no entry</div>'; glossEl.appendChild(d); return; }
+        var su=t.sur.su, mean=t.sur.en, ipa=ipaOf(su);
         d.className='tok';
         d.innerHTML='<div class="t-su">'+esc(su)+'</div>'+
                     '<div class="t-su-native">'+esc(su)+'</div>'+
@@ -4833,15 +4920,34 @@ updateWantsBadge();
     }
   }
 
-  function setDir(d){
-    dir=d;
-    if(dir==='es'){ sDirText.innerHTML='<b>English</b> &rarr; Surdalad'; sInLbl.textContent='English'; sOutLbl.textContent='Surdalad'; sInput.placeholder='Type here, e.g. the dragon crossed the sea'; }
-    else { sDirText.innerHTML='<b>Surdalad</b> &rarr; English'; sInLbl.textContent='Surdalad'; sOutLbl.textContent='English'; sInput.placeholder='Type a Surdalad word, e.g. admalaph'; }
+  var SU_EX={ es:'Type here, e.g. the dragon crossed the sea', se:'Type a Surdalad word, e.g. Urulaph',
+              as:'Type an Audalad word, e.g. Urul', sa:'Type a Surdalad word, e.g. Urulaph' };
+  function refreshDir(){
+    var pv = (pivot==='au') ? 'Audalad' : 'English';
+    if(toSurd){ sDirText.innerHTML='<b>'+pv+'</b> &rarr; Surdalad'; sInLbl.textContent=pv; sOutLbl.textContent='Surdalad'; }
+    else      { sDirText.innerHTML='<b>Surdalad</b> &rarr; '+pv; sInLbl.textContent='Surdalad'; sOutLbl.textContent=pv; }
+    var key = toSurd ? (pivot==='au'?'as':'es') : (pivot==='au'?'sa':'se');
+    sInput.placeholder = SU_EX[key] || '';
     doTranslate();
   }
-  if(sSwap) sSwap.addEventListener('click',function(){ setDir(dir==='es'?'se':'es'); });
+  if(sSwap) sSwap.addEventListener('click',function(){ toSurd=!toSurd; refreshDir(); });
+  document.querySelectorAll('#surdalad .su-pivot').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('#surdalad .su-pivot').forEach(function(x){x.classList.remove('active');});
+      btn.classList.add('active');
+      pivot = (btn.dataset.pivot==='au') ? 'au' : 'en';
+      refreshDir();
+    });
+  });
   if(sInput) sInput.addEventListener('input',doTranslate);
   if(sCopy) sCopy.addEventListener('click',function(){ try{ var r=sOutput.querySelector('.roman'); navigator.clipboard.writeText(((r?r.textContent:sOutput.textContent)||'').trim()); }catch(e){} });
+  if(sPng) sPng.addEventListener('click', async function(e){
+    var b=e.currentTarget;
+    if(!suLastNative){ var o0=b.textContent; b.textContent='Translate to Surdalad first'; setTimeout(function(){ b.textContent=o0; },1400); return; }
+    var o=b.textContent; b.textContent='Saving\u2026';
+    try{ await exportSurdaladPNG(suLastNative,'surdalad-script'); }catch(err){}
+    b.textContent=o;
+  });
 
   var sSearch=document.getElementById('su-search');
   var sCount=document.getElementById('su-count');
