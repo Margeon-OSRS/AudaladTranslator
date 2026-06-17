@@ -596,6 +596,18 @@ a{color:var(--gold-soft);}
 #surdalad .l-sec::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent);}
 #surdalad .l-note{background:var(--bg2);border:1px dashed var(--line);border-radius:5px;padding:12px 15px;color:var(--ink-dim);font-size:14px;margin-top:14px;}
 #surdalad .l-note b{color:var(--iris-soft);font-weight:400;}
+#surdalad .l-law{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-left:3px solid var(--iris-dim);border-radius:5px;padding:14px 17px;margin:0 0 13px;}
+#surdalad .l-law h4{font-family:'Cinzel',serif;font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--iris-soft);margin:0 0 6px;display:flex;align-items:baseline;gap:10px;}
+#surdalad .l-law h4 .rn{font-family:'EB Garamond',serif;font-size:12px;letter-spacing:0;color:var(--iris-dim);border:1px solid var(--iris-dim);border-radius:4px;padding:0 7px;}
+#surdalad .l-law p{margin:0 0 10px;color:var(--ink-dim);font-size:14.5px;line-height:1.55;}
+#surdalad .l-law p:last-child{margin-bottom:0;}
+#surdalad .arr{color:var(--iris-dim);}
+#surdalad .l-drop{float:left;font-family:'Cinzel',serif;font-size:42px;line-height:.82;color:var(--iris);margin:6px 11px 0 0;}
+#surdalad .l-glyph{text-align:center;font-family:'SurdaladScript';color:var(--iris-dim);font-size:26px;letter-spacing:3px;margin:22px 0;opacity:.7;}
+#surdalad .ex b{color:var(--iris-soft);font-weight:400;}
+#surdalad .src-list{display:flex;flex-direction:column;gap:8px;margin:6px 0 16px;}
+#surdalad .src-row{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:5px;padding:10px 14px;font-size:14.5px;color:var(--ink-dim);line-height:1.5;}
+#surdalad .src-row b{color:var(--iris-soft);font-weight:400;font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;display:block;margin-bottom:3px;}
 #surdalad .s-out{min-height:60px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:12px 14px;font-size:18px;color:var(--ink);}
 #surdalad .s-out .native{font-size:30px;line-height:1.5;display:block;margin-top:10px;overflow-wrap:anywhere;word-break:break-word;}
 #surdalad .field .lbl{color:var(--iris-soft);}
@@ -1933,15 +1945,76 @@ a{color:var(--gold-soft);}
         <p class="l-lede">Surdalad is not Audalad worn smooth or made over. It is a separate tongue that grew up among many peoples, taking a little from each, until it could stand on its own.</p>
 
         <div class="l-sec">A tongue woven from many</div>
-        <p>Where the harbour dialect and the reformed register are Audalad in other clothes, Surdalad is a meeting-place of languages. It draws on five in all: Castellan and Audalad most of all, with Rethian, Atalian and Corrian lending their own colour, the last of these folded in almost whole. The result is its own speech, close enough to its neighbours to be followed, distinct enough to be counted a language and not a mere patois.</p>
+        <p><span class="l-drop">S</span>urdalad began the way trade tongues often do, as a common speech cobbled together where many peoples met and bargained. But it did not stay a rough jargon. Too many languages left their mark, and too much of each settled in to stay, so what grew up was a creole: a true tongue with words and a grammar of its own, close enough to its neighbours to be followed, distinct enough to be counted a language in its own right and not a mere patois.</p>
+        <p>That is the line its keepers draw. It leans on Audalad more than on any other tongue, yet it is no dialect of the court. Where the harbour speech and House Dimaina&rsquo;s reform are Audalad in other clothes, Surdalad is its own people&rsquo;s tongue, answerable to no Accord but their own.</p>
 
-        <div class="l-sec">How its words are made</div>
-        <p>A word coming into Surdalad keeps as much of its old shape as it can. Most often a hard sound is shed from the front, and a familiar ending is added to the back: tails such as -thon, -on, -og, -go, -eth, -wen, -den, -ene, -ere and -phen recur again and again, so that words of very different origin come to rhyme and sit together as kin. Through all of it the final sound of the original is guarded, so a borrowed word still answers to its source.</p>
+        <div class="l-sec">The five tongues behind it</div>
+        <p>Five languages fed into Surdalad, each leaving a different measure behind.</p>
+        <div class="src-list">
+          <div class="src-row"><b>Audalad</b>A leading hand, and the nearest kin: roughly a dozen words came straight from the court tongue, and its shadow lies over much of the rest.</div>
+          <div class="src-row"><b>Castellan</b>The largest single donor of plain, everyday vocabulary, lending around a dozen words of its own.</div>
+          <div class="src-row"><b>Corrian</b>Taken in almost whole. So little of it survived anywhere else that Surdalad simply swallowed what remained, close to twenty-five words in all.</div>
+          <div class="src-row"><b>Rethian</b>A small tongue with little to spare, so only a handful of words crossed over.</div>
+          <div class="src-row"><b>Atalian</b>Lent few words outright, but shaped the sound of Surdalad and the way its words are built far more than its vocabulary ever did.</div>
+        </div>
+
+        <div class="l-sec">How a word is taken in</div>
+        <p>There is a rough and ready way a foreign word becomes a Surdalad one. It is less a strict law than a habit, and it bends where it must.</p>
+        <div class="l-law">
+          <h4><span class="rn">1</span> Keep it close</h4>
+          <p>The word stays as near to its source as it can. Surdalad borrows openly; it does not disguise what it takes.</p>
+        </div>
+        <div class="l-law">
+          <h4><span class="rn">2</span> Shed the front</h4>
+          <p>A hard sound at the very start is often dropped (though not always), leaving the word a little softer on the tongue.</p>
+        </div>
+        <div class="l-law">
+          <h4><span class="rn">3</span> Add a familiar tail</h4>
+          <p>A common ending is fixed to the back, so that words of very different birth come to rhyme and sit together as kin. The endings that keep returning:</p>
+          <div class="ex"><b>-thon</b><b>-on</b><b>-og</b><b>-go</b><b>-eth</b><b>-wen</b><b>-den</b><b>-ene</b><b>-ere</b><b>-phen</b></div>
+        </div>
+        <div class="l-law">
+          <h4><span class="rn">4</span> Guard the ending</h4>
+          <p>Through all of it the final sound of the original word is kept, so a borrowed word still answers to the tongue it came from.</p>
+        </div>
+
+        <div class="l-glyph">Surdalad</div>
+
+        <div class="l-sec">How it is put together</div>
+        <p>The grammar is still being set down by Surdalad&rsquo;s keepers, but its shape is already clear in the main. Where a rule is not yet fixed, it is marked as such below.</p>
+        <div class="l-law">
+          <h4>One gender</h4>
+          <p>There is no he, she or it in the grammar. Every noun is treated the same way, plain and ungendered.</p>
+        </div>
+        <div class="l-law">
+          <h4>More than one</h4>
+          <p>A word beginning with a consonant takes <b>-ae</b> to mean more than one of a thing. An older plural in <b>-yi</b> may still linger in places; the keepers have not yet settled whether it lives on or has fallen away.</p>
+        </div>
+        <div class="l-law">
+          <h4>Belonging</h4>
+          <p>Ownership is marked on the word itself, and where the mark sits depends on the owner. A living owner is shown by a small piece fixed to the front of the word; a lifeless owner by one fixed to the back. So a thing held by a person is marked differently from a thing that belongs to another thing.</p>
+        </div>
+        <div class="l-law">
+          <h4>Bigger and smaller</h4>
+          <p>A word can be swelled to name something grand or large, or shrunk to name something small or dear. A few stubborn words change in their own way instead of taking the usual mark.</p>
+        </div>
+        <div class="l-law">
+          <h4>Verbs</h4>
+          <p>A verb carries its doer and an ending together. Time is shown at the front of the verb: one piece for the past, another for what is yet to come. A plain &ldquo;no&rdquo; is set at the front in the same way, turning a verb to its opposite.</p>
+        </div>
+        <div class="l-law">
+          <h4>Word order</h4>
+          <p>The verb tends to lead, with the doer and then the thing done following after it. This is the working rule, and one of the parts still being pinned down.</p>
+        </div>
+        <div class="l-law">
+          <h4>The apostrophe</h4>
+          <p>The mark is used sparingly, and only for good reason: where two vowels would otherwise clash, where a word is clipped short, to show belonging, or to mark a &ldquo;no.&rdquo;</p>
+        </div>
 
         <div class="l-sec">Its own hand</div>
         <p>Surdalad is written in the Vel Suradas Kestelal hand, a script of its own quite apart from the court&rsquo;s. Every reading on the Translate tab and every entry in the Lexicon is shown in that hand beside its plain spelling. A few rarer marked vowels fall outside the carved letters and will show in the plain face instead.</p>
 
-        <div class="l-note"><b>How this works.</b> Surdalad keeps a lexicon of its own, loaded separately from the court&rsquo;s. It does not change when an Audalad word changes; it grows on its own terms as new words are agreed.</div>
+        <div class="l-note"><b>How this works.</b> Surdalad keeps a lexicon of its own, loaded separately from the court&rsquo;s, and grows on its own terms as new words are agreed. The grammar above is the tongue as its keepers describe it; the Translate tab still reads word by word from that lexicon, looking each word up rather than bending it for plural, owner or tense. As the rules harden, the forms can be added here.</div>
       </div>
     </div>
   </section>
