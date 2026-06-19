@@ -35,6 +35,8 @@
   --line:#3a3145;
   --verd:#6f9a86;
   --err:#b56b6b;
+  --scr-size:1;
+  --scr-lead:1.5;
 }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
@@ -185,7 +187,7 @@ textarea::placeholder{color:#5a5266;font-style:italic;}
 .out{min-height:74px;min-width:0;overflow-wrap:anywhere;}
 .out .roman{font-size:22px;color:var(--ink);overflow-wrap:anywhere;word-break:break-word;}
 .out .native{
-  font-family:'AudaladScript';font-size:38px;color:var(--gold);line-height:1.5;
+  font-family:'AudaladScript';font-size:calc(38px * var(--scr-size,1));color:var(--gold);line-height:var(--scr-lead,1.5);
   margin-top:4px;overflow-wrap:anywhere;word-break:break-word;text-shadow:0 0 18px rgba(212,175,82,0.18);
   display:none;max-width:100%;padding-right:2px;
 }
@@ -618,7 +620,7 @@ a{color:var(--gold-soft);}
 #surdalad .field .lbl{color:var(--iris-soft);}
 #surdalad .out .roman{color:var(--ink);}
 #surdalad .out .miss{color:#c97a7a;}
-#surdalad .out .su-native{font-family:'SurdaladScript';color:var(--iris);font-size:34px;line-height:1.5;margin-top:6px;display:block;overflow-wrap:anywhere;word-break:break-word;max-width:100%;text-shadow:0 0 18px rgba(154,134,212,0.18);}
+#surdalad .out .su-native{font-family:'SurdaladScript';color:var(--iris);font-size:calc(34px * var(--scr-size,1));line-height:var(--scr-lead,1.5);margin-top:6px;display:block;overflow-wrap:anywhere;word-break:break-word;max-width:100%;text-shadow:0 0 18px rgba(154,134,212,0.18);}
 #surdalad .out .c-ipa{color:var(--ink-dim);font-family:'EB Garamond',serif;font-size:15px;margin-top:6px;letter-spacing:.3px;}
 #surdalad .gloss .tok .t-su{color:var(--iris-soft);font-size:15px;}
 #surdalad .gloss .tok .t-su-native{font-family:'SurdaladScript';color:var(--iris);font-size:20px;line-height:1.35;margin-top:2px;}
@@ -807,6 +809,24 @@ a{color:var(--gold-soft);}
 #surdalad .su-frow .fx{background:transparent;border:1px solid var(--line);color:var(--ink-dim);border-radius:3px;width:26px;height:26px;line-height:1;cursor:pointer;flex:none;font-size:16px;}
 #surdalad .su-frow .fx:hover{border-color:var(--err);color:var(--err);}
 #surdalad .su-fmsg{color:var(--iris-soft);font-style:italic;font-size:13px;min-height:18px;margin-top:8px;text-align:center;}
+
+/* ---- script display control (size + line spacing) ---- */
+.scrctl-host{margin-top:10px;}
+.scrctl{
+  display:flex;align-items:center;flex-wrap:wrap;gap:14px;
+  padding:8px 12px;border:1px solid var(--line);border-radius:4px;
+  background:var(--panel2);font-size:12px;color:var(--ink-dim);
+}
+.scrctl-lbl{letter-spacing:.12em;text-transform:uppercase;font-size:11px;color:var(--gold-soft);}
+.scrctl-item{display:flex;align-items:center;gap:7px;}
+.scrctl-k{color:var(--ink-dim);white-space:nowrap;}
+.scrctl input[type="range"]{width:108px;accent-color:var(--gold);cursor:pointer;}
+.scrctl-v{min-width:36px;text-align:right;color:var(--ink);font-variant-numeric:tabular-nums;}
+.scrReset{
+  background:transparent;border:1px solid var(--line);color:var(--ink-dim);
+  border-radius:3px;padding:3px 9px;font-size:11px;cursor:pointer;font-family:inherit;
+}
+.scrReset:hover{color:var(--ink);border-color:var(--gold-dim);}
 </style>
 </head>
 <body>
@@ -5743,6 +5763,77 @@ updateWantsBadge();
   smSpin(); setInterval(smSpin, 2600);
 
   applySMode();
+})();
+
+/* ---------- SCRIPT DISPLAY CONTROL (size + line spacing) ---------- */
+(function(){
+  const LS_SCRIPT = 'audalad_script_v1';
+  const DEF = { size: 1, lead: 1.5 };
+  const MIN_S = 0.6, MAX_S = 1.8, MIN_L = 1.0, MAX_L = 2.4;
+  let st = Object.assign({}, DEF);
+  try{
+    const r = localStorage.getItem(LS_SCRIPT);
+    if(r){ const o = JSON.parse(r);
+      if(typeof o.size === 'number') st.size = o.size;
+      if(typeof o.lead === 'number') st.lead = o.lead; }
+  }catch(e){}
+
+  function clamp(v,a,b){ return Math.min(b, Math.max(a, v)); }
+  function save(){ try{ localStorage.setItem(LS_SCRIPT, JSON.stringify(st)); }catch(e){} }
+
+  function apply(){
+    const root = document.documentElement;
+    root.style.setProperty('--scr-size', st.size);
+    root.style.setProperty('--scr-lead', st.lead);
+    document.querySelectorAll('.scrSize').forEach(el=>{ el.value = st.size; });
+    document.querySelectorAll('.scrLead').forEach(el=>{ el.value = st.lead; });
+    document.querySelectorAll('.scrSizeVal').forEach(el=>{ el.textContent = Math.round(st.size*100)+'%'; });
+    document.querySelectorAll('.scrLeadVal').forEach(el=>{ el.textContent = st.lead.toFixed(1); });
+  }
+  function setSize(v){ st.size = clamp(parseFloat(v)||DEF.size, MIN_S, MAX_S); save(); apply(); }
+  function setLead(v){ st.lead = clamp(parseFloat(v)||DEF.lead, MIN_L, MAX_L); save(); apply(); }
+  function reset(){ st = Object.assign({}, DEF); save(); apply(); }
+
+  function build(container){
+    if(!container || container.querySelector('.scrctl')) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'scrctl';
+    wrap.innerHTML =
+      '<span class="scrctl-lbl">Script</span>' +
+      '<label class="scrctl-item"><span class="scrctl-k">Size</span>' +
+        '<input type="range" class="scrSize" min="'+MIN_S+'" max="'+MAX_S+'" step="0.05">' +
+        '<span class="scrctl-v scrSizeVal"></span></label>' +
+      '<label class="scrctl-item"><span class="scrctl-k">Line spacing</span>' +
+        '<input type="range" class="scrLead" min="'+MIN_L+'" max="'+MAX_L+'" step="0.1">' +
+        '<span class="scrctl-v scrLeadVal"></span></label>' +
+      '<button type="button" class="scrReset" title="Reset to default">Reset</button>';
+    container.appendChild(wrap);
+    wrap.querySelector('.scrSize').addEventListener('input', e=>setSize(e.target.value));
+    wrap.querySelector('.scrLead').addEventListener('input', e=>setLead(e.target.value));
+    wrap.querySelector('.scrReset').addEventListener('click', reset);
+  }
+
+  // Main translator: its own row beneath the existing toolbar.
+  const mainTb = document.querySelector('#translate .toolbar');
+  if(mainTb && mainTb.parentNode){
+    const host = document.createElement('div');
+    host.className = 'scrctl-host';
+    mainTb.parentNode.insertBefore(host, mainTb.nextSibling);
+    build(host);
+  }
+
+  // Kindred Tongues: one row under the dialect picker (applies to every dialect translator).
+  const diaView = document.getElementById('dialects');
+  if(diaView){
+    const pick = diaView.querySelector('.dia-pick');
+    const host = document.createElement('div');
+    host.className = 'scrctl-host';
+    if(pick && pick.parentNode){ pick.parentNode.insertBefore(host, pick.nextSibling); }
+    else { diaView.insertBefore(host, diaView.firstChild); }
+    build(host);
+  }
+
+  apply();
 })();
 
 </script>
