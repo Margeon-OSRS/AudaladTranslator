@@ -2034,6 +2034,7 @@ a{color:var(--gold-soft);}
               <option value="adj">adjective</option>
               <option value="adv">adverb</option>
               <option value="prep">preposition</option>
+              <option value="postp">postposition</option>
               <option value="conj">conjunction</option>
               <option value="pron">pronoun</option>
               <option value="det">determiner</option>
@@ -2820,7 +2821,7 @@ function applyDir(){
 document.getElementById('swapBtn').addEventListener('click', ()=>{ dir=FLIP[dir]; applyDir(); });
 
 /* ---------- dictionary ---------- */
-const POS_LABEL={n:'Noun',v:'Verb',adj:'Adjective',adv:'Adverb',prep:'Preposition',conj:'Conjunction',det:'Determiner',num:'Number',ord:'Ordinal',pron:'Pronoun',intj:'Greeting',q:'Question',title:'Title',name:'Name'};
+const POS_LABEL={n:'Noun',v:'Verb',adj:'Adjective',adv:'Adverb',prep:'Preposition',postp:'Postposition',conj:'Conjunction',det:'Determiner',num:'Number',ord:'Ordinal',pron:'Pronoun',intj:'Greeting',q:'Question',title:'Title',name:'Name'};
 let activePos='all';
 const dictlist=document.getElementById('dictlist');
 const searchEl=document.getElementById('search');
@@ -2828,7 +2829,7 @@ const countEl=document.getElementById('count');
 
 function buildPosFilter(){
   const pf=document.getElementById('posfilter');
-  const order=['all','n','v','adj','adv','prep','conj','det','pron','num','ord','q','intj','title'];
+  const order=['all','n','v','adj','adv','prep','postp','conj','det','pron','num','ord','q','intj','title'];
   order.forEach(p=>{
     const b=document.createElement('button');
     b.className='chip'+(p==='all'?' active':'');
@@ -4751,8 +4752,8 @@ updateWantsBadge();
 
 /* ================= LOW-AUDALAD TAB (derives entirely from the shared lexicon) ================= */
 (function(){
-  const POSORDER=['n','v','adj','adv','prep','conj','det','pron','intj','q','num','ord','title'];
-  const POSLABEL={n:'Nouns',v:'Verbs',adj:'Adjectives',adv:'Adverbs',prep:'Prepositions',conj:'Conjunctions',det:'Determiners',pron:'Pronouns',intj:'Greetings & cries',q:'Questions',num:'Numbers',ord:'Ordinals',title:'Titles & ranks'};
+  const POSORDER=['n','v','adj','adv','prep','postp','conj','det','pron','intj','q','num','ord','title'];
+  const POSLABEL={n:'Nouns',v:'Verbs',adj:'Adjectives',adv:'Adverbs',prep:'Prepositions',postp:'Postpositions',conj:'Conjunctions',det:'Determiners',pron:'Pronouns',intj:'Greetings & cries',q:'Questions',num:'Numbers',ord:'Ordinals',title:'Titles & ranks'};
 
   function translateEnToLow(text){
     const raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
@@ -4844,7 +4845,7 @@ updateWantsBadge();
   function lowEntries(){ return lex().map(d=>({dia:harborForm(d.au),std:d.au,en:d.en,pos:d.pos})).sort((a,b)=>a.dia.toLowerCase().localeCompare(b.dia.toLowerCase())); }
   const lSearch=document.getElementById('l-search'), lLexList=document.getElementById('l-lexlist'), lCount=document.getElementById('l-count');
   function rowHtml(e){ const changed=e.dia!==e.std; return '<div class="l-row"><div class="l-dia">'+escapeHtml(e.dia)+'<span class="au">'+escapeHtml(toNative(e.dia))+'</span></div><div class="l-mean">'+escapeHtml(e.en)+'</div><div class="l-from">'+(changed?('from <b>'+escapeHtml(e.std)+'</b>'):'unchanged')+'</div></div>'; }
-  const LPOS_ORDER=['all','n','v','adj','adv','prep','conj','det','pron','num','ord','q','intj','title'];
+  const LPOS_ORDER=['all','n','v','adj','adv','prep','postp','conj','det','pron','num','ord','q','intj','title'];
   let activeLowPos='all', lPosBuilt=false;
   function buildLowPosFilter(){
     const pf=document.getElementById('l-posfilter'); pf.innerHTML='';
@@ -5480,7 +5481,7 @@ updateWantsBadge();
   function dimEntries(){ return lex().map(function(d){ return {dim:dimFromHigh(d.au), std:d.au, en:d.en, pos:d.pos}; }).sort(function(a,b){ return a.dim.toLowerCase().localeCompare(b.dim.toLowerCase()); }); }
   var dSearch=document.getElementById('d-search'), dLexList=document.getElementById('d-lexlist'), dCount=document.getElementById('d-count');
   function dRowHtml(e){ var changed=e.dim!==e.std; return '<div class="l-row"><div class="l-dia">'+escapeHtml(e.dim)+'<span class="au">'+escapeHtml(toNative(e.dim))+'</span></div><div class="l-mean">'+escapeHtml(e.en)+'</div><div class="l-from">'+(changed?('from <b>'+escapeHtml(e.std)+'</b>'):'unchanged')+'</div></div>'; }
-  var DPOS_ORDER=['all','n','v','adj','adv','prep','conj','det','pron','num','ord','q','intj','title'];
+  var DPOS_ORDER=['all','n','v','adj','adv','prep','postp','conj','det','pron','num','ord','q','intj','title'];
   var activeDimPos='all', dPosBuilt=false;
   function buildDimPosFilter(){
     var pf=document.getElementById('d-posfilter'); pf.innerHTML='';
@@ -5722,7 +5723,7 @@ updateWantsBadge();
   function oldEntries(){ return lex().map(function(d){ return {old:oldFromModern(d.au), std:d.au, en:d.en, pos:d.pos}; }).sort(function(a,b){ return a.old.toLowerCase().localeCompare(b.old.toLowerCase()); }); }
   var sSearch=document.getElementById('s-search'), sLexList=document.getElementById('s-lexlist'), sCount=document.getElementById('s-count');
   function sRowHtml(e){ var changed=e.old!==e.std; return '<div class="l-row"><div class="l-dia">'+escapeHtml(e.old)+'<span class="au">'+escapeHtml(oldNative(e.old))+'</span></div><div class="l-mean">'+escapeHtml(e.en)+'</div><div class="l-from">'+(changed?('from <b>'+escapeHtml(e.std)+'</b>'):'unchanged')+'</div></div>'; }
-  var SPOS_ORDER=['all','n','v','adj','adv','prep','conj','det','pron','num','ord','q','intj','title'];
+  var SPOS_ORDER=['all','n','v','adj','adv','prep','postp','conj','det','pron','num','ord','q','intj','title'];
   var activeOldPos='all', sPosBuilt=false;
   function buildOldPosFilter(){
     var pf=document.getElementById('s-posfilter'); pf.innerHTML='';
