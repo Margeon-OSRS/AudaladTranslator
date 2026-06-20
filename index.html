@@ -810,23 +810,64 @@ a{color:var(--gold-soft);}
 #surdalad .su-frow .fx:hover{border-color:var(--err);color:var(--err);}
 #surdalad .su-fmsg{color:var(--iris-soft);font-style:italic;font-size:13px;min-height:18px;margin-top:8px;text-align:center;}
 
-/* ---- script display control (size + line spacing) ---- */
-.scrctl-host{margin-top:10px;}
-.scrctl{
-  display:flex;align-items:center;flex-wrap:wrap;gap:14px;
-  padding:8px 12px;border:1px solid var(--line);border-radius:4px;
-  background:var(--panel2);font-size:12px;color:var(--ink-dim);
-}
-.scrctl-lbl{letter-spacing:.12em;text-transform:uppercase;font-size:11px;color:var(--gold-soft);}
-.scrctl-item{display:flex;align-items:center;gap:7px;}
-.scrctl-k{color:var(--ink-dim);white-space:nowrap;}
-.scrctl input[type="range"]{width:108px;accent-color:var(--gold);cursor:pointer;}
-.scrctl-v{min-width:36px;text-align:right;color:var(--ink);font-variant-numeric:tabular-nums;}
-.scrReset{
+/* ---- script display control: discreet toolbar toggle + popover ---- */
+.scrdisp{position:relative;display:inline-flex;}
+.scrdisp-btn{
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:500;
   background:transparent;border:1px solid var(--line);color:var(--ink-dim);
-  border-radius:3px;padding:3px 9px;font-size:11px;cursor:pointer;font-family:inherit;
+  border-radius:3px;padding:6px 11px;cursor:pointer;transition:.18s;
+  display:inline-flex;align-items:center;gap:7px;line-height:1;
 }
-.scrReset:hover{color:var(--ink);border-color:var(--gold-dim);}
+.scrdisp-btn:hover,.scrdisp.open .scrdisp-btn{border-color:var(--gold);color:var(--gold);}
+.scrdisp-btn .sd-aa{font-family:'EB Garamond',serif;font-size:14px;letter-spacing:0;text-transform:none;line-height:1;}
+.scrdisp-btn .sd-car{font-size:8px;opacity:.7;transition:transform .2s;}
+.scrdisp.open .scrdisp-btn .sd-car{transform:rotate(180deg);}
+
+.scrdisp-pop{
+  position:absolute;top:calc(100% + 9px);left:50%;
+  width:250px;max-width:84vw;z-index:60;
+  background:var(--panel2);border:1px solid var(--gold-dim);border-radius:6px;
+  padding:14px 16px 11px;box-shadow:0 16px 40px rgba(0,0,0,.5);text-align:left;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transform:translateX(-50%) translateY(-4px);
+  transition:opacity .16s ease,transform .16s ease,visibility .16s;
+}
+.scrdisp.open .scrdisp-pop{
+  opacity:1;visibility:visible;pointer-events:auto;
+  transform:translateX(-50%) translateY(0);
+}
+.scrdisp-pop::before{
+  content:"";position:absolute;bottom:100%;left:50%;transform:translateX(-50%);
+  border:6px solid transparent;border-bottom-color:var(--gold-dim);
+}
+.scrdisp-pop::after{
+  content:"";position:absolute;bottom:100%;left:50%;transform:translateX(-50%) translateY(1px);
+  border:6px solid transparent;border-bottom-color:var(--panel2);
+}
+.scrdisp-head{
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold-soft);margin-bottom:12px;display:block;
+}
+.scrdisp-row{display:flex;flex-direction:column;gap:6px;margin-bottom:13px;}
+.scrdisp-row .sd-top{display:flex;justify-content:space-between;align-items:baseline;
+  font-size:11px;color:var(--ink-dim);letter-spacing:.03em;}
+.scrdisp-row .sd-val{color:var(--ink);font-variant-numeric:tabular-nums;font-size:11px;}
+.scrdisp-pop input[type="range"]{width:100%;accent-color:var(--gold);cursor:pointer;margin:0;}
+.scrdisp-foot{display:flex;justify-content:flex-end;border-top:1px solid var(--line);padding-top:9px;margin-top:2px;}
+.scrReset{
+  background:transparent;border:none;color:var(--ink-dim);
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;
+  cursor:pointer;padding:2px;transition:.15s;
+}
+.scrReset:hover{color:var(--gold);}
+
+/* Surdalad: tint the control to its own iris register */
+#surdalad .scrdisp-btn:hover,#surdalad .scrdisp.open .scrdisp-btn{border-color:var(--iris-dim);color:var(--iris-soft);}
+#surdalad .scrdisp-pop{border-color:var(--iris-dim);}
+#surdalad .scrdisp-pop::before{border-bottom-color:var(--iris-dim);}
+#surdalad .scrdisp-head{color:var(--iris-soft);}
+#surdalad .scrdisp-pop input[type="range"]{accent-color:var(--iris);}
+#surdalad .scrReset:hover{color:var(--iris-soft);}
 </style>
 </head>
 <body>
@@ -5795,44 +5836,69 @@ updateWantsBadge();
   function setLead(v){ st.lead = clamp(parseFloat(v)||DEF.lead, MIN_L, MAX_L); save(); apply(); }
   function reset(){ st = Object.assign({}, DEF); save(); apply(); }
 
-  function build(container){
-    if(!container || container.querySelector('.scrctl')) return;
+  function closeAll(except){
+    document.querySelectorAll('.scrdisp.open').forEach(function(d){
+      if(d===except) return;
+      d.classList.remove('open');
+      var b = d.querySelector('.scrdisp-btn');
+      if(b) b.setAttribute('aria-expanded','false');
+    });
+  }
+
+  // Build a discreet "Aa Display" toggle + popover inside a translator toolbar.
+  function build(toolbar){
+    if(!toolbar || toolbar.querySelector('.scrdisp')) return;
     const wrap = document.createElement('div');
-    wrap.className = 'scrctl';
+    wrap.className = 'scrdisp';
     wrap.innerHTML =
-      '<span class="scrctl-lbl">Script</span>' +
-      '<label class="scrctl-item"><span class="scrctl-k">Size</span>' +
-        '<input type="range" class="scrSize" min="'+MIN_S+'" max="'+MAX_S+'" step="0.05">' +
-        '<span class="scrctl-v scrSizeVal"></span></label>' +
-      '<label class="scrctl-item"><span class="scrctl-k">Line spacing</span>' +
-        '<input type="range" class="scrLead" min="'+MIN_L+'" max="'+MAX_L+'" step="0.1">' +
-        '<span class="scrctl-v scrLeadVal"></span></label>' +
-      '<button type="button" class="scrReset" title="Reset to default">Reset</button>';
-    container.appendChild(wrap);
+      '<button type="button" class="scrdisp-btn" aria-expanded="false" aria-haspopup="true" ' +
+        'title="Adjust how the native script is displayed">' +
+        '<span class="sd-aa">Aa</span><span>Display</span><span class="sd-car">&#9662;</span></button>' +
+      '<div class="scrdisp-pop" role="dialog" aria-label="Script display settings">' +
+        '<span class="scrdisp-head">Script display</span>' +
+        '<div class="scrdisp-row">' +
+          '<div class="sd-top"><span>Size</span><span class="sd-val scrSizeVal"></span></div>' +
+          '<input type="range" class="scrSize" min="'+MIN_S+'" max="'+MAX_S+'" step="0.05">' +
+        '</div>' +
+        '<div class="scrdisp-row">' +
+          '<div class="sd-top"><span>Line spacing</span><span class="sd-val scrLeadVal"></span></div>' +
+          '<input type="range" class="scrLead" min="'+MIN_L+'" max="'+MAX_L+'" step="0.1">' +
+        '</div>' +
+        '<div class="scrdisp-foot"><button type="button" class="scrReset">Reset</button></div>' +
+      '</div>';
+    toolbar.appendChild(wrap);
+
+    const btn = wrap.querySelector('.scrdisp-btn');
+    const pop = wrap.querySelector('.scrdisp-pop');
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      const willOpen = !wrap.classList.contains('open');
+      closeAll(willOpen ? wrap : null);
+      wrap.classList.toggle('open', willOpen);
+      btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    });
+    pop.addEventListener('click', function(e){ e.stopPropagation(); });
     wrap.querySelector('.scrSize').addEventListener('input', e=>setSize(e.target.value));
     wrap.querySelector('.scrLead').addEventListener('input', e=>setLead(e.target.value));
     wrap.querySelector('.scrReset').addEventListener('click', reset);
   }
 
-  // Main translator: its own row beneath the existing toolbar.
-  const mainTb = document.querySelector('#translate .toolbar');
-  if(mainTb && mainTb.parentNode){
-    const host = document.createElement('div');
-    host.className = 'scrctl-host';
-    mainTb.parentNode.insertBefore(host, mainTb.nextSibling);
-    build(host);
-  }
+  // Close any open popover on outside click or Escape (wired once).
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.scrdisp')) closeAll();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeAll();
+  });
 
-  // Kindred Tongues: one row under the dialect picker (applies to every dialect translator).
-  const diaView = document.getElementById('dialects');
-  if(diaView){
-    const pick = diaView.querySelector('.dia-pick');
-    const host = document.createElement('div');
-    host.className = 'scrctl-host';
-    if(pick && pick.parentNode){ pick.parentNode.insertBefore(host, pick.nextSibling); }
-    else { diaView.insertBefore(host, diaView.firstChild); }
-    build(host);
-  }
+  // Mount one toggle into every translator's toolbar (those that render native
+  // script): main Audalad, Keshir, Dimainad, Shavur-Audalad, Surdalad. Each is
+  // located by its "Script PNG" button, and all instances stay in sync via apply().
+  ['pngOut','l-png','d-png','s-png','su-png'].forEach(function(id){
+    const b = document.getElementById(id);
+    const tb = b && b.closest('.toolbar');
+    if(tb) build(tb);
+  });
 
   apply();
 })();
