@@ -4848,29 +4848,78 @@ function mountKindredLexicon(cfg){
   return { buildLex:buildLex, buildFilter:buildFilter };
 }
 
+/* ===== shared kindred-register translator: forward EN->register + the translate UI (render, direction, wiring) ===== */
+function translateEnToReg(text, tf){
+  var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
+  var words=raw.match(/[A-Za-z']+|[.,!?;:]/g)||[]; var out=[]; var i=0, prevNum=false;
+  while(i<words.length){
+    var w=words[i];
+    if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); i++; continue; }
+    var matched=null, span=1;
+    for(var n=Math.min(3,words.length-i);n>=1;n--){
+      var phrase=words.slice(i,i+n).filter(function(x){return !/^[.,!?;:]$/.test(x);}).join(' ').toLowerCase();
+      if(enToAu[phrase]){ matched=enToAu[phrase][0]; span=n; break; }
+    }
+    var srcText=words.slice(i,i+span).join(' ');
+    if(matched){ out.push({src:srcText, au:tf(matched.au), en:matched.full, note:matched.full}); prevNum=(matched.pos==='num'||matched.pos==='ord'); }
+    else { var rr=resolveEng(w,{afterNumber:prevNum}); if(rr){ out.push({src:srcText, au:tf(rr.au), en:rr.en, note:rr.en}); } else out.push({src:srcText, au:null}); prevNum=false; }
+    i+=span;
+  }
+  return {tokens:out};
+}
+function tJoinParts(parts){ var s=''; parts.forEach(function(p){ if(/^[.,!?;:]$/.test(p)) s=s.replace(/\s$/,'')+p+' '; else s+=p+' '; }); return s.trim(); }
+function mountKindredTranslator(cfg){
+  var p=cfg.prefix, mode=cfg.initMode, lastText='', lastNative='';
+  var inEl=document.getElementById(p+'-input'), outEl=document.getElementById(p+'-output'), glossEl=document.getElementById(p+'-gloss');
+  var nativeFn=cfg.nativeFn||toNative, ipaFn=cfg.ipaFn||ipaText, exportFn=cfg.exportFn||function(x){return x;};
+  function render(){
+    var text=inEl.value; var auOut=(mode!==cfg.enOutMode);
+    var res=cfg.translators[mode](text);
+    glossEl.innerHTML='';
+    if(!res.tokens.length){ lastText='';lastNative=''; outEl.innerHTML='<div class="placeholder">Translation appears here\u2026</div>'; return; }
+    var parts=res.tokens.map(function(t){ return t.punct? t.punct : ((auOut?t.au:t.en)!=null?(auOut?t.au:t.en):'['+t.src+'?]'); });
+    var str=tJoinParts(parts);
+    var html='<div class="roman">'+escapeHtml(str)+'</div>';
+    if(auOut){
+      var np=[]; res.tokens.forEach(function(t){ if(t.punct){np.push(t.punct);return;} if(t.au!=null) np.push(t.au); });
+      var ns=tJoinParts(np); lastText=str; lastNative=exportFn(ns);
+      var ipa=ipaFn(ns);
+      html+='<div class="native">'+escapeHtml(nativeFn(ns))+'</div>'+(ipa?'<div class="c-ipa">'+escapeHtml(ipa)+'</div>':'');
+    } else { lastText=str; lastNative=''; }
+    outEl.innerHTML=html;
+    res.tokens.forEach(function(t){
+      if(t.punct) return;
+      var d=document.createElement('div'); var miss=auOut?(t.au==null):(t.en==null);
+      d.className='tok'+(miss?' miss':'');
+      if(auOut) d.innerHTML='<div class="t-au">'+escapeHtml(t.au||'??')+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
+      else d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.en||'??')+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
+      glossEl.appendChild(d);
+    });
+  }
+  function applyMode(){
+    var lab=cfg.labels[mode];
+    document.getElementById(p+'-dirText').innerHTML='<b>'+lab[0]+'</b> &rarr; '+lab[1];
+    document.getElementById(p+'-inLbl').textContent=lab[0]; document.getElementById(p+'-outLbl').textContent=lab[1];
+    outEl.classList.toggle('show-native', mode!==cfg.enOutMode);
+    inEl.placeholder=cfg.placeholders[mode];
+    document.getElementById(cfg.pairEnId).classList.toggle('on', cfg.pair[mode]===cfg.pairEnTok);
+    document.getElementById(cfg.pairAuId).classList.toggle('on', cfg.pair[mode]===cfg.pairAuTok);
+    inEl.value=''; render(); inEl.focus();
+  }
+  document.getElementById(p+'-swap').addEventListener('click', function(){ mode=cfg.flip[mode]; applyMode(); });
+  document.getElementById(cfg.pairEnId).addEventListener('click', function(){ if(cfg.pair[mode]!==cfg.pairEnTok){ mode=cfg.pairEnMode; applyMode(); } });
+  document.getElementById(cfg.pairAuId).addEventListener('click', function(){ if(cfg.pair[mode]!==cfg.pairAuTok){ mode=cfg.pairAuMode; applyMode(); } });
+  document.getElementById(p+'-copy').addEventListener('click', function(e){ copyText(lastText, e.currentTarget); });
+  inEl.addEventListener('input', render);
+  wireScriptExport(p+'-png', function(){ return lastNative; }, cfg.pngName, cfg.pngSlant);
+  return { render:render, applyMode:applyMode };
+}
+
 /* ================= LOW-AUDALAD TAB (derives entirely from the shared lexicon) ================= */
 (function(){
   const POSORDER=['n','v','adj','adv','prep','postp','conj','det','pron','num','ord','q','intj','title'];
   const POSLABEL={n:'Nouns',v:'Verbs',adj:'Adjectives',adv:'Adverbs',prep:'Prepositions',postp:'Postpositions',conj:'Conjunctions',det:'Determiners',pron:'Pronouns',intj:'Greetings & cries',q:'Questions',num:'Numbers',ord:'Ordinals',title:'Titles & ranks'};
 
-  function translateEnToLow(text){
-    const raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
-    const words=raw.match(/[A-Za-z']+|[.,!?;:]/g)||[]; const out=[]; let i=0,prevNum=false;
-    while(i<words.length){
-      const w=words[i];
-      if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); i++; continue; }
-      let matched=null,span=1;
-      for(let n=Math.min(3,words.length-i);n>=1;n--){
-        const phrase=words.slice(i,i+n).filter(x=>!/^[.,!?;:]$/.test(x)).join(' ').toLowerCase();
-        if(enToAu[phrase]){ matched=enToAu[phrase][0]; span=n; break; }
-      }
-      const srcText=words.slice(i,i+span).join(' ');
-      if(matched){ out.push({src:srcText, au:harborForm(matched.au), en:matched.full, note:matched.full}); prevNum=(matched.pos==='num'||matched.pos==='ord'); }
-      else { const r=resolveEng(w,{afterNumber:prevNum}); if(r){ out.push({src:srcText, au:harborForm(r.au), en:r.en, note:r.en}); } else out.push({src:srcText, au:null}); prevNum=false; }
-      i+=span;
-    }
-    return {tokens:out};
-  }
   function translateLowToEn(text){
     const raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
     const map=lowToHighMap(); const words=raw.match(/[^\s.,!?;:]+|[.,!?;:]/g)||[]; const out=[];
@@ -4889,61 +4938,21 @@ function mountKindredLexicon(cfg){
     return {tokens:out};
   }
 
-  let l_dir='en2low', l_lastText='', l_lastNative='';
-  const lIn=document.getElementById('l-input'), lOut=document.getElementById('l-output'), lGloss=document.getElementById('l-gloss');
-  function joinParts(parts){ let s=''; parts.forEach(p=>{ if(/^[.,!?;:]$/.test(p)) s=s.replace(/\s$/,'')+p+' '; else s+=p+' '; }); return s.trim(); }
-  function lRender(){
-    const text=lIn.value; const auOut=(l_dir!=='low2en');
-    const res = l_dir==='en2low'?translateEnToLow(text)
-              : l_dir==='low2en'?translateLowToEn(text)
-              : l_dir==='high2low'?translateHighToLow(text)
-              : translateLowToHigh(text);
-    lGloss.innerHTML='';
-    if(!res.tokens.length){ l_lastText='';l_lastNative=''; lOut.innerHTML='<div class="placeholder">Translation appears here\u2026</div>'; return; }
-    const parts=res.tokens.map(t=> t.punct? t.punct : ((auOut?t.au:t.en)!=null?(auOut?t.au:t.en):'['+t.src+'?]'));
-    const str=joinParts(parts);
-    let html='<div class="roman">'+escapeHtml(str)+'</div>';
-    if(auOut){
-      const np=[]; res.tokens.forEach(t=>{ if(t.punct){np.push(t.punct);return;} if(t.au!=null) np.push(t.au); });
-      const ns=joinParts(np); l_lastText=str; l_lastNative=ns;
-      const ipa=ipaText(ns);
-      html+='<div class="native">'+escapeHtml(toNative(ns))+'</div>'+(ipa?'<div class="c-ipa">'+escapeHtml(ipa)+'</div>':'');
-    } else { l_lastText=str; l_lastNative=''; }
-    lOut.innerHTML=html;
-    res.tokens.forEach(t=>{
-      if(t.punct) return;
-      const d=document.createElement('div'); const miss=auOut?(t.au==null):(t.en==null);
-      d.className='tok'+(miss?' miss':'');
-      if(auOut) d.innerHTML='<div class="t-au">'+escapeHtml(t.au||'??')+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
-      else d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.en||'??')+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
-      lGloss.appendChild(d);
-    });
-  }
-  lIn.addEventListener('input', lRender);
   const L_FLIP={en2low:'low2en',low2en:'en2low',high2low:'low2high',low2high:'high2low'};
   const L_PAIR={en2low:'el',low2en:'el',high2low:'hl',low2high:'hl'};
   const L_LBL={en2low:['English','Low-Audalad'],low2en:['Low-Audalad','English'],high2low:['Audalad','Low-Audalad'],low2high:['Low-Audalad','Audalad']};
   const L_PH={en2low:'Type here, e.g. the emperor will cross the sea',low2en:'Type Low-Audalad, e.g. sei Orishar Rodezum',high2low:'Type Audalad, e.g. Autai Aurdi Utura',low2high:'Type Low-Audalad, e.g. Ode Ord Udur'};
-  function applyLDir(){
-    const lab=L_LBL[l_dir];
-    document.getElementById('l-dirText').innerHTML='<b>'+lab[0]+'</b> &rarr; '+lab[1];
-    document.getElementById('l-inLbl').textContent=lab[0]; document.getElementById('l-outLbl').textContent=lab[1];
-    lOut.classList.toggle('show-native', l_dir!=='low2en');
-    lIn.placeholder=L_PH[l_dir];
-    document.getElementById('lpairEL').classList.toggle('on', L_PAIR[l_dir]==='el');
-    document.getElementById('lpairHL').classList.toggle('on', L_PAIR[l_dir]==='hl');
-    lIn.value=''; lRender(); lIn.focus();
-  }
-  document.getElementById('l-swap').addEventListener('click', ()=>{ l_dir=L_FLIP[l_dir]; applyLDir(); });
-  document.getElementById('lpairEL').addEventListener('click', ()=>{ if(L_PAIR[l_dir]!=='el'){ l_dir='en2low'; applyLDir(); } });
-  document.getElementById('lpairHL').addEventListener('click', ()=>{ if(L_PAIR[l_dir]!=='hl'){ l_dir='high2low'; applyLDir(); } });
-  document.getElementById('l-copy').addEventListener('click', e=>copyText(l_lastText, e.currentTarget));
-  wireScriptExport('l-png', function(){ return l_lastNative; }, 'low-audalad-script');
+  var lTrans = mountKindredTranslator({
+    prefix:'l', initMode:'en2low', enOutMode:'low2en',
+    translators:{ en2low:function(t){return translateEnToReg(t,harborForm);}, low2en:translateLowToEn, high2low:translateHighToLow, low2high:translateLowToHigh },
+    flip:L_FLIP, pair:L_PAIR, labels:L_LBL, placeholders:L_PH,
+    pairEnId:'lpairEL', pairAuId:'lpairHL', pairEnTok:'el', pairAuTok:'hl', pairEnMode:'en2low', pairAuMode:'high2low',
+    nativeFn:toNative, ipaFn:ipaText, pngName:'low-audalad-script' });
 
   mountKindredLexicon({ tabSel:'#lowaudalad', prefix:'l', subAttr:'lview', transform:harborForm, nativeFn:toNative, demoTail:'low form',
     demoWords:[['Autai','water'],['Aurdi','sea'],['Utura','light'],['Murak','foot'],['Karu','coin'],['Sarek','to know'],['Nishi','child'],['Audalad','island']] });
 
-  lRender();
+  lTrans.render();
 })();
 
 /* ================= SURDALAD (kindred creole - its own lexicon & script) ================= */
@@ -5366,24 +5375,6 @@ function mountKindredLexicon(cfg){
     if(notes && notes.indexOf('of-the')>=0) en=en+' (of)';
     return en;
   }
-  function translateEnToDim(text){
-    var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
-    var words=raw.match(/[A-Za-z']+|[.,!?;:]/g)||[]; var out=[]; var i=0, prevNum=false;
-    while(i<words.length){
-      var w=words[i];
-      if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); i++; continue; }
-      var matched=null, span=1;
-      for(var n=Math.min(3,words.length-i);n>=1;n--){
-        var phrase=words.slice(i,i+n).filter(function(x){return !/^[.,!?;:]$/.test(x);}).join(' ').toLowerCase();
-        if(enToAu[phrase]){ matched=enToAu[phrase][0]; span=n; break; }
-      }
-      var srcText=words.slice(i,i+span).join(' ');
-      if(matched){ out.push({src:srcText, au:dimFromHigh(matched.au), en:matched.full, note:matched.full}); prevNum=(matched.pos==='num'||matched.pos==='ord'); }
-      else { var rr=resolveEng(w,{afterNumber:prevNum}); if(rr){ out.push({src:srcText, au:dimFromHigh(rr.au), en:rr.en, note:rr.en}); } else out.push({src:srcText, au:null}); prevNum=false; }
-      i+=span;
-    }
-    return {tokens:out};
-  }
   function translateHighToDim(text){
     var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
     var words=raw.match(/[^\s.,!?;:]+|[.,!?;:]/g)||[]; var out=[];
@@ -5485,61 +5476,21 @@ function mountKindredLexicon(cfg){
     });
     return {tokens:out};
   }
-  var d_mode='en2dim', d_lastText='', d_lastNative='';
-  var dIn=document.getElementById('d-input'), dOut=document.getElementById('d-output'), dGloss=document.getElementById('d-gloss');
-  function joinParts(parts){ var s=''; parts.forEach(function(p){ if(/^[.,!?;:]$/.test(p)) s=s.replace(/\s$/,'')+p+' '; else s+=p+' '; }); return s.trim(); }
-  function dRender(){
-    var text=dIn.value; var auOut=(d_mode!=='dim2en');
-    var res = d_mode==='en2dim'?translateEnToDim(text)
-            : d_mode==='high2dim'?translateHighToDim(text)
-            : d_mode==='dim2en'?translateDimToEn(text)
-            : translateDimToHigh(text);
-    dGloss.innerHTML='';
-    if(!res.tokens.length){ d_lastText='';d_lastNative=''; dOut.innerHTML='<div class="placeholder">Translation appears here\u2026</div>'; return; }
-    var parts=res.tokens.map(function(t){ return t.punct? t.punct : ((auOut?t.au:t.en)!=null?(auOut?t.au:t.en):'['+t.src+'?]'); });
-    var str=joinParts(parts);
-    var html='<div class="roman">'+escapeHtml(str)+'</div>';
-    if(auOut){
-      var np=[]; res.tokens.forEach(function(t){ if(t.punct){np.push(t.punct);return;} if(t.au!=null) np.push(t.au); });
-      var ns=joinParts(np); d_lastText=str; d_lastNative=ns;
-      var ipa=ipaText(ns);
-      html+='<div class="native">'+escapeHtml(toNative(ns))+'</div>'+(ipa?'<div class="c-ipa">'+escapeHtml(ipa)+'</div>':'');
-    } else { d_lastText=str; d_lastNative=''; }
-    dOut.innerHTML=html;
-    res.tokens.forEach(function(t){
-      if(t.punct) return;
-      var d=document.createElement('div'); var miss=auOut?(t.au==null):(t.en==null);
-      d.className='tok'+(miss?' miss':'');
-      if(auOut) d.innerHTML='<div class="t-au">'+escapeHtml(t.au||'??')+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
-      else d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.en||'??')+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
-      dGloss.appendChild(d);
-    });
-  }
-  dIn.addEventListener('input', dRender);
   var D_FLIP={en2dim:'dim2en', dim2en:'en2dim', high2dim:'dim2high', dim2high:'high2dim'};
   var D_PAIR={en2dim:'en', dim2en:'en', high2dim:'au', dim2high:'au'};
   var D_LBL={en2dim:['English','Dimainad'], dim2en:['Dimainad','English'], high2dim:['Audalad','Dimainad'], dim2high:['Dimainad','Audalad']};
   var D_PH={en2dim:'Type here, e.g. the nobles will know the gold', dim2en:'Type Dimainad, e.g. Nadoae Luarsarec Sor Otaladae', high2dim:'Type Audalad, e.g. Naduae L\u00faarsarek Shur Yiutalad', dim2high:'Type Dimainad, e.g. Nadoae Luarsarec Sor Otaladae'};
-  function applyDMode(){
-    var lab=D_LBL[d_mode];
-    document.getElementById('d-dirText').innerHTML='<b>'+lab[0]+'</b> &rarr; '+lab[1];
-    document.getElementById('d-inLbl').textContent=lab[0]; document.getElementById('d-outLbl').textContent=lab[1];
-    dOut.classList.toggle('show-native', d_mode!=='dim2en');
-    dIn.placeholder=D_PH[d_mode];
-    document.getElementById('dpairEN').classList.toggle('on', D_PAIR[d_mode]==='en');
-    document.getElementById('dpairHI').classList.toggle('on', D_PAIR[d_mode]==='au');
-    dIn.value=''; dRender(); dIn.focus();
-  }
-  document.getElementById('dpairEN').addEventListener('click', function(){ if(D_PAIR[d_mode]!=='en'){ d_mode='en2dim'; applyDMode(); } });
-  document.getElementById('dpairHI').addEventListener('click', function(){ if(D_PAIR[d_mode]!=='au'){ d_mode='high2dim'; applyDMode(); } });
-  document.getElementById('d-swap').addEventListener('click', function(){ d_mode=D_FLIP[d_mode]; applyDMode(); });
-  document.getElementById('d-copy').addEventListener('click', function(e){ copyText(d_lastText, e.currentTarget); });
-  wireScriptExport('d-png', function(){ return d_lastNative; }, 'dimainad-script', 16.70);
+  var dTrans = mountKindredTranslator({
+    prefix:'d', initMode:'en2dim', enOutMode:'dim2en',
+    translators:{ en2dim:function(t){return translateEnToReg(t,dimFromHigh);}, dim2en:translateDimToEn, high2dim:translateHighToDim, dim2high:translateDimToHigh },
+    flip:D_FLIP, pair:D_PAIR, labels:D_LBL, placeholders:D_PH,
+    pairEnId:'dpairEN', pairAuId:'dpairHI', pairEnTok:'en', pairAuTok:'au', pairEnMode:'en2dim', pairAuMode:'high2dim',
+    nativeFn:toNative, ipaFn:ipaText, pngName:'dimainad-script', pngSlant:16.70 });
 
   mountKindredLexicon({ tabSel:'#dimainad', prefix:'d', subAttr:'dview', transform:dimFromHigh, nativeFn:toNative, demoTail:'Dimainad form',
     demoWords:[['Nadu','noble'],['Sarek','to know'],['Au','water'],['Naddar','wind'],['Nashei','woman'],['Zhurak','fire'],['Sahra','town'],['Shur','gold']] });
 
-  applyDMode();
+  dTrans.applyMode();
 })();
 
 
@@ -5573,24 +5524,6 @@ function mountKindredLexicon(cfg){
   function oldDeacc(s){ return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
 
   /* ---- forward: English -> Shavur, Audalad -> Shavur ---- */
-  function translateEnToOld(text){
-    var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
-    var words=raw.match(/[A-Za-z']+|[.,!?;:]/g)||[]; var out=[]; var i=0, prevNum=false;
-    while(i<words.length){
-      var w=words[i];
-      if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); i++; continue; }
-      var matched=null, span=1;
-      for(var n=Math.min(3,words.length-i);n>=1;n--){
-        var phrase=words.slice(i,i+n).filter(function(x){return !/^[.,!?;:]$/.test(x);}).join(' ').toLowerCase();
-        if(enToAu[phrase]){ matched=enToAu[phrase][0]; span=n; break; }
-      }
-      var srcText=words.slice(i,i+span).join(' ');
-      if(matched){ out.push({src:srcText, au:oldFromModern(matched.au), en:matched.full, note:matched.full}); prevNum=(matched.pos==='num'||matched.pos==='ord'); }
-      else { var rr=resolveEng(w,{afterNumber:prevNum}); if(rr){ out.push({src:srcText, au:oldFromModern(rr.au), en:rr.en, note:rr.en}); } else out.push({src:srcText, au:null}); prevNum=false; }
-      i+=span;
-    }
-    return {tokens:out};
-  }
   function translateHighToOld(text){
     var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
     var words=raw.match(/[^\s.,!?;:]+|[.,!?;:]/g)||[]; var out=[];
@@ -5687,61 +5620,21 @@ function mountKindredLexicon(cfg){
   }
 
   /* ---- UI ---- */
-  var s_mode='en2old', s_lastText='', s_lastNative='';
-  var sIn=document.getElementById('s-input'), sOut=document.getElementById('s-output'), sGloss=document.getElementById('s-gloss');
-  function joinParts(parts){ var s=''; parts.forEach(function(p){ if(/^[.,!?;:]$/.test(p)) s=s.replace(/\s$/,'')+p+' '; else s+=p+' '; }); return s.trim(); }
-  function sRender(){
-    var text=sIn.value; var auOut=(s_mode!=='old2en');
-    var res = s_mode==='en2old'?translateEnToOld(text)
-            : s_mode==='high2old'?translateHighToOld(text)
-            : s_mode==='old2en'?translateOldToEn(text)
-            : translateOldToHigh(text);
-    sGloss.innerHTML='';
-    if(!res.tokens.length){ s_lastText='';s_lastNative=''; sOut.innerHTML='<div class="placeholder">Translation appears here\u2026</div>'; return; }
-    var parts=res.tokens.map(function(t){ return t.punct? t.punct : ((auOut?t.au:t.en)!=null?(auOut?t.au:t.en):'['+t.src+'?]'); });
-    var str=joinParts(parts);
-    var html='<div class="roman">'+escapeHtml(str)+'</div>';
-    if(auOut){
-      var np=[]; res.tokens.forEach(function(t){ if(t.punct){np.push(t.punct);return;} if(t.au!=null) np.push(t.au); });
-      var ns=joinParts(np); s_lastText=str; s_lastNative=oldBase(ns);
-      var ipa=oldIpa(ns);
-      html+='<div class="native">'+escapeHtml(oldNative(ns))+'</div>'+(ipa?'<div class="c-ipa">'+escapeHtml(ipa)+'</div>':'');
-    } else { s_lastText=str; s_lastNative=''; }
-    sOut.innerHTML=html;
-    res.tokens.forEach(function(t){
-      if(t.punct) return;
-      var d=document.createElement('div'); var miss=auOut?(t.au==null):(t.en==null);
-      d.className='tok'+(miss?' miss':'');
-      if(auOut) d.innerHTML='<div class="t-au">'+escapeHtml(t.au||'??')+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
-      else d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.en||'??')+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
-      sGloss.appendChild(d);
-    });
-  }
-  sIn.addEventListener('input', sRender);
   var S_FLIP={en2old:'old2en', old2en:'en2old', high2old:'old2high', old2high:'high2old'};
   var S_PAIR={en2old:'en', old2en:'en', high2old:'au', old2high:'au'};
   var S_LBL={en2old:['English','Shavur-Audalad'], old2en:['Shavur-Audalad','English'], high2old:['Audalad','Shavur-Audalad'], old2high:['Shavur-Audalad','Audalad']};
   var S_PH={en2old:'Type here, e.g. fire water and king', old2en:'Type Shavur-Audalad, e.g. \u017durak \u0101u dar Lukal', high2old:'Type Audalad, e.g. Zhurak Au dar Lugal', old2high:'Type Shavur-Audalad, e.g. \u017durak \u0101u dar Lukal'};
-  function applySMode(){
-    var lab=S_LBL[s_mode];
-    document.getElementById('s-dirText').innerHTML='<b>'+lab[0]+'</b> &rarr; '+lab[1];
-    document.getElementById('s-inLbl').textContent=lab[0]; document.getElementById('s-outLbl').textContent=lab[1];
-    sOut.classList.toggle('show-native', s_mode!=='old2en');
-    sIn.placeholder=S_PH[s_mode];
-    document.getElementById('spairEN').classList.toggle('on', S_PAIR[s_mode]==='en');
-    document.getElementById('spairHI').classList.toggle('on', S_PAIR[s_mode]==='au');
-    sIn.value=''; sRender(); sIn.focus();
-  }
-  document.getElementById('spairEN').addEventListener('click', function(){ if(S_PAIR[s_mode]!=='en'){ s_mode='en2old'; applySMode(); } });
-  document.getElementById('spairHI').addEventListener('click', function(){ if(S_PAIR[s_mode]!=='au'){ s_mode='high2old'; applySMode(); } });
-  document.getElementById('s-swap').addEventListener('click', function(){ s_mode=S_FLIP[s_mode]; applySMode(); });
-  document.getElementById('s-copy').addEventListener('click', function(e){ copyText(s_lastText, e.currentTarget); });
-  wireScriptExport('s-png', function(){ return s_lastNative; }, 'shavur-audalad-script', 0);
+  var sTrans = mountKindredTranslator({
+    prefix:'s', initMode:'en2old', enOutMode:'old2en',
+    translators:{ en2old:function(t){return translateEnToReg(t,oldFromModern);}, old2en:translateOldToEn, high2old:translateHighToOld, old2high:translateOldToHigh },
+    flip:S_FLIP, pair:S_PAIR, labels:S_LBL, placeholders:S_PH,
+    pairEnId:'spairEN', pairAuId:'spairHI', pairEnTok:'en', pairAuTok:'au', pairEnMode:'en2old', pairAuMode:'high2old',
+    nativeFn:oldNative, ipaFn:oldIpa, exportFn:oldBase, pngName:'shavur-audalad-script', pngSlant:0 });
 
   mountKindredLexicon({ tabSel:'#shavuraudalad', prefix:'s', subAttr:'sview', transform:oldFromModern, nativeFn:oldNative, demoTail:'old form',
     demoWords:[['Zhurak','fire'],['Au','water'],['Lugal','king'],['Rinu','to cut'],['Kel','circle'],['Lugash','benefit'],['Nadu','noble'],['Daritu','to give']] });
 
-  applySMode();
+  sTrans.applyMode();
 })();
 
 /* ---------- SCRIPT DISPLAY CONTROL (size + line spacing) ---------- */
