@@ -2863,6 +2863,7 @@ document.getElementById('swapBtn').addEventListener('click', ()=>{ dir=FLIP[dir]
 
 /* ---------- dictionary ---------- */
 const POS_LABEL={n:'Noun',v:'Verb',adj:'Adjective',adv:'Adverb',prep:'Preposition',postp:'Postposition',conj:'Conjunction',det:'Determiner',num:'Number',ord:'Ordinal',pron:'Pronoun',intj:'Greeting',q:'Question',title:'Title',name:'Name'};
+const POS_ORDER=['all','n','v','adj','adv','prep','postp','conj','det','pron','num','ord','q','intj','title'];
 let activePos='all';
 const dictlist=document.getElementById('dictlist');
 const searchEl=document.getElementById('search');
@@ -2870,8 +2871,7 @@ const countEl=document.getElementById('count');
 
 function buildPosFilter(){
   const pf=document.getElementById('posfilter');
-  const order=['all','n','v','adj','adv','prep','postp','conj','det','pron','num','ord','q','intj','title'];
-  order.forEach(p=>{
+  POS_ORDER.forEach(p=>{
     const b=document.createElement('button');
     b.className='chip'+(p==='all'?' active':'');
     b.textContent=p==='all'?'All':POS_LABEL[p];
@@ -4791,6 +4791,63 @@ const wantsClearBtn=document.getElementById('wantsClear'); if(wantsClearBtn) wan
 loadWants();
 updateWantsBadge();
 
+/* ===== shared kindred-register engine: Low / Dimainad / Shavur lexicon views all derive from the one lexicon ===== */
+function wireScriptExport(btnId, getNative, filenameBase, slantDeg){
+  var btn=document.getElementById(btnId); if(!btn) return;
+  btn.addEventListener('click', async function(e){
+    var b=e.currentTarget; var native=getNative();
+    if(!native){ var o=b.textContent; b.textContent='Translate first'; setTimeout(function(){ b.textContent=o; }, 1200); return; }
+    var o2=b.textContent; b.textContent='Saving\u2026';
+    if(slantDeg===undefined) await exportNativePNG(native, filenameBase);
+    else await exportNativePNG(native, filenameBase, slantDeg);
+    b.textContent=o2;
+  });
+}
+function mountKindredLexicon(cfg){
+  var prefix=cfg.prefix, tf=cfg.transform, nf=cfg.nativeFn||toNative;
+  var searchEl=document.getElementById(prefix+'-search');
+  var listEl=document.getElementById(prefix+'-lexlist');
+  var countEl=document.getElementById(prefix+'-count');
+  function entries(){ return lex().map(function(d){ return {form:tf(d.au), std:d.au, en:d.en, pos:d.pos}; }).sort(function(a,b){ return a.form.toLowerCase().localeCompare(b.form.toLowerCase()); }); }
+  function rowHtml(e){ var changed=e.form!==e.std; return '<div class="l-row"><div class="l-dia">'+escapeHtml(e.form)+'<span class="au">'+escapeHtml(nf(e.form))+'</span></div><div class="l-mean">'+escapeHtml(e.en)+'</div><div class="l-from">'+(changed?('from <b>'+escapeHtml(e.std)+'</b>'):'unchanged')+'</div></div>'; }
+  var active='all', built=false;
+  function buildFilter(){
+    var pf=document.getElementById(prefix+'-posfilter'); pf.innerHTML='';
+    var present=new Set(lex().map(function(d){ return d.pos; }));
+    POS_ORDER.forEach(function(p){
+      if(p!=='all' && !present.has(p)) return;
+      var b=document.createElement('button');
+      b.className='chip'+(p===active?' active':'');
+      b.textContent = p==='all'?'All':(POS_LABEL[p]||p);
+      b.addEventListener('click', function(){ active=p; pf.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('active'); }); b.classList.add('active'); buildLex(); });
+      pf.appendChild(b);
+    });
+    built=true;
+  }
+  function buildLex(){
+    if(!built) buildFilter();
+    var all=entries(); var q=searchEl.value.trim().toLowerCase();
+    var rows=all.filter(function(e){ return (active==='all'||e.pos===active) && (!q||e.form.toLowerCase().includes(q)||e.std.toLowerCase().includes(q)||e.en.toLowerCase().includes(q)); });
+    countEl.textContent=rows.length+' of '+all.length+' words'+((q||active!=='all')?' shown':'');
+    listEl.innerHTML = rows.length ? ('<div class="l-grid">'+rows.map(rowHtml).join('')+'</div>') : '<div class="l-count" style="text-align:center;padding:20px">No words match that.</div>';
+  }
+  searchEl.addEventListener('input', buildLex);
+  var inited=false;
+  document.querySelectorAll(cfg.tabSel+' .lsub button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll(cfg.tabSel+' .lsub button').forEach(function(x){ x.classList.remove('active'); });
+      document.querySelectorAll(cfg.tabSel+' .lview').forEach(function(x){ x.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById(prefix+'-'+btn.dataset[cfg.subAttr]).classList.add('active');
+      if(btn.dataset[cfg.subAttr]==='lexicon' && !inited){ buildLex(); inited=true; }
+    });
+  });
+  var di=0;
+  function spin(){ var pair=cfg.demoWords[di%cfg.demoWords.length]; di++; var hi=document.getElementById(prefix+'m-hi'); if(!hi) return; var form=tf(pair[0]); hi.textContent=pair[0]; document.getElementById(prefix+'m-lo').textContent=form; document.getElementById(prefix+'m-au').textContent=nf(form); document.getElementById(prefix+'m-cap').innerHTML='&ldquo;'+pair[1]+'&rdquo; &middot; the high tongue, then the '+cfg.demoTail; }
+  spin(); setInterval(spin, 2600);
+  return { buildLex:buildLex, buildFilter:buildFilter };
+}
+
 /* ================= LOW-AUDALAD TAB (derives entirely from the shared lexicon) ================= */
 (function(){
   const POSORDER=['n','v','adj','adv','prep','postp','conj','det','pron','num','ord','q','intj','title'];
@@ -4881,50 +4938,10 @@ updateWantsBadge();
   document.getElementById('lpairEL').addEventListener('click', ()=>{ if(L_PAIR[l_dir]!=='el'){ l_dir='en2low'; applyLDir(); } });
   document.getElementById('lpairHL').addEventListener('click', ()=>{ if(L_PAIR[l_dir]!=='hl'){ l_dir='high2low'; applyLDir(); } });
   document.getElementById('l-copy').addEventListener('click', e=>copyText(l_lastText, e.currentTarget));
-  document.getElementById('l-png').addEventListener('click', async e=>{ const b=e.currentTarget; if(!l_lastNative){ const o=b.textContent;b.textContent='Translate first';setTimeout(()=>b.textContent=o,1200);return;} const o=b.textContent;b.textContent='Saving\u2026'; await exportNativePNG(l_lastNative,'low-audalad-script'); b.textContent=o; });
+  wireScriptExport('l-png', function(){ return l_lastNative; }, 'low-audalad-script');
 
-  function lowEntries(){ return lex().map(d=>({dia:harborForm(d.au),std:d.au,en:d.en,pos:d.pos})).sort((a,b)=>a.dia.toLowerCase().localeCompare(b.dia.toLowerCase())); }
-  const lSearch=document.getElementById('l-search'), lLexList=document.getElementById('l-lexlist'), lCount=document.getElementById('l-count');
-  function rowHtml(e){ const changed=e.dia!==e.std; return '<div class="l-row"><div class="l-dia">'+escapeHtml(e.dia)+'<span class="au">'+escapeHtml(toNative(e.dia))+'</span></div><div class="l-mean">'+escapeHtml(e.en)+'</div><div class="l-from">'+(changed?('from <b>'+escapeHtml(e.std)+'</b>'):'unchanged')+'</div></div>'; }
-  const LPOS_ORDER=['all','n','v','adj','adv','prep','postp','conj','det','pron','num','ord','q','intj','title'];
-  let activeLowPos='all', lPosBuilt=false;
-  function buildLowPosFilter(){
-    const pf=document.getElementById('l-posfilter'); pf.innerHTML='';
-    const present=new Set(lex().map(d=>d.pos));
-    LPOS_ORDER.forEach(p=>{
-      if(p!=='all' && !present.has(p)) return;
-      const b=document.createElement('button');
-      b.className='chip'+(p===activeLowPos?' active':'');
-      b.textContent = p==='all'?'All':(POS_LABEL[p]||p);
-      b.addEventListener('click',()=>{ activeLowPos=p; pf.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); b.classList.add('active'); buildLowLex(); });
-      pf.appendChild(b);
-    });
-    lPosBuilt=true;
-  }
-  function buildLowLex(){
-    if(!lPosBuilt) buildLowPosFilter();
-    const all=lowEntries(); const q=lSearch.value.trim().toLowerCase();
-    const rows=all.filter(e=> (activeLowPos==='all'||e.pos===activeLowPos) && (!q||e.dia.toLowerCase().includes(q)||e.std.toLowerCase().includes(q)||e.en.toLowerCase().includes(q)));
-    lCount.textContent=rows.length+' of '+all.length+' words'+((q||activeLowPos!=='all')?' shown':'');
-    lLexList.innerHTML = rows.length ? ('<div class="l-grid">'+rows.map(rowHtml).join('')+'</div>') : '<div class="l-count" style="text-align:center;padding:20px">No words match that.</div>';
-  }
-  lSearch.addEventListener('input', buildLowLex);
-
-  let lexInit=false;
-  document.querySelectorAll('#lowaudalad .lsub button').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      document.querySelectorAll('#lowaudalad .lsub button').forEach(x=>x.classList.remove('active'));
-      document.querySelectorAll('#lowaudalad .lview').forEach(x=>x.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('l-'+btn.dataset.lview).classList.add('active');
-      if(btn.dataset.lview==='lexicon' && !lexInit){ buildLowLex(); lexInit=true; }
-    });
-  });
-
-  const MORPH=[['Autai','water'],['Aurdi','sea'],['Utura','light'],['Murak','foot'],['Karu','coin'],['Sarek','to know'],['Nishi','child'],['Audalad','island']];
-  let mi=0;
-  function spin(){ const pair=MORPH[mi%MORPH.length]; mi++; const lo=harborForm(pair[0]); const hi=document.getElementById('lm-hi'); if(!hi) return; hi.textContent=pair[0]; document.getElementById('lm-lo').textContent=lo; document.getElementById('lm-au').textContent=toNative(lo); document.getElementById('lm-cap').innerHTML='&ldquo;'+pair[1]+'&rdquo; &middot; the high tongue, then the low form'; }
-  spin(); setInterval(spin, 2600);
+  mountKindredLexicon({ tabSel:'#lowaudalad', prefix:'l', subAttr:'lview', transform:harborForm, nativeFn:toNative, demoTail:'low form',
+    demoWords:[['Autai','water'],['Aurdi','sea'],['Utura','light'],['Murak','foot'],['Karu','coin'],['Sarek','to know'],['Nishi','child'],['Audalad','island']] });
 
   lRender();
 })();
@@ -5517,50 +5534,10 @@ updateWantsBadge();
   document.getElementById('dpairHI').addEventListener('click', function(){ if(D_PAIR[d_mode]!=='au'){ d_mode='high2dim'; applyDMode(); } });
   document.getElementById('d-swap').addEventListener('click', function(){ d_mode=D_FLIP[d_mode]; applyDMode(); });
   document.getElementById('d-copy').addEventListener('click', function(e){ copyText(d_lastText, e.currentTarget); });
-  document.getElementById('d-png').addEventListener('click', async function(e){ var b=e.currentTarget; if(!d_lastNative){ var o=b.textContent;b.textContent='Translate first';setTimeout(function(){b.textContent=o;},1200);return;} var o2=b.textContent;b.textContent='Saving\u2026'; await exportNativePNG(d_lastNative,'dimainad-script',16.70); b.textContent=o2; });
+  wireScriptExport('d-png', function(){ return d_lastNative; }, 'dimainad-script', 16.70);
 
-  function dimEntries(){ return lex().map(function(d){ return {dim:dimFromHigh(d.au), std:d.au, en:d.en, pos:d.pos}; }).sort(function(a,b){ return a.dim.toLowerCase().localeCompare(b.dim.toLowerCase()); }); }
-  var dSearch=document.getElementById('d-search'), dLexList=document.getElementById('d-lexlist'), dCount=document.getElementById('d-count');
-  function dRowHtml(e){ var changed=e.dim!==e.std; return '<div class="l-row"><div class="l-dia">'+escapeHtml(e.dim)+'<span class="au">'+escapeHtml(toNative(e.dim))+'</span></div><div class="l-mean">'+escapeHtml(e.en)+'</div><div class="l-from">'+(changed?('from <b>'+escapeHtml(e.std)+'</b>'):'unchanged')+'</div></div>'; }
-  var DPOS_ORDER=['all','n','v','adj','adv','prep','postp','conj','det','pron','num','ord','q','intj','title'];
-  var activeDimPos='all', dPosBuilt=false;
-  function buildDimPosFilter(){
-    var pf=document.getElementById('d-posfilter'); pf.innerHTML='';
-    var present=new Set(lex().map(function(d){return d.pos;}));
-    DPOS_ORDER.forEach(function(p){
-      if(p!=='all' && !present.has(p)) return;
-      var b=document.createElement('button');
-      b.className='chip'+(p===activeDimPos?' active':'');
-      b.textContent = p==='all'?'All':(POS_LABEL[p]||p);
-      b.addEventListener('click',function(){ activeDimPos=p; pf.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active');}); b.classList.add('active'); buildDimLex(); });
-      pf.appendChild(b);
-    });
-    dPosBuilt=true;
-  }
-  function buildDimLex(){
-    if(!dPosBuilt) buildDimPosFilter();
-    var all=dimEntries(); var q=dSearch.value.trim().toLowerCase();
-    var rows=all.filter(function(e){ return (activeDimPos==='all'||e.pos===activeDimPos) && (!q||e.dim.toLowerCase().indexOf(q)>=0||e.std.toLowerCase().indexOf(q)>=0||e.en.toLowerCase().indexOf(q)>=0); });
-    dCount.textContent=rows.length+' of '+all.length+' words'+((q||activeDimPos!=='all')?' shown':'');
-    dLexList.innerHTML = rows.length ? ('<div class="l-grid">'+rows.map(dRowHtml).join('')+'</div>') : '<div class="l-count" style="text-align:center;padding:20px">No words match that.</div>';
-  }
-  dSearch.addEventListener('input', buildDimLex);
-
-  var dLexInit=false;
-  document.querySelectorAll('#dimainad .lsub button').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      document.querySelectorAll('#dimainad .lsub button').forEach(function(x){x.classList.remove('active');});
-      document.querySelectorAll('#dimainad .lview').forEach(function(x){x.classList.remove('active');});
-      btn.classList.add('active');
-      document.getElementById('d-'+btn.dataset.dview).classList.add('active');
-      if(btn.dataset.dview==='lexicon' && !dLexInit){ buildDimLex(); dLexInit=true; }
-    });
-  });
-
-  var DM_WORDS=[['Nadu','noble'],['Sarek','to know'],['Au','water'],['Naddar','wind'],['Nashei','woman'],['Zhurak','fire'],['Sahra','town'],['Shur','gold']];
-  var dmi=0;
-  function dmSpin(){ var pair=DM_WORDS[dmi%DM_WORDS.length]; dmi++; var hi=document.getElementById('dm-hi'); if(!hi) return; var form=dimFromHigh(pair[0]); hi.textContent=pair[0]; document.getElementById('dm-lo').textContent=form; document.getElementById('dm-au').textContent=toNative(form); document.getElementById('dm-cap').innerHTML='&ldquo;'+pair[1]+'&rdquo; &middot; the high tongue, then the Dimainad form'; }
-  dmSpin(); setInterval(dmSpin, 2600);
+  mountKindredLexicon({ tabSel:'#dimainad', prefix:'d', subAttr:'dview', transform:dimFromHigh, nativeFn:toNative, demoTail:'Dimainad form',
+    demoWords:[['Nadu','noble'],['Sarek','to know'],['Au','water'],['Naddar','wind'],['Nashei','woman'],['Zhurak','fire'],['Sahra','town'],['Shur','gold']] });
 
   applyDMode();
 })();
@@ -5759,50 +5736,10 @@ updateWantsBadge();
   document.getElementById('spairHI').addEventListener('click', function(){ if(S_PAIR[s_mode]!=='au'){ s_mode='high2old'; applySMode(); } });
   document.getElementById('s-swap').addEventListener('click', function(){ s_mode=S_FLIP[s_mode]; applySMode(); });
   document.getElementById('s-copy').addEventListener('click', function(e){ copyText(s_lastText, e.currentTarget); });
-  document.getElementById('s-png').addEventListener('click', async function(e){ var b=e.currentTarget; if(!s_lastNative){ var o=b.textContent;b.textContent='Translate first';setTimeout(function(){b.textContent=o;},1200);return;} var o2=b.textContent;b.textContent='Saving\u2026'; await exportNativePNG(s_lastNative,'shavur-audalad-script',0); b.textContent=o2; });
+  wireScriptExport('s-png', function(){ return s_lastNative; }, 'shavur-audalad-script', 0);
 
-  function oldEntries(){ return lex().map(function(d){ return {old:oldFromModern(d.au), std:d.au, en:d.en, pos:d.pos}; }).sort(function(a,b){ return a.old.toLowerCase().localeCompare(b.old.toLowerCase()); }); }
-  var sSearch=document.getElementById('s-search'), sLexList=document.getElementById('s-lexlist'), sCount=document.getElementById('s-count');
-  function sRowHtml(e){ var changed=e.old!==e.std; return '<div class="l-row"><div class="l-dia">'+escapeHtml(e.old)+'<span class="au">'+escapeHtml(oldNative(e.old))+'</span></div><div class="l-mean">'+escapeHtml(e.en)+'</div><div class="l-from">'+(changed?('from <b>'+escapeHtml(e.std)+'</b>'):'unchanged')+'</div></div>'; }
-  var SPOS_ORDER=['all','n','v','adj','adv','prep','postp','conj','det','pron','num','ord','q','intj','title'];
-  var activeOldPos='all', sPosBuilt=false;
-  function buildOldPosFilter(){
-    var pf=document.getElementById('s-posfilter'); pf.innerHTML='';
-    var present=new Set(lex().map(function(d){return d.pos;}));
-    SPOS_ORDER.forEach(function(p){
-      if(p!=='all' && !present.has(p)) return;
-      var b=document.createElement('button');
-      b.className='chip'+(p===activeOldPos?' active':'');
-      b.textContent = p==='all'?'All':(POS_LABEL[p]||p);
-      b.addEventListener('click',function(){ activeOldPos=p; pf.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active');}); b.classList.add('active'); buildOldLex(); });
-      pf.appendChild(b);
-    });
-    sPosBuilt=true;
-  }
-  function buildOldLex(){
-    if(!sPosBuilt) buildOldPosFilter();
-    var all=oldEntries(); var q=sSearch.value.trim().toLowerCase();
-    var rows=all.filter(function(e){ return (activeOldPos==='all'||e.pos===activeOldPos) && (!q||e.old.toLowerCase().indexOf(q)>=0||e.std.toLowerCase().indexOf(q)>=0||e.en.toLowerCase().indexOf(q)>=0); });
-    sCount.textContent=rows.length+' of '+all.length+' words'+((q||activeOldPos!=='all')?' shown':'');
-    sLexList.innerHTML = rows.length ? ('<div class="l-grid">'+rows.map(sRowHtml).join('')+'</div>') : '<div class="l-count" style="text-align:center;padding:20px">No words match that.</div>';
-  }
-  sSearch.addEventListener('input', buildOldLex);
-
-  var sLexInit=false;
-  document.querySelectorAll('#shavuraudalad .lsub button').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      document.querySelectorAll('#shavuraudalad .lsub button').forEach(function(x){x.classList.remove('active');});
-      document.querySelectorAll('#shavuraudalad .lview').forEach(function(x){x.classList.remove('active');});
-      btn.classList.add('active');
-      document.getElementById('s-'+btn.dataset.sview).classList.add('active');
-      if(btn.dataset.sview==='lexicon' && !sLexInit){ buildOldLex(); sLexInit=true; }
-    });
-  });
-
-  var SM_WORDS=[['Zhurak','fire'],['Au','water'],['Lugal','king'],['Rinu','to cut'],['Kel','circle'],['Lugash','benefit'],['Nadu','noble'],['Daritu','to give']];
-  var smi=0;
-  function smSpin(){ var pair=SM_WORDS[smi%SM_WORDS.length]; smi++; var hi=document.getElementById('sm-hi'); if(!hi) return; var form=oldFromModern(pair[0]); hi.textContent=pair[0]; document.getElementById('sm-lo').textContent=form; document.getElementById('sm-au').textContent=oldNative(form); document.getElementById('sm-cap').innerHTML='&ldquo;'+pair[1]+'&rdquo; &middot; the high tongue, then the old form'; }
-  smSpin(); setInterval(smSpin, 2600);
+  mountKindredLexicon({ tabSel:'#shavuraudalad', prefix:'s', subAttr:'sview', transform:oldFromModern, nativeFn:oldNative, demoTail:'old form',
+    demoWords:[['Zhurak','fire'],['Au','water'],['Lugal','king'],['Rinu','to cut'],['Kel','circle'],['Lugash','benefit'],['Nadu','noble'],['Daritu','to give']] });
 
   applySMode();
 })();
