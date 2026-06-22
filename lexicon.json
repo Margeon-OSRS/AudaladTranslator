@@ -2542,5 +2542,821 @@
     "en": "to record",
     "pos": "v",
     "by": "MegaMasterBloc"
+  },
+  {
+    "au": "Keshiningal",
+    "en": "princess",
+    "pos": "title",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Naduras",
+    "en": "lord",
+    "pos": "title",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Onisneru",
+    "en": "scepter",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Onisedal",
+    "en": "realm",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Reikatsan",
+    "en": "border",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mumtutal",
+    "en": "capital",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rezhpla",
+    "en": "subject",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Urdushair",
+    "en": "ambassador",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Oniseshair",
+    "en": "minister",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Utalshair",
+    "en": "steward",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Lexir",
+    "en": "crime",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Aderektar",
+    "en": "theft",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Adernergar",
+    "en": "murder",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Baemai",
+    "en": "guilt",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Baemir",
+    "en": "innocent",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Baemu",
+    "en": "to accuse",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Lexaru",
+    "en": "to punish",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rudaritu",
+    "en": "to pardon",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Lexmar",
+    "en": "court",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Dujai",
+    "en": "verdict",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Dujush",
+    "en": "trial",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Eslagus",
+    "en": "evidence",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Enzhurdu",
+    "en": "oath",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Urdvisu",
+    "en": "to swear",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rezhiru",
+    "en": "to betray",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rezhirpla",
+    "en": "traitor",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rezhal",
+    "en": "loyal",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rezhai",
+    "en": "duty",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Aluran",
+    "en": "honor",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Daritai",
+    "en": "reward",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Baema",
+    "en": "to blame",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Gilgai",
+    "en": "slavery",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Uhytutal",
+    "en": "prison",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Prosudal",
+    "en": "exile",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Nergai",
+    "en": "arrow",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Dulvai",
+    "en": "armor",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Atluksai",
+    "en": "dagger",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Hazurmar",
+    "en": "siege",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Hazures",
+    "en": "victory",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Hazuresir",
+    "en": "defeat",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Iguiru",
+    "en": "to retreat",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Votaritu",
+    "en": "to surrender",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Uhytpla",
+    "en": "captive",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Veshan",
+    "en": "banner",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Odilutal",
+    "en": "fortress",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Hashruvas",
+    "en": "rampart",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Vorin",
+    "en": "foe",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Hazektai",
+    "en": "raid",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Aderhazu",
+    "en": "ambush",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Dalektaru",
+    "en": "to conquer",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Orin",
+    "en": "god",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Orisha",
+    "en": "goddess",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Aderusu",
+    "en": "hell",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Orial",
+    "en": "holy",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Narakhadu",
+    "en": "to curse",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Velakhadu",
+    "en": "to bless",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Orikhadu",
+    "en": "to pray",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Orurdu",
+    "en": "prayer",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Orirezhu",
+    "en": "to worship",
+    "pos": "v",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Orinergai",
+    "en": "sacrifice",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Enzhardu",
+    "en": "offering",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Enzhamar",
+    "en": "altar",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Orimar",
+    "en": "shrine",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Esbitpla",
+    "en": "priest",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Opkai",
+    "en": "omen",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Naraktsai",
+    "en": "demon",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Orishair",
+    "en": "angel",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Nergutsai",
+    "en": "ghost",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Orides",
+    "en": "miracle",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Enzhalir",
+    "en": "sin",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Velanzum",
+    "en": "virtue",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Eskai",
+    "en": "faith",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Gaeshan",
+    "en": "festival",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Velanplae",
+    "en": "feast",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Nergulvelai",
+    "en": "mourning",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Nergulshan",
+    "en": "funeral",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Sarkai",
+    "en": "wisdom",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Sarekai",
+    "en": "knowledge",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Kairai",
+    "en": "truth",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mornai",
+    "en": "reason",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Aderurdu",
+    "en": "riddle",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Sarelai",
+    "en": "lesson",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Sarelpla",
+    "en": "teacher",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Sarkupla",
+    "en": "scholar",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Gaeurdu",
+    "en": "poem",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Korvai",
+    "en": "tale",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Shavkortai",
+    "en": "legend",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Urdurush",
+    "en": "language",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Khadai",
+    "en": "speech",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ezhalir",
+    "en": "silence",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Dumra",
+    "en": "drum",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Gaeneru",
+    "en": "flute",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Tsanga",
+    "en": "bell",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Vugae",
+    "en": "harp",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Helitai",
+    "en": "painting",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Gabiliri",
+    "en": "statue",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rinuliri",
+    "en": "carving",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Viran",
+    "en": "pattern",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Urai",
+    "en": "time",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Seyerai",
+    "en": "fortune",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Seyeres",
+    "en": "luck",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Elsakai",
+    "en": "danger",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Shumulai",
+    "en": "safety",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Votai",
+    "en": "purpose",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Korai",
+    "en": "meaning",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rafai",
+    "en": "weight",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Kedrai",
+    "en": "depth",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Kaiyai",
+    "en": "height",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Reikai",
+    "en": "edge",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Isbrai",
+    "en": "center",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Sikosai",
+    "en": "surface",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Gabai",
+    "en": "shape",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Votakai",
+    "en": "must",
+    "pos": "adv",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Eskaire",
+    "en": "certain",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Lebrai",
+    "en": "possible",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Lebrir",
+    "en": "impossible",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Uhytir",
+    "en": "different",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Uhytai",
+    "en": "equal",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Aderum",
+    "en": "opposite",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Shetuhyt",
+    "en": "similar",
+    "pos": "adj",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Naduai",
+    "en": "respect",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ervisai",
+    "en": "mercy",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Gilga",
+    "en": "greed",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Aderira",
+    "en": "envy",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Hashira",
+    "en": "jealousy",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Velara",
+    "en": "gratitude",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Velanura",
+    "en": "regret",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Aderivela",
+    "en": "longing",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Itonir",
+    "en": "despair",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rodvelan",
+    "en": "grief",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Vastai",
+    "en": "patience",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Ervisa",
+    "en": "pity",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Mirava",
+    "en": "wonder",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Orimira",
+    "en": "awe",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Falira",
+    "en": "scorn",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
+  },
+  {
+    "au": "Rezhalai",
+    "en": "loyalty",
+    "pos": "n",
+    "by": "Filurdu U. Dimaina"
   }
 ]
