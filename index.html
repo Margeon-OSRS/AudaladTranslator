@@ -2487,6 +2487,16 @@ function resolveEng(w, opts){
   return null;
 }
 
+/* English function words that fold into the NEXT content word as Audalad
+   affixes rather than standing alone. Built forms stay round-trippable with
+   the reverse resolver (suffix order: plural -> negation -> possessive,
+   tense prefix outermost), matching buildHighForm. */
+const _ARTICLES = new Set(['a','an','the']);
+const _AUX_TENSE = {did:'past', does:'present', do:null};   // do-support carriers
+function _attachNeg(au){ return /ir$/i.test(au) ? au : au+'ir'; }
+function _attachPoss(au){ return /ad$/i.test(au) ? au : au+'ad'; }
+function _isContentPOS(pos){ return pos==='v'||pos==='n'||pos==='title'||pos==='adj'||pos==='adv'; }
+
 function translateEnToAu(text){
   const raw = text.replace(/\s+/g,' ').trim();
   if(!raw) return {tokens:[]};
@@ -2495,34 +2505,85 @@ function translateEnToAu(text){
   const out = [];
   let i = 0;
   let prevWasNumber = false;
+  // modifiers waiting to fold into the next content word
+  let pend = {neg:false, poss:false, tense:null, carriedSrc:[]};
+  function flushOrphans(){
+    // any pending markers that never found a host: surface their plain words
+    pend.carriedSrc.forEach(o=>{
+      const r = resolveEng(o.toLowerCase(), {});
+      if(r) out.push({src:o, au:r.au, en:r.en, note:r.note});
+      else out.push({src:o, au:null});
+    });
+    pend = {neg:false, poss:false, tense:null, carriedSrc:[]};
+  }
+
   while(i < words.length){
     const w = words[i];
-    if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); i++; continue; }
-    // greedy phrase up to 3 words
+    if(/^[.,!?;:]$/.test(w)){ flushOrphans(); out.push({punct:w}); i++; continue; }
+    const lw = w.toLowerCase();
+
+    // ---- function words that become pending affixes (consumed, not emitted) ----
+    if(_ARTICLES.has(lw)){ pend.carriedSrc.push(w); i++; continue; }              // a / an / the -> absorbed
+    if(lw==='not'){ pend.neg=true; pend.carriedSrc.push(w); i++; continue; }       // negation -> -ir
+    // do-support contraction: didn't / doesn't / don't
+    let mNt = lw.match(/^(did|does|do|is|are|was|were|has|have|had|will|wo|ca|could|would|should)n['\u2019]t$/);
+    if(mNt){ pend.neg=true; const aux=mNt[1]; if(_AUX_TENSE[aux]!==undefined && _AUX_TENSE[aux]) pend.tense=_AUX_TENSE[aux]; pend.carriedSrc.push(w); i++; continue; }
+    if(_AUX_TENSE[lw]!==undefined){ if(_AUX_TENSE[lw]) pend.tense=_AUX_TENSE[lw]; pend.carriedSrc.push(w); i++; continue; } // did/does/do as tense carrier
+    // possessive "of [the/a] NOUN": consume "of" (+ optional article) only if a content word follows
+    if(lw==='of'){
+      let j=i+1; const eaten=[w];
+      while(j<words.length && _ARTICLES.has(words[j].toLowerCase())){ eaten.push(words[j]); j++; }
+      const nextR = (j<words.length && !/^[.,!?;:]$/.test(words[j])) ? resolveEng(words[j].toLowerCase(), {}) : null;
+      if(nextR){ pend.poss=true; pend.carriedSrc.push(...eaten); i=j; continue; } // fold into the noun ahead
+      // otherwise fall through and treat "of" as an ordinary word
+    }
+
+    // ---- possessive clitic on this very token: father's / fathers' ----
+    let possHere=false, baseTok=w;
+    let mClit = w.match(/^(.*?)['\u2019]s$/i) || w.match(/^(.*?s)['\u2019]$/i);
+    if(mClit && mClit[1]){ baseTok=mClit[1]; possHere=true; }
+
+    // ---- greedy phrase up to 3 words (content lookup) ----
     let matched = null, span = 1;
     for(let n=Math.min(3, words.length-i); n>=1; n--){
-      const phrase = words.slice(i,i+n).filter(x=>!/^[.,!?;:]$/.test(x)).join(' ').toLowerCase();
+      const slice = words.slice(i,i+n).filter(x=>!/^[.,!?;:]$/.test(x));
+      const phrase = (n===1 ? baseTok : slice.join(' ')).toLowerCase();
       if(enToAu[phrase]){ matched = enToAu[phrase][0]; span = n; break; }
     }
-    const srcText = words.slice(i,i+span).join(' ');
+    const srcCore = (span===1 && possHere) ? baseTok : words.slice(i,i+span).join(' ');
+    const srcFull = pend.carriedSrc.concat(possHere ? [w] : [words.slice(i,i+span).join(' ')]).join(' ');
+
     if(matched){
-      let auForm = matched.au;
-      let rnote = null;
+      let auForm = matched.au, rnote = null, notes = [];
       const pcat = PRON_PERSON[auForm.toLowerCase()];
-      if(pcat && pronRank[pcat]){
-        auForm = pronRank[pcat] + auForm;
-        rnote = RANK_LABEL[pronRank[pcat]];
-      }
-      out.push({src:srcText, au:auForm, en:matched.full, note:rnote});
+      if(pcat && pronRank[pcat]){ auForm = pronRank[pcat] + auForm; rnote = RANK_LABEL[pronRank[pcat]]; }
+      // apply a pending tense to a verb (do-support)
+      if(pend.tense && matched.pos==='v'){ const t=applyMorph(matched,pend.tense==='past'?'past':'present',{}); auForm = (pcat&&pronRank[pcat]?pronRank[pcat]:'')+t.au; if(t.note) notes.push(t.note); }
+      // suffix order: negation then possessive (plural would already be in au from phrase entry)
+      if(pend.neg && (matched.pos==='v'||matched.pos==='adj')){ auForm=_attachNeg(auForm); notes.push('negated'); }
+      if((pend.poss||possHere) && (matched.pos==='n'||matched.pos==='title'||matched.pos==='pron')){ auForm=_attachPoss(auForm); notes.push('possessive'); }
+      const noteStr=[rnote].concat(notes).filter(Boolean).join(' \u00b7 ') || null;
+      out.push({src:srcFull, au:auForm, en:matched.full, note:noteStr});
       prevWasNumber = (matched.pos==='num' || matched.pos==='ord');
+      pend = {neg:false, poss:false, tense:null, carriedSrc:[]};
     } else {
-      const r = resolveEng(w, {afterNumber: prevWasNumber});
-      if(r){ out.push({src:srcText, au:r.au, en:r.en, note:r.note}); }
-      else { out.push({src:srcText, au:null}); }
+      const r = resolveEng(baseTok, {afterNumber: prevWasNumber});
+      if(r){
+        let auForm=r.au, notes=[];
+        if(pend.neg){ auForm=_attachNeg(auForm); notes.push('negated'); }
+        if(pend.poss||possHere){ auForm=_attachPoss(auForm); notes.push('possessive'); }
+        const noteStr=[r.note].concat(notes).filter(Boolean).join(' \u00b7 ') || null;
+        out.push({src:srcFull, au:auForm, en:r.en, note:noteStr});
+      } else {
+        flushOrphans();
+        out.push({src:srcCore, au:null});
+      }
       prevWasNumber = false;
+      pend = {neg:false, poss:false, tense:null, carriedSrc:[]};
     }
     i += span;
   }
+  flushOrphans();
   return {tokens:out};
 }
 
