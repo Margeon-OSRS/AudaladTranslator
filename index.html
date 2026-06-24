@@ -2565,6 +2565,43 @@ function lookupAu(word){
   if(direct) return {au:direct.rec.au, en:direct.rec.en, notes:direct.notes};
   return null;
 }
+/* ---- readable English surface forms for the AU->EN sentence line ---- */
+function _enPast(stem){
+  // regular -ed with the common spelling tweaks; irregulars stay as-is upstream
+  if(/e$/.test(stem)) return stem+'d';
+  if(/[^aeiou]y$/.test(stem)) return stem.slice(0,-1)+'ied';
+  if(/[^aeiouwxy][aeiou][bdgklmnprt]$/.test(stem)) return stem+stem.slice(-1)+'ed'; // short CVC: stop -> stopped
+  return stem+'ed';
+}
+function _enIng(stem){
+  if(/[^aeiou]e$/.test(stem)) return stem.slice(0,-1)+'ing';  // make -> making
+  if(/[^aeiouwxy][aeiou][bdgklmnprt]$/.test(stem)) return stem+stem.slice(-1)+'ing';
+  return stem+'ing';
+}
+function _enThirdPerson(stem){
+  if(/(s|sh|ch|x|z|o)$/.test(stem)) return stem+'es';
+  if(/[^aeiou]y$/.test(stem)) return stem.slice(0,-1)+'ies';
+  return stem+'s';
+}
+function smoothEng(en, notes){
+  const isVerb = /^to /.test(en);
+  let stem = en.replace(/^to /,'');
+  const tense = notes.find(n=>/past|future|present|continuous/.test(n));
+  if(isVerb && tense){
+    if(/past/.test(tense))            stem = _enPast(stem);
+    else if(tense==='present')        stem = _enThirdPerson(stem);
+    else if(tense==='far-future')     stem = 'will '+stem;
+    else if(tense==='near-future')    stem = 'about to '+stem;
+    else if(tense==='continuous')     stem = 'is '+_enIng(stem);
+    en = stem;
+  } else if(isVerb && notes.includes('negated')){
+    en = stem; // keep bare verb stem so negation reads cleanly below
+  }
+  if(notes.includes('negated')) en = 'not '+en.replace(/^to /,'');
+  if(notes.includes('plural')||notes.includes('plural (Yi-)')) en = en+'s';
+  if(notes.includes('of-the')) en = 'of the '+en;
+  return en;
+}
 function translateAuToEn(text){
   const raw = text.replace(/\s+/g,' ').trim();
   if(!raw) return {tokens:[]};
@@ -2574,10 +2611,7 @@ function translateAuToEn(text){
     if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
     const res = lookupAu(w);
     if(res){
-      let eng = res.en;
-      if(res.notes.includes('negated')) eng = 'not '+eng.replace(/^to /,'');
-      if(res.notes.includes('plural')) eng = eng+'s';
-      if(res.notes.includes('of-the')) eng = eng+' (of)';
+      let eng = smoothEng(res.en, res.notes);
       // tense
       const t = res.notes.find(n=>/past|future|present|continuous/.test(n));
       out.push({src:w, au:res.au, en:eng, note: t || (res.notes.includes('plural')?'plural':res.notes.includes('negated')?'negation':res.notes.includes('of-the')?'possessive':null)});
