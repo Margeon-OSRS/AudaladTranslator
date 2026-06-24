@@ -2533,36 +2533,100 @@ const TENSE = [
 ];
 function deaccent(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
 
-function resolveSuffix(word){
-  // returns {rec, notes:[]} or null  (word: original-case-insensitive)
-  const lw = word.toLowerCase();
+/* ---------- robust AU -> EN resolver ----------
+   Peels markers in morphological order and ALWAYS prefers a whole-word
+   lexicon hit over any stripped reading, so real headwords that happen to
+   end in -ir / -ad / -ae are never mis-parsed as inflected forms.
+   Layers (outer -> inner): tense prefix | plural / negation | possessive.
+   Multiple suffixes stack (e.g. plural-of-a-possessive). Lookup runs in a
+   normalized (deaccented, lower) space; original casing is carried for the
+   gloss separately. */
+
+// Tense prefixes keyed by their deaccented-lower form, longest first so a
+// short prefix can never pre-empt a longer one sharing its opening.
+const _TENSE_NORM = TENSE
+  .map(([acc, plain, label]) => [plain.replace(/\s+/g,''), label])
+  .sort((a,b) => b[0].length - a[0].length);
+
+// Suffix markers, longest first within each family. Possessive is innermost.
+const _SUFFIX_RULES = [
+  ['ae','plural'],
+  ['ir','negated'],
+  ['adi','of-the'], ['id','of-the'], ['ad','of-the']
+];
+
+function _stripSuffixes(stem){
+  // Returns {core, notes:[...]} after peeling as many stacked suffixes as
+  // resolve to a real headword. Whole-word hit wins at every level.
+  let core = stem;
   const notes = [];
-  if(auToEn[lw]) return {rec:auToEn[lw], notes};
-  // plural -ae
-  if(lw.endsWith('ae') && auToEn[lw.slice(0,-2)]) return {rec:auToEn[lw.slice(0,-2)], notes:['plural']};
-  // negation -ir
-  if(lw.endsWith('ir') && auToEn[lw.slice(0,-2)]) return {rec:auToEn[lw.slice(0,-2)], notes:['negated']};
-  // possessive / adjectival
-  for(const suf of ['adi','id','ad']){
-    if(lw.endsWith(suf) && auToEn[lw.slice(0,-suf.length)]) return {rec:auToEn[lw.slice(0,-suf.length)], notes:['of-the']};
+  let guard = 0;
+  while(guard++ < 6){
+    if(auToEn[core]) return {core, notes};              // exact headword: stop
+    let advanced = false;
+    for(const [suf, label] of _SUFFIX_RULES){
+      if(core.length > suf.length && core.endsWith(suf)){
+        const cand = core.slice(0, -suf.length);
+        // only peel if what remains is itself resolvable (directly, by Yi-,
+        // or by further suffix peeling) — avoids shaving real headwords
+        if(auToEn[cand] || (cand.startsWith('yi') && auToEn[cand.slice(2)]) || _peelable(cand)){
+          core = cand; notes.push(label); advanced = true; break;
+        }
+      }
+    }
+    if(!advanced) break;
   }
-  // non-personified plural Yi-
-  if(lw.startsWith('yi') && auToEn[lw.slice(2)]) return {rec:auToEn[lw.slice(2)], notes:['plural']};
+  if(auToEn[core]) return {core, notes};
+  // non-personified plural Yi- (a prefix; check after suffix peeling)
+  if(core.length > 2 && core.startsWith('yi') && auToEn[core.slice(2)]){
+    return {core: core.slice(2), notes: notes.concat(['plural'])};
+  }
+  return notes.length && auToEn[core] ? {core, notes} : null;
+}
+
+// lightweight lookahead: would `stem` resolve if we kept peeling? (no notes)
+function _peelable(stem){
+  let core = stem, guard = 0;
+  while(guard++ < 6){
+    if(auToEn[core]) return true;
+    let advanced = false;
+    for(const [suf] of _SUFFIX_RULES){
+      if(core.length > suf.length && core.endsWith(suf)){
+        const cand = core.slice(0, -suf.length);
+        if(auToEn[cand] || (cand.startsWith('yi') && auToEn[cand.slice(2)])){ core = cand; advanced = true; break; }
+      }
+    }
+    if(!advanced) break;
+  }
+  if(auToEn[core]) return true;
+  return core.length > 2 && core.startsWith('yi') && !!auToEn[core.slice(2)];
+}
+
+function resolveAuStem(stemNorm){
+  // stemNorm is already deaccented+lower. Returns {rec, notes} or null.
+  const r = _stripSuffixes(stemNorm);
+  if(r){ return {rec: auToEn[r.core], notes: r.notes}; }
   return null;
 }
+
 function lookupAu(word){
-  const direct = resolveSuffix(word);
-  if(direct && !direct.notes.length) return {au:auToEn[word.toLowerCase()].au, en:auToEn[word.toLowerCase()].en, notes:[]};
-  // try tense prefix
-  const dw = deaccent(word);
-  for(const [acc, plain, label] of TENSE){
-    if(dw.startsWith(plain)){
-      const rest = word.slice(word.length - (dw.length - plain.length)); // approximate slice on original
-      const r = resolveSuffix(rest);
-      if(r){ return {au:r.rec.au, en:r.rec.en, notes:[label, ...r.notes]}; }
+  const norm = deaccent(word);                  // deaccented + lowercased
+  // 1) whole word, no markers — highest priority
+  if(auToEn[norm]) return {au: auToEn[norm].au, en: auToEn[norm].en, notes: []};
+  // 2) suffix / plural stack with no tense (norm is not a whole-word hit here)
+  const bare = resolveAuStem(norm);
+  if(bare && bare.notes.length) return {au: bare.rec.au, en: bare.rec.en, notes: bare.notes};
+  // 3) tense prefix (longest match first) + whatever the residue resolves to
+  for(const [plain, label] of _TENSE_NORM){
+    if(norm.length > plain.length && norm.startsWith(plain)){
+      const residue = norm.slice(plain.length);
+      if(auToEn[residue]) return {au: auToEn[residue].au, en: auToEn[residue].en, notes: [label]};
+      const r = resolveAuStem(residue);
+      if(r) return {au: r.rec.au, en: r.rec.en, notes: [label, ...r.notes]};
     }
   }
-  if(direct) return {au:direct.rec.au, en:direct.rec.en, notes:direct.notes};
+  // 4) last resort: a bare suffix-stripped reading even if step 2 was cautious
+  if(bare) return {au: bare.rec.au, en: bare.rec.en, notes: bare.notes};
   return null;
 }
 /* ---- readable English surface forms for the AU->EN sentence line ---- */
@@ -2583,7 +2647,7 @@ function _enThirdPerson(stem){
   if(/[^aeiou]y$/.test(stem)) return stem.slice(0,-1)+'ies';
   return stem+'s';
 }
-function smoothEng(en, notes){
+function smoothEng(en, notes, wasCap){
   const isVerb = /^to /.test(en);
   let stem = en.replace(/^to /,'');
   const tense = notes.find(n=>/past|future|present|continuous/.test(n));
@@ -2594,12 +2658,13 @@ function smoothEng(en, notes){
     else if(tense==='near-future')    stem = 'about to '+stem;
     else if(tense==='continuous')     stem = 'is '+_enIng(stem);
     en = stem;
-  } else if(isVerb && notes.includes('negated')){
-    en = stem; // keep bare verb stem so negation reads cleanly below
+  } else if(isVerb && (notes.includes('negated') || notes.includes('plural') || notes.includes('plural (Yi-)') || notes.includes('of-the'))){
+    en = stem; // a verb taking any marker: drop the infinitive "to " so it composes cleanly
   }
   if(notes.includes('negated')) en = 'not '+en.replace(/^to /,'');
   if(notes.includes('plural')||notes.includes('plural (Yi-)')) en = en+'s';
   if(notes.includes('of-the')) en = 'of the '+en;
+  if(wasCap && en) en = en.charAt(0).toUpperCase()+en.slice(1);
   return en;
 }
 function translateAuToEn(text){
@@ -2611,7 +2676,7 @@ function translateAuToEn(text){
     if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
     const res = lookupAu(w);
     if(res){
-      let eng = smoothEng(res.en, res.notes);
+      let eng = smoothEng(res.en, res.notes, /^[A-Z]/.test(w));
       // tense
       const t = res.notes.find(n=>/past|future|present|continuous/.test(n));
       out.push({src:w, au:res.au, en:eng, note: t || (res.notes.includes('plural')?'plural':res.notes.includes('negated')?'negation':res.notes.includes('of-the')?'possessive':null)});
