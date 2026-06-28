@@ -868,9 +868,174 @@ a{color:var(--gold-soft);}
 #surdalad .scrdisp-head{color:var(--iris-soft);}
 #surdalad .scrdisp-pop input[type="range"]{accent-color:var(--iris);}
 #surdalad .scrReset:hover{color:var(--iris-soft);}
+
+/* ============================================================
+   FIT & FINISH  —  derived tokens, focus floor, motion, mobile
+   ============================================================ */
+:root{
+  --elev-1:0 1px 2px rgba(0,0,0,0.4);
+  --elev-2:0 6px 24px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.4);
+  --ring:0 0 0 2px var(--bg), 0 0 0 3px var(--gold-soft);
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+/* Keyboard focus floor: every interactive control gets one visible, gold ring.
+   Mouse users keep the existing quiet hover states (focus-visible only). */
+a:focus-visible,button:focus-visible,input:focus-visible,
+textarea:focus-visible,select:focus-visible,summary:focus-visible,
+[tabindex]:focus-visible{
+  outline:none;
+  box-shadow:var(--ring);
+  border-radius:3px;
+}
+.tab:focus-visible,.subtab:focus-visible,.wmode-btn:focus-visible,
+.ctier-btn:focus-visible,.chip:focus-visible{border-radius:3px;}
+
+/* Smooth the tab underline-to-fill transition that was instant before */
+.tab{transition:color .18s var(--ease),background .18s var(--ease),border-color .18s var(--ease);}
+.entry{transition:border-color .18s var(--ease),transform .18s var(--ease),box-shadow .18s var(--ease);}
+.entry:hover{box-shadow:var(--elev-1);}
+
+/* Respect reduced-motion across the whole document */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+  .swap:hover{transform:none;}
+}
+
+/* Mobile tightening: the header and tab rail eat too much vertical space
+   on a phone, pushing the actual tools below the fold. */
+@media (max-width:560px){
+  .wrap{padding:22px 14px 64px;}
+  .crest{font-size:40px;}
+  h1{letter-spacing:4px;}
+  .rule{margin:14px auto 20px;}
+  .tabs{gap:5px;margin-bottom:20px;}
+  .tab{padding:7px 11px;font-size:12px;}
+  .io{gap:14px;}
+  textarea{font-size:16px;} /* prevents iOS zoom-on-focus */
+  .searchbar input,.l-search,.vinput,.morphsearch{font-size:16px;}
+}
+
+/* ============================================================
+   THE INDEX  —  global command palette (Cmd/Ctrl-K or /)
+   One search across every register of the corpus: headword,
+   gloss, part of speech, and the scholar who proposed it.
+   ============================================================ */
+.cmdk-hint{
+  display:inline-flex;align-items:center;gap:7px;
+  margin:14px auto 0;padding:7px 14px;
+  background:transparent;border:1px solid var(--line);border-radius:3px;
+  color:var(--ink-dim);font-family:'EB Garamond',serif;font-size:13px;
+  cursor:pointer;transition:all .15s var(--ease);
+}
+.cmdk-hint:hover{border-color:var(--gold-dim);color:var(--ink);}
+.cmdk-hint kbd{
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:.5px;
+  background:var(--panel2);border:1px solid var(--line);border-bottom-width:2px;
+  border-radius:3px;padding:2px 6px;color:var(--gold-soft);
+}
+.cmdk-hint .ck-glyph{font-family:'AudaladScript';font-size:18px;color:var(--gold-soft);line-height:1;}
+
+.cmdk-scrim{
+  position:fixed;inset:0;z-index:200;display:none;
+  background:rgba(6,5,9,0.72);
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  padding:14vh 16px 16px;
+  animation:ckFade .16s var(--ease);
+}
+.cmdk-scrim.open{display:block;}
+@keyframes ckFade{from{opacity:0;}to{opacity:1;}}
+
+.cmdk{
+  max-width:600px;margin:0 auto;
+  background:linear-gradient(180deg,var(--panel),var(--bg2));
+  border:1px solid var(--gold-dim);border-radius:8px;
+  box-shadow:var(--elev-2), 0 0 60px rgba(212,175,82,0.08);
+  overflow:hidden;
+  animation:ckRise .2s var(--ease);
+}
+@keyframes ckRise{from{opacity:0;transform:translateY(-10px) scale(.985);}to{opacity:1;transform:none;}}
+
+.cmdk-top{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);}
+.cmdk-sigil{font-family:'AudaladScript';font-size:26px;color:var(--gold);line-height:1;text-shadow:0 0 18px rgba(212,175,82,0.25);flex:none;}
+.cmdk-input{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--ink);font-family:'EB Garamond',serif;font-size:19px;
+}
+.cmdk-input::placeholder{color:#5a5266;font-style:italic;}
+.cmdk-esc{
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;color:var(--ink-dim);
+  border:1px solid var(--line);border-radius:3px;padding:3px 7px;flex:none;
+}
+
+.cmdk-results{max-height:48vh;overflow-y:auto;overscroll-behavior:contain;padding:6px 0;}
+.cmdk-results::-webkit-scrollbar{width:9px;}
+.cmdk-results::-webkit-scrollbar-thumb{background:var(--line);border-radius:5px;border:2px solid var(--bg2);}
+
+.ck-group-label{
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--gold-soft);padding:10px 18px 5px;display:flex;align-items:center;gap:8px;
+}
+.ck-group-label::after{content:"";flex:1;height:1px;background:var(--line);}
+
+.ck-row{
+  display:flex;align-items:baseline;gap:12px;
+  padding:9px 18px;cursor:pointer;border-left:2px solid transparent;
+  transition:background .1s var(--ease),border-color .1s var(--ease);
+}
+.ck-row:hover,.ck-row.sel{background:rgba(212,175,82,0.07);border-left-color:var(--gold);}
+.ck-row .ck-head{color:var(--gold);font-size:17px;flex:none;min-width:0;}
+.ck-row .ck-native{font-family:'AudaladScript';font-size:20px;color:var(--gold-soft);opacity:.8;margin-left:6px;}
+.ck-row .ck-gloss{color:var(--ink);font-size:15px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ck-row .ck-meta{display:flex;align-items:center;gap:8px;flex:none;}
+.ck-row .ck-pos{
+  font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;text-transform:uppercase;
+  color:var(--ink-dim);border:1px solid var(--line);border-radius:9px;padding:2px 7px;
+}
+.ck-row .ck-by{color:var(--verd);font-size:11px;font-style:italic;}
+.ck-row.ck-action .ck-head{color:var(--ink);font-size:15px;}
+.ck-row.ck-action .ck-sigil-sm{color:var(--gold-soft);font-size:18px;flex:none;}
+
+.cmdk-empty{padding:30px 18px;text-align:center;color:var(--ink-dim);font-style:italic;font-size:14px;line-height:1.7;}
+.cmdk-foot{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  padding:9px 16px;border-top:1px solid var(--line);
+  color:var(--ink-dim);font-size:11px;
+}
+.cmdk-foot kbd{
+  font-family:'Cinzel',serif;font-size:9px;background:var(--panel2);
+  border:1px solid var(--line);border-radius:3px;padding:1px 5px;color:var(--ink-dim);margin:0 2px;
+}
+@media (max-width:560px){
+  .cmdk-scrim{padding:8vh 10px 10px;}
+  .cmdk-input{font-size:16px;}
+  .cmdk-foot{display:none;}
+  .ck-row .ck-by{display:none;}
+}
 </style>
 </head>
 <body>
+<div class="cmdk-scrim" id="cmdkScrim" role="dialog" aria-modal="true" aria-label="The Index: search the corpus">
+  <div class="cmdk">
+    <div class="cmdk-top">
+      <span class="cmdk-sigil" aria-hidden="true">A</span>
+      <input class="cmdk-input" id="cmdkInput" type="text" autocomplete="off" spellcheck="false"
+             placeholder="Search a word, gloss, part of speech, or scholar&hellip;">
+      <span class="cmdk-esc">ESC</span>
+    </div>
+    <div class="cmdk-results" id="cmdkResults"></div>
+    <div class="cmdk-foot">
+      <span><kbd>&uarr;</kbd><kbd>&darr;</kbd> move</span>
+      <span><kbd>&crarr;</kbd> open</span>
+      <span><kbd>esc</kbd> close</span>
+    </div>
+  </div>
+</div>
 <div class="wrap">
   <header>
     <div class="crest">Audalad</div>
@@ -887,6 +1052,14 @@ a{color:var(--gold-soft);}
     <button class="tab" data-view="forge">Forge</button>
     <button class="tab" data-view="grammar">Grammar</button>
     <button class="tab" data-view="dialects">Kindred Tongues</button>
+  </div>
+
+  <div style="text-align:center;">
+    <button class="cmdk-hint" id="cmdkHint" aria-label="Open the index (keyboard shortcut Control or Command K)">
+      <span class="ck-glyph" aria-hidden="true">A</span>
+      Search the whole corpus
+      <kbd>&#8984;K</kbd>
+    </button>
   </div>
 
   <details class="guide">
@@ -3176,6 +3349,213 @@ document.querySelectorAll('.tab').forEach(t=>{
     document.getElementById(t.dataset.view).classList.add('active');
   });
 });
+
+/* ============================================================
+   THE INDEX  —  global command palette
+   Searches the whole corpus (headword, gloss, part of speech,
+   contributor) and deep-links into the relevant tab.
+   ============================================================ */
+(function(){
+  const scrim=document.getElementById('cmdkScrim');
+  const input=document.getElementById('cmdkInput');
+  const list=document.getElementById('cmdkResults');
+  const hint=document.getElementById('cmdkHint');
+  if(!scrim||!input||!list) return;
+
+  function goToView(view){
+    const tab=document.querySelector('.tab[data-view="'+view+'"]');
+    if(tab) tab.click();
+  }
+
+  // Open a lexicon entry: switch to Lexicon, prefill its search, flash the card.
+  function openEntry(rec){
+    close();
+    goToView('dict');
+    const s=document.getElementById('search');
+    if(s){ s.value=rec.au; s.dispatchEvent(new Event('input',{bubbles:true})); }
+    requestAnimationFrame(()=>{
+      const cards=document.querySelectorAll('#dict .entry');
+      for(const c of cards){
+        if((c.textContent||'').toLowerCase().includes(rec.au.toLowerCase())){
+          c.scrollIntoView({block:'center',behavior:'smooth'});
+          c.style.transition='box-shadow .3s ease,border-color .3s ease';
+          c.style.boxShadow='0 0 0 2px var(--gold)';
+          setTimeout(()=>{c.style.boxShadow='';},1100);
+          break;
+        }
+      }
+    });
+  }
+
+  // Tab targets, so "grammar" or "forge" typed into the Index jumps there.
+  const TABS=[
+    {view:'translate',label:'Translate',hint:'Render English into Audalad and back'},
+    {view:'dict',label:'Lexicon',hint:'Browse every documented word'},
+    {view:'wants',label:'Wants',hint:'Words the community still needs'},
+    {view:'conj',label:'Conjugate',hint:'Lay out a verb across all tenses'},
+    {view:'forge',label:'Forge',hint:'Coin new words from real roots'},
+    {view:'grammar',label:'Grammar',hint:'The rules of the tongue'},
+    {view:'dialects',label:'Kindred Tongues',hint:'Keshir, Dimainad, Shavur, Surdalad'}
+  ];
+
+  // Group order mirrors the lexicon's own part-of-speech ordering.
+  const GROUP_ORDER=['title','n','v','adj','adv','prep','conj','det','pron','num','ord','q','intj','name'];
+  function groupRank(pos){ const i=GROUP_ORDER.indexOf(pos); return i<0?99:i; }
+
+  const norm=s=>(s||'').toLowerCase().replace(/['\u2019\u02bc\u02b9]/g,'').trim();
+
+  // Score a record against the query. Lower is better; null = no match.
+  function score(rec, q){
+    const head=norm(rec.au), gloss=(rec.en||'').toLowerCase(), by=(rec.by||'').toLowerCase();
+    const posName=(POS_LABEL[rec.pos]||rec.pos||'').toLowerCase();
+    if(head===q) return 0;
+    if(head.startsWith(q)) return 1;
+    // gloss word-start (e.g. "wat" -> "water")
+    if(gloss.split(/[\/,;]\s*|\s+/).some(w=>w.replace(/[()]/g,'').startsWith(q))) return 2;
+    if(head.includes(q)) return 3;
+    if(gloss.includes(q)) return 4;
+    if(by && by.includes(q)) return 5;
+    if(posName.startsWith(q)) return 6;
+    return null;
+  }
+
+  let results=[], sel=0;
+
+  function render(){
+    const q=norm(input.value);
+    list.innerHTML='';
+    results=[];
+
+    if(!q){
+      // Resting state: offer the tab destinations as an index of the toolkit.
+      const lbl=document.createElement('div');
+      lbl.className='ck-group-label'; lbl.textContent='Jump to';
+      list.appendChild(lbl);
+      TABS.forEach(t=>{
+        const row=document.createElement('div');
+        row.className='ck-row ck-action';
+        row.innerHTML='<span class="ck-sigil-sm" aria-hidden="true">&#8250;</span>'+
+          '<span class="ck-head">'+escapeHtml(t.label)+'</span>'+
+          '<span class="ck-gloss">'+escapeHtml(t.hint)+'</span>';
+        row.addEventListener('click',()=>{close();goToView(t.view);});
+        results.push({el:row,run:()=>{close();goToView(t.view);}});
+        list.appendChild(row);
+      });
+      sel=0; paintSel(); return;
+    }
+
+    // Tab-name matches first (typing "forge" should clearly offer Forge).
+    const tabHits=TABS.filter(t=>t.label.toLowerCase().includes(q)||t.view.includes(q));
+    if(tabHits.length){
+      const lbl=document.createElement('div');
+      lbl.className='ck-group-label'; lbl.textContent='Pages';
+      list.appendChild(lbl);
+      tabHits.forEach(t=>{
+        const row=document.createElement('div');
+        row.className='ck-row ck-action';
+        row.innerHTML='<span class="ck-sigil-sm" aria-hidden="true">&#8250;</span>'+
+          '<span class="ck-head">'+escapeHtml(t.label)+'</span>'+
+          '<span class="ck-gloss">'+escapeHtml(t.hint)+'</span>';
+        const run=()=>{close();goToView(t.view);};
+        row.addEventListener('click',run);
+        results.push({el:row,run}); list.appendChild(row);
+      });
+    }
+
+    // Corpus matches, de-duplicated by headword+gloss, scored and grouped.
+    const seen=new Set(), scored=[];
+    lex().forEach(rec=>{
+      if(!rec||!rec.au) return;
+      const sc=score(rec,q); if(sc===null) return;
+      const key=norm(rec.au)+'|'+(rec.en||'').toLowerCase();
+      if(seen.has(key)) return; seen.add(key);
+      scored.push({rec,sc});
+    });
+    scored.sort((a,b)=> a.sc-b.sc || groupRank(a.rec.pos)-groupRank(b.rec.pos) || norm(a.rec.au).localeCompare(norm(b.rec.au)));
+    const CAP=60; const shown=scored.slice(0,CAP);
+
+    // Bucket by POS while preserving the score-sorted order within each bucket.
+    const buckets={};
+    shown.forEach(s=>{ (buckets[s.rec.pos]=buckets[s.rec.pos]||[]).push(s.rec); });
+    Object.keys(buckets).sort((a,b)=>groupRank(a)-groupRank(b)).forEach(pos=>{
+      const lbl=document.createElement('div');
+      lbl.className='ck-group-label';
+      lbl.textContent=(POS_LABEL[pos]||pos)+(buckets[pos].length>1?'s':'');
+      list.appendChild(lbl);
+      buckets[pos].forEach(rec=>{
+        const row=document.createElement('div');
+        row.className='ck-row';
+        const by=rec.by?'<span class="ck-by">'+escapeHtml(rec.by)+'</span>':'';
+        row.innerHTML=
+          '<span class="ck-head">'+escapeHtml(rec.au)+
+            '<span class="ck-native" aria-hidden="true">'+escapeHtml(toNative(rec.au))+'</span></span>'+
+          '<span class="ck-gloss">'+escapeHtml(rec.en||'')+'</span>'+
+          '<span class="ck-meta"><span class="ck-pos">'+escapeHtml(POS_LABEL[rec.pos]||rec.pos||'')+'</span>'+by+'</span>';
+        const run=()=>openEntry(rec);
+        row.addEventListener('click',run);
+        results.push({el:row,run}); list.appendChild(row);
+      });
+    });
+
+    if(!results.length){
+      const e=document.createElement('div');
+      e.className='cmdk-empty';
+      e.innerHTML='No entry for &ldquo;'+escapeHtml(input.value.trim())+'&rdquo;.<br>'+
+        'Try a gloss in English, or forge it on the Forge page.';
+      list.appendChild(e);
+    }
+    if(scored.length>CAP){
+      const m=document.createElement('div');
+      m.className='cmdk-empty';
+      m.style.padding='12px 18px';
+      m.textContent=(scored.length-CAP)+' more matches — keep typing to narrow.';
+      list.appendChild(m);
+    }
+    sel=0; paintSel();
+  }
+
+  function paintSel(){
+    results.forEach((r,i)=>r.el.classList.toggle('sel',i===sel));
+    if(results[sel]) results[sel].el.scrollIntoView({block:'nearest'});
+  }
+
+  function open(){
+    scrim.classList.add('open');
+    document.body.style.overflow='hidden';
+    input.value=''; render(); input.focus();
+  }
+  function close(){
+    scrim.classList.remove('open');
+    document.body.style.overflow='';
+  }
+
+  if(hint) hint.addEventListener('click',open);
+  input.addEventListener('input',render);
+
+  scrim.addEventListener('mousedown',e=>{ if(e.target===scrim) close(); });
+
+  input.addEventListener('keydown',e=>{
+    if(e.key==='ArrowDown'){ e.preventDefault(); if(results.length){sel=(sel+1)%results.length;paintSel();} }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); if(results.length){sel=(sel-1+results.length)%results.length;paintSel();} }
+    else if(e.key==='Enter'){ e.preventDefault(); if(results[sel]) results[sel].run(); }
+    else if(e.key==='Escape'){ e.preventDefault(); close(); }
+  });
+
+  // Global shortcuts: Cmd/Ctrl-K toggles; "/" opens when not already typing.
+  document.addEventListener('keydown',e=>{
+    const k=e.key.toLowerCase();
+    if((e.metaKey||e.ctrlKey)&&k==='k'){
+      e.preventDefault();
+      scrim.classList.contains('open')?close():open();
+      return;
+    }
+    if(e.key==='/' && !scrim.classList.contains('open')){
+      const t=document.activeElement, tag=t&&t.tagName;
+      if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||(t&&t.isContentEditable)) return;
+      e.preventDefault(); open();
+    }
+  });
+})();
 
 /* ---------- FORGE ---------- */
 function nativeSpan(s){return '<span>'+escapeHtml(toNative(s))+'</span>';}
@@ -5891,6 +6271,13 @@ function mountKindredTranslator(cfg){
   });
 
   apply();
+})();
+
+/* Platform-correct the Index shortcut label (mac shows the looped-square; elsewhere Ctrl). */
+(function(){
+  const isMac=/Mac|iPhone|iPad|iPod/.test(navigator.platform||navigator.userAgent||'');
+  if(isMac) return;
+  document.querySelectorAll('.cmdk-hint kbd').forEach(k=>{ k.textContent='Ctrl K'; });
 })();
 
 </script>
