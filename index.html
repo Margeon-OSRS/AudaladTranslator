@@ -210,6 +210,22 @@ textarea::placeholder{color:#5a5266;font-style:italic;}
 .tok .t-note{color:var(--verd);font-size:10px;letter-spacing:.5px;text-transform:uppercase;margin-top:2px;}
 .tok.miss .t-au{color:var(--err);}
 
+/* Unknown word: not an error, just not coined yet. Calm, dashed, actionable. */
+.tok.pending{
+  background:transparent;border:1px dashed var(--gold-dim);
+  display:flex;flex-direction:column;align-items:center;gap:1px;
+}
+.tok.pending .t-au{color:var(--ink-dim);font-size:14px;font-style:normal;}
+.tok.pending .t-pend{color:var(--gold-soft);font-size:9px;letter-spacing:.6px;text-transform:uppercase;}
+.tok.pending .t-forge{
+  margin-top:3px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.5px;
+  color:var(--gold);background:transparent;border:1px solid var(--gold-dim);
+  border-radius:3px;padding:2px 7px;cursor:pointer;transition:all .15s var(--ease,ease);
+}
+.tok.pending .t-forge:hover{background:var(--gold);color:var(--bg);border-color:var(--gold);}
+/* In the output line, an unknown word reads quietly rather than as bracketed error syntax. */
+.roman .unk{color:var(--ink-dim);border-bottom:1px dashed var(--gold-dim);cursor:help;}
+
 .toolbar{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:18px 0 4px;justify-content:center;}
 .toggle{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:14px;color:var(--ink-dim);user-select:none;}
 .toggle input{display:none;}
@@ -3080,11 +3096,17 @@ function render(){
   }
   // build output strings
   let parts=[];
+  let romanHtml='';   // display copy: unknown words get a quiet underline + tooltip
   res.tokens.forEach(t=>{
-    if(t.punct){ parts.push(t.punct); return; }
-    if(auOut){ parts.push(t.au!=null ? t.au : '['+t.src+'?]'); }
-    else { parts.push(t.en!=null ? t.en : '['+t.src+'?]'); }
+    if(t.punct){ parts.push(t.punct); romanHtml=romanHtml.replace(/\s$/,'')+escapeHtml(t.punct)+' '; return; }
+    const known = auOut ? t.au!=null : t.en!=null;
+    const word = known ? (auOut?t.au:t.en) : t.src;
+    parts.push(word);
+    romanHtml += (known
+      ? escapeHtml(word)
+      : '<span class="unk" title="Not in the lexicon yet — forge it below">'+escapeHtml(word)+'</span>') + ' ';
   });
+  romanHtml=romanHtml.trim();
   // join, attach punctuation tight
   let str='';
   parts.forEach(p=>{
@@ -3106,26 +3128,51 @@ function render(){
     lastOutText=str; lastNativeText=nstr;
     const ipa=ipaText(nstr);
     outputEl.innerHTML =
-      '<div class="roman">'+escapeHtml(str)+'</div>'+
+      '<div class="roman">'+romanHtml+'</div>'+
       '<div class="native">'+escapeHtml(toNative(nstr))+'</div>'+
       (ipa?'<div class="c-ipa">'+escapeHtml(ipa)+'</div>':'');
   } else {
     lastOutText=str; lastNativeText='';
-    outputEl.innerHTML = '<div class="roman">'+escapeHtml(str)+'</div>';
+    outputEl.innerHTML = '<div class="roman">'+romanHtml+'</div>';
   }
   // gloss
   if(glossToggle.checked){
     res.tokens.forEach(t=>{
       if(t.punct) return;
+      const unknown = (auOut && t.au==null) || (!auOut && t.en==null);
       const d=document.createElement('div');
-      d.className='tok'+(((auOut&&t.au==null)||(!auOut&&t.en==null))?' miss':'');
-      if(auOut){
-        d.innerHTML='<div class="t-au">'+escapeHtml(t.au||'??')+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+t.note+'</div>':'');
+      if(unknown){
+        // Not an error — just a word the lexicon doesn't have yet. Offer to forge it.
+        d.className='tok pending';
+        d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div>'+
+                    '<div class="t-pend">not coined yet</div>'+
+                    '<button class="t-forge" type="button">Forge</button>';
+        d.querySelector('.t-forge').addEventListener('click',()=>forgeWord(t.src));
+      } else if(auOut){
+        d.className='tok';
+        d.innerHTML='<div class="t-au">'+escapeHtml(t.au)+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+t.note+'</div>':'');
       } else {
-        d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.en||'??')+'</div>'+(t.note?'<div class="t-note">'+t.note+'</div>':'');
+        d.className='tok';
+        d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.en)+'</div>'+(t.note?'<div class="t-note">'+t.note+'</div>':'');
       }
       glossEl.appendChild(d);
     });
+  }
+}
+
+/* Send an untranslatable word straight to the Forge, concept-first, ready to coin. */
+function forgeWord(word){
+  const clean=(word||'').replace(/[.,!?;:]/g,'').trim();
+  const tab=document.querySelector('.tab[data-view="forge"]');
+  if(tab) tab.click();
+  const sub=document.querySelector('.subtab[data-fview="concept"]');
+  if(sub) sub.click();
+  const inp=document.getElementById('cnInput');
+  if(inp){
+    inp.value=clean;
+    inp.dispatchEvent(new Event('input',{bubbles:true}));
+    inp.scrollIntoView({block:'center',behavior:'smooth'});
+    setTimeout(()=>inp.focus(),250);
   }
 }
 function escapeHtml(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
@@ -5417,9 +5464,17 @@ function mountKindredTranslator(cfg){
     var res=cfg.translators[mode](text);
     glossEl.innerHTML='';
     if(!res.tokens.length){ lastText='';lastNative=''; outEl.innerHTML='<div class="placeholder">Translation appears here\u2026</div>'; return; }
-    var parts=res.tokens.map(function(t){ return t.punct? t.punct : ((auOut?t.au:t.en)!=null?(auOut?t.au:t.en):'['+t.src+'?]'); });
+    var romanHtml=''; // display: quietly mark words the dialect lexicon lacks
+    res.tokens.forEach(function(t){
+      if(t.punct){ romanHtml=romanHtml.replace(/\s$/,'')+escapeHtml(t.punct)+' '; return; }
+      var known=auOut?(t.au!=null):(t.en!=null);
+      var word=known?(auOut?t.au:t.en):t.src;
+      romanHtml += (known?escapeHtml(word):'<span class="unk" title="Not in this tongue\u2019s lexicon yet">'+escapeHtml(word)+'</span>')+' ';
+    });
+    romanHtml=romanHtml.trim();
+    var parts=res.tokens.map(function(t){ return t.punct? t.punct : ((auOut?t.au:t.en)!=null?(auOut?t.au:t.en):t.src); });
     var str=tJoinParts(parts);
-    var html='<div class="roman">'+escapeHtml(str)+'</div>';
+    var html='<div class="roman">'+romanHtml+'</div>';
     if(auOut){
       var np=[]; res.tokens.forEach(function(t){ if(t.punct){np.push(t.punct);return;} if(t.au!=null) np.push(t.au); });
       var ns=tJoinParts(np); lastText=str; lastNative=exportFn(ns);
@@ -5429,10 +5484,18 @@ function mountKindredTranslator(cfg){
     outEl.innerHTML=html;
     res.tokens.forEach(function(t){
       if(t.punct) return;
-      var d=document.createElement('div'); var miss=auOut?(t.au==null):(t.en==null);
-      d.className='tok'+(miss?' miss':'');
-      if(auOut) d.innerHTML='<div class="t-au">'+escapeHtml(t.au||'??')+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
-      else d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.en||'??')+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
+      var miss=auOut?(t.au==null):(t.en==null);
+      var d=document.createElement('div');
+      if(miss){
+        d.className='tok pending';
+        d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-pend">not coined yet</div>';
+      } else if(auOut){
+        d.className='tok';
+        d.innerHTML='<div class="t-au">'+escapeHtml(t.au)+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
+      } else {
+        d.className='tok';
+        d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.en)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
+      }
       glossEl.appendChild(d);
     });
   }
