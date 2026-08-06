@@ -3441,5 +3441,60 @@
     "en": "quarry",
     "pos": "n",
     "by": "Fenwik Rochelle"
+  },
+  {
+    "au": "Lumiyru'",
+    "en": "Copper",
+    "pos": "n",
+    "by": "Fenwik Rochelle"
+  },
+  {
+    "au": "Lumervis'",
+    "en": "Tin",
+    "pos": "n",
+    "by": "Fenwik Rochelle"
+  },
+  {
+    "au": "Lumervisiyru'",
+    "en": "Bronze",
+    "pos": "n",
+    "by": "Fenwik Rochelle"
+  },
+  {
+    "au": "Tsiat",
+    "en": "Rye",
+    "pos": "n",
+    "by": "Fenwik Rochelle"
+  },
+  {
+    "au": "Hiat",
+    "en": "Barley",
+    "pos": "n",
+    "by": "Fenwik Rochelle"
+  },
+  {
+    "au": "Veae",
+    "en": "Rice",
+    "pos": "n",
+    "by": "Fenwik Rochelle"
+  },
+  {
+    "au": "Utalshayr'",
+    "en": "Hut",
+    "pos": "n",
+    "by": "Fenwik Rochelle"
+  },
+  {
+    "au": "Dalkazhurlu'",
+    "en": "Coal",
+    "pos": "n",
+    "by": "Fenwik Rochelle"
+  },
+  {
+    "au": "Lua",
+    "en": "Develop",
+    "pos": "v",
+    "by": "Fenwik Rochelle"
   }
+  
 ]
