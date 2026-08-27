@@ -1179,7 +1179,7 @@ textarea:focus-visible,select:focus-visible,summary:focus-visible,
     </div>
 
     <div class="note">
-      <b>How it reads.</b> Translation is word-by-word (Audalad is SVO, like English). The engine handles tense prefixes, plurals (<i>-ae</i>), negation (<i>-ir</i>), possessives (<i>-ad</i>) and the non-personified plural (<i>Yi-</i>). <b>Social rank</b> sets the honorific prefix on pronouns: <i>Ori'</i> ascended/divine, <i>Itu'</i> greater, equal (none), <i>Ke'</i> lesser. Words it can't find are marked in red.
+      <b>How it reads.</b> Into Audalad, translation is word-by-word (Audalad is SVO, like English). The engine handles tense prefixes, plurals (<i>-ae</i>), negation (<i>-ir</i>), possessives (<i>-ad</i>) and the non-personified plural (<i>Yi-</i>). <b>Social rank</b> sets the honorific prefix on pronouns: <i>Ori'</i> ascended/divine, <i>Itu'</i> greater, equal (none), <i>Ke'</i> lesser. Out of Audalad, each word is looked up the same way and the line is then read as a sentence: the pronoun takes its case from where it stands, the verb agrees with its subject and takes its tense from the prefix, <i>-ir</i> (or <i>Num</i>) becomes English negation, a verb after a modal reads bare and after another verb as an infinitive, <i>-ad</i> reads by position (<i>naduad utal</i> the noble's house, <i>utal naduad</i> the house of the noble), <i>-esha</i> gives an adverb and <i>-dir</i> an ordinal. The word cards underneath keep the plain dictionary gloss. Words it can't find are marked in red.
     </div>
   </section>
 
@@ -2578,16 +2578,28 @@ function lex(){ return DATA.concat(officialWords, customWords); }
 
 /* ---------- build lookup maps (rebuilt whenever the lexicon changes) ---------- */
 let auToEn = {};   // lowercased audalad -> {au,en,pos}
+let auToEnAlt = {}; // lowercased audalad -> every record sharing that headword (homographs picked by context when reading)
 let enToAu = {};   // lowercased english key -> [{au,pos,full}]
 function addEn(key, rec){
   key = key.trim().toLowerCase();
   if(!key) return;
   (enToAu[key] = enToAu[key] || []).push(rec);
 }
+/* extra keys a headword answers to when read: accents dropped, the old letters (š ž ō) modernised, apostrophes dropped */
+function _auAliases(au){
+  const base=au.toLowerCase();
+  const de=deaccent(au), nb=_normBase(au).toLowerCase();
+  const out=[];
+  [de, nb, base.replace(/['\u2019\u02bc]/g,''), de.replace(/['\u2019\u02bc]/g,''), nb.replace(/['\u2019\u02bc]/g,'')]
+    .forEach(k=>{ if(k && k!==base && !out.includes(k)) out.push(k); });
+  return out;
+}
 function rebuildMaps(){
-  auToEn = {}; enToAu = {};
+  auToEn = {}; enToAu = {}; auToEnAlt = {};
   lex().forEach(d=>{
-    auToEn[d.au.toLowerCase()] = d;
+    const k=d.au.toLowerCase();
+    auToEn[k] = d;
+    (auToEnAlt[k]=auToEnAlt[k]||[]).push(d);
     const rec = {au:d.au, pos:d.pos, full:d.en};
     addEn(d.en, rec);
     d.en.split(/[\/,]/).forEach(part=>{
@@ -2600,6 +2612,11 @@ function rebuildMaps(){
   pronounParadigm().forEach(d=>{
     const k=d.au.toLowerCase();
     if(!auToEn[k]) auToEn[k]=d;
+  });
+  // aliases never shadow a real headword: they only fill keys nothing else claims
+  lex().forEach(d=>{
+    const k=d.au.toLowerCase();
+    _auAliases(d.au).forEach(a=>{ if(!auToEn[a]){ auToEn[a]=d; auToEnAlt[a]=auToEnAlt[k]; } });
   });
 }
 loadCustom();
@@ -2869,37 +2886,65 @@ function resolveAuStem(stemNorm){
   return null;
 }
 
-function lookupAu(word){
-  const norm = deaccent(word);                  // deaccented + lowercased
-  // 1) whole word, no markers — highest priority
-  if(auToEn[norm]) return {au: auToEn[norm].au, en: auToEn[norm].en, notes: []};
-  // 2) suffix / plural stack with no tense (norm is not a whole-word hit here)
+function _auHit(rec, notes){
+  return {au:rec.au, en:rec.en, pos:rec.pos, rec, notes, alts: auToEnAlt[rec.au.toLowerCase()]||[rec]};
+}
+function _lookupAuNorm(norm){
+  // norm is deaccented + lowercased with straight apostrophes
+  // 1) whole word, no markers: highest priority
+  if(auToEn[norm]) return _auHit(auToEn[norm], []);
+  // 2) the derived endings that sit outside the small ones: -esha (adverb from a verb), -diret / -dir (ordinal from a number)
+  for(const [suf,label,want] of [['esha','adverb','v'],['diret','ordinal','num'],['dir','ordinal','num']]){
+    if(norm.length > suf.length+1 && norm.endsWith(suf)){
+      const inner = norm.slice(0,-suf.length);
+      const r = auToEn[inner] ? _auHit(auToEn[inner],[]) : (label==='adverb' ? _lookupAuNorm(inner) : null);
+      if(r && r.pos===want) return _auHit(r.rec, r.notes.concat([label]));
+    }
+  }
+  // 3) suffix / plural stack with no tense
   const bare = resolveAuStem(norm);
-  if(bare && bare.notes.length) return {au: bare.rec.au, en: bare.rec.en, notes: bare.notes};
-  // 3) tense prefix (longest match first) + whatever the residue resolves to
+  if(bare && bare.notes.length) return _auHit(bare.rec, bare.notes);
+  // 4) tense prefix (longest match first) + whatever the residue resolves to
   for(const [plain, label] of _TENSE_NORM){
     if(norm.length > plain.length && norm.startsWith(plain)){
       const residue = norm.slice(plain.length);
-      if(auToEn[residue]) return {au: auToEn[residue].au, en: auToEn[residue].en, notes: [label]};
+      if(auToEn[residue]) return _auHit(auToEn[residue], [label]);
       const r = resolveAuStem(residue);
-      if(r) return {au: r.rec.au, en: r.rec.en, notes: [label, ...r.notes]};
+      if(r) return _auHit(r.rec, [label, ...r.notes]);
     }
   }
-  // 4) last resort: a bare suffix-stripped reading even if step 2 was cautious
-  if(bare) return {au: bare.rec.au, en: bare.rec.en, notes: bare.notes};
+  // 5) last resort: a bare suffix-stripped reading even if step 3 was cautious
+  if(bare) return _auHit(bare.rec, bare.notes);
   return null;
 }
+function lookupAu(word){
+  const src = String(word||'');
+  const regal = /^[\u00c2\u00e2]/.test(src);                       // the A-circumflex marker: a regal / divine name, read from its plain form
+  const norm = deaccent(src).replace(/[\u2019\u02bc]/g,"'");       // deaccented + lowercased, straight apostrophes
+  const rm = norm.match(/^(ori|itu|ke)'/);
+  const rank = rm ? ({ori:'ascended',itu:'greater',ke:'lesser'})[rm[1]] : null;
+  let hit = _lookupAuNorm(norm);
+  if(!hit && /'/.test(norm)) hit = _lookupAuNorm(norm.replace(/'/g,''));   // a typed cluster mark the headword lacks
+  if(!hit && rank){                                                 // a rank prefix on a form the paradigm does not list
+    const inner = _lookupAuNorm(norm.slice(rm[0].length));
+    if(inner && inner.pos==='pron') hit = inner;
+  }
+  if(!hit) return null;
+  hit.regal = regal; hit.rank = (hit.pos==='pron') ? rank : null; hit.norm = norm; hit.src = src;
+  return hit;
+}
 /* ---- readable English surface forms for the AU->EN sentence line ---- */
+function _enOneSyllable(stem){ return (stem.match(/[aeiouy]+/g)||[]).length===1; }
 function _enPast(stem){
   // regular -ed with the common spelling tweaks; irregulars stay as-is upstream
   if(/e$/.test(stem)) return stem+'d';
   if(/[^aeiou]y$/.test(stem)) return stem.slice(0,-1)+'ied';
-  if(/[^aeiouwxy][aeiou][bdgklmnprt]$/.test(stem)) return stem+stem.slice(-1)+'ed'; // short CVC: stop -> stopped
+  if(_enOneSyllable(stem) && /[^aeiouwxy][aeiou][bdgklmnprt]$/.test(stem)) return stem+stem.slice(-1)+'ed'; // short CVC: stop -> stopped (listen stays single)
   return stem+'ed';
 }
 function _enIng(stem){
   if(/[^aeiou]e$/.test(stem)) return stem.slice(0,-1)+'ing';  // make -> making
-  if(/[^aeiouwxy][aeiou][bdgklmnprt]$/.test(stem)) return stem+stem.slice(-1)+'ing';
+  if(_enOneSyllable(stem) && /[^aeiouwxy][aeiou][bdgklmnprt]$/.test(stem)) return stem+stem.slice(-1)+'ing';
   return stem+'ing';
 }
 function _enThirdPerson(stem){
@@ -2907,25 +2952,439 @@ function _enThirdPerson(stem){
   if(/[^aeiou]y$/.test(stem)) return stem.slice(0,-1)+'ies';
   return stem+'s';
 }
-function smoothEng(en, notes, wasCap){
-  const isVerb = /^to /.test(en);
-  let stem = en.replace(/^to /,'');
-  const tense = notes.find(n=>/past|future|present|continuous/.test(n));
-  if(isVerb && tense){
-    if(/past/.test(tense))            stem = _enPast(stem);
-    else if(tense==='present')        stem = _enThirdPerson(stem);
-    else if(tense==='far-future')     stem = 'will '+stem;
-    else if(tense==='near-future')    stem = 'about to '+stem;
-    else if(tense==='continuous')     stem = 'is '+_enIng(stem);
-    en = stem;
-  } else if(isVerb && (notes.includes('negated') || notes.includes('plural') || notes.includes('plural (Yi-)') || notes.includes('of-the'))){
-    en = stem; // a verb taking any marker: drop the infinitive "to " so it composes cleanly
+/* ---------- AU -> EN: reading the line as a sentence ----------
+   lookupAu gives every word its dictionary gloss and its markers. This pass
+   then reads the line the way the guide says Audalad is built (subject, then
+   verb, then object) and writes the English surface from that:
+     - pronoun case from position: In -> "I" before the verb, "me" after it
+     - the verb agrees with its subject, takes its tense from the prefix, and
+       negation (-ir, or the adverb Num) becomes English do-support
+     - a verb after a modal reads bare (can work); after another verb it reads
+       as an infinitive (like to work); after a preposition, as a gerund
+     - the copula (Shul, Assar, Iri, Elae) bends to its subject: am / is / are
+     - a question word ahead of the subject pulls the auxiliary forward
+       (Haru Ir zharina -> why do you like)
+     - the possessive -ad reads by position: before its noun as "noble's" or,
+       for things, as an attributive (gold house); after it as "of the noble"
+     - a bare singular count noun gets the article English cannot do without
+     - -esha gives an English -ly adverb, -dir / -diret an ordinal
+   Nothing here adds to the Audalad. Each rule is an English-side rendering
+   of a marker the guide documents, and the word cards keep the plain
+   dictionary gloss so the word-by-word layer is never hidden. */
+
+const _EN_ARTICLES=true;   // give a bare singular count noun its English article (In zharina hariz -> I like the name); set false for a plain gloss line
+const _EN_MODAL=new Set(['can','could','will','would','shall','should','may','might','must']);
+const _EN_COPULA=new Set(['is/are/am','was/were','to be','be','is','are','am','was','were']);
+const _EN_PLQUANT=new Set(['many','few','several','some','all','both','most']);   // quantifiers that take a plural noun
+const _EN_SGQUANT=new Set(['every','each','no','any','other','much']);
+const _EN_MASS=new Set(('water gold silver iron steel metal wood sand snow ice fire blood food bread wheat music art '+
+  'freedom peace war death life history magic unity prosperity piety devotion beauty commerce trade progress '+
+  'information comfort belief chaos disorder pain sweetness roundness duality mastery excellence nonsense cuisine '+
+  'furniture clay moss wind light earth soil skin hair cloth metallurgy eternity forever might momentum defense '+
+  'defence approval activity nature air rain dust salt sugar milk honey wine beer rice grain smoke ash glass paper '+
+  'leather oil health wealth luck love hate fear hope faith truth justice honour honor courage strength power wisdom '+
+  'knowledge time space weather sleep rest silence noise darkness heat cold energy stringness slime armor armour').split(' '));
+const _EN_IRREG_PAST={};
+Object.keys(IRREG_EN).forEach(k=>{ const [lemma,kind]=IRREG_EN[k]; if(kind==='past' && !_EN_IRREG_PAST[lemma]) _EN_IRREG_PAST[lemma]=k; });
+Object.assign(_EN_IRREG_PAST,{write:'wrote',have:'had',do:'did',be:'was',sing:'sang',swim:'swam',get:'got',hold:'held',
+  hit:'hit',put:'put',cut:'cut',let:'let',shut:'shut',lie:'lay',lead:'led',stand:'stood',wear:'wore',tear:'tore',swear:'swore',
+  bear:'bore',ride:'rode',drive:'drove',strike:'struck',forget:'forgot',become:'became',meet:'met',send:'sent',spend:'spent',
+  lend:'lent',bend:'bent',teach:'taught',catch:'caught',buy:'bought',fight:'fought',seek:'sought',throw:'threw',grow:'grew',
+  blow:'blew',draw:'drew',shine:'shone',bleed:'bled',feed:'fed',hide:'hid',bite:'bit',pay:'paid',lay:'laid',deal:'dealt',
+  dream:'dreamt',mean:'meant',wake:'woke',sit:'sat',shoot:'shot',dig:'dug',hang:'hung',steal:'stole',choose:'chose',
+  freeze:'froze',weave:'wove',forgive:'forgave',withdraw:'withdrew',overcome:'overcame',undo:'undid',cling:'clung',
+  sting:'stung',swing:'swung',ring:'rang',spring:'sprang',shrink:'shrank',sink:'sank',read:'read',spread:'spread',set:'set',
+  cost:'cost',burst:'burst',cast:'cast',split:'split',quit:'quit',wind:'wound',bind:'bound',grind:'ground',slide:'slid',
+  weep:'wept',sweep:'swept',creep:'crept',flee:'fled',kneel:'knelt',spell:'spelt',learn:'learnt',burn:'burnt',dwell:'dwelt',
+  come:'came',tell:'told',sell:'sold',win:'won',lose:'lost',fall:'fell',rise:'rose'});
+const _EN_IRREG_PL={man:'men',woman:'women',child:'children',person:'people',foot:'feet',tooth:'teeth',life:'lives',
+  knife:'knives',wolf:'wolves',leaf:'leaves',mouse:'mice',goose:'geese',fish:'fish',sheep:'sheep',deer:'deer',ox:'oxen',die:'dice'};
+const _EN_ORD={one:'first',two:'second',three:'third',five:'fifth',eight:'eighth',nine:'ninth',twelve:'twelfth'};
+/* pronoun readings by the bare (rank-stripped, deaccented) form. p = person, n = number */
+const _PRON_READ={
+  in:{subj:'I',obj:'me',p:1,n:'s'},        inae:{subj:'we',obj:'us',p:1,n:'p'},
+  ir:{subj:'you',obj:'you',p:2,n:'s'},     irae:{subj:'you all',obj:'you all',p:2,n:'p'},
+  enu:{subj:'he/she',obj:'him/her',p:3,n:'s'}, enuae:{subj:'they',obj:'them',p:3,n:'p'},
+  ki:{subj:'it',obj:'it',p:3,n:'s'},       kiae:{subj:'they',obj:'them',p:3,n:'p'},
+  inad:{det:'my',abs:'mine'},   inadae:{det:'our',abs:'ours'},   irad:{det:'your',abs:'yours'},   iradae:{det:'your',abs:'yours'},
+  enuad:{det:'his/her',abs:'his/hers'}, enuadae:{det:'their',abs:'theirs'}, kiad:{det:'its',abs:'its'}, kiadae:{det:'their',abs:'theirs'}
+};
+const _RANK_KEY_RE=/^(ori|itu|ke)['\u2019\u02bc]/i;
+const _RANK_WORD={ori:'ascended',itu:'greater',ke:'lesser'};
+
+/* English word shapes. Multi-word bases (hand down) bend their first word. */
+function _enFirstSense(en){
+  let s=String(en||'').replace(/\([^)]*\)/g,' ').replace(/\s+/g,' ').trim();
+  return s.split(/[\/,;]/)[0].trim();
+}
+function _enSplitHead(base){ const i=base.indexOf(' '); return i<0?[base,'']:[base.slice(0,i),base.slice(i)]; }
+function _enPastOf(base){ const [h,rest]=_enSplitHead(base); return (_EN_IRREG_PAST[h]||_enPast(h))+rest; }
+function _enIngOf(base){ const [h,rest]=_enSplitHead(base); return _enIng(h)+rest; }
+function _enThirdOf(base){ const [h,rest]=_enSplitHead(base); const irr={have:'has',do:'does',be:'is'}; return (irr[h]||_enThirdPerson(h))+rest; }
+function _enPluralOf(n){
+  const [h,rest]=_enSplitHead(n);            // "capital city" pluralises its last word instead
+  if(rest){ const parts=n.split(' '); const last=parts.pop(); return parts.join(' ')+' '+_enPluralOf(last); }
+  if(_EN_IRREG_PL[h]) return _EN_IRREG_PL[h];
+  if(/(s|sh|ch|x|z)$/.test(h)) return h+'es';
+  if(/[^aeiou]y$/.test(h)) return h.slice(0,-1)+'ies';
+  return h+'s';
+}
+function _enPossOf(n){ return /s$/.test(n) ? n+"'" : n+"'s"; }
+function _enOrdinalOf(num){
+  const w=num.trim().toLowerCase();
+  if(_EN_ORD[w]) return _EN_ORD[w];
+  if(/ty$/.test(w)) return w.slice(0,-1)+'ieth';
+  if(/e$/.test(w)) return w.slice(0,-1)+'th';   // nine -> ninth is in the table; twelve too
+  return w+'th';
+}
+function _enArticleFor(word){ return /^[aeiou]/i.test(word) ? 'an' : 'a'; }
+const _EN_NUM_SMALL=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+const _EN_NUM_TENS=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+function _enNumberWords(n){
+  if(n<20) return _EN_NUM_SMALL[n];
+  if(n<100){ const t=Math.floor(n/10), u=n%10; return _EN_NUM_TENS[t]+(u?'-'+_EN_NUM_SMALL[u]:''); }
+  if(n<1000){ const h=Math.floor(n/100), r=n%100; return _EN_NUM_SMALL[h]+' hundred'+(r?' and '+_enNumberWords(r):''); }
+  const th=Math.floor(n/1000), r=n%1000;
+  return _enNumberWords(th)+' thousand'+(r ? (r<100?' and ':' ')+_enNumberWords(r) : '');
+}
+function _enNumberOrdinal(n){ const w=_enNumberWords(n); const m=w.match(/^([\s\S]*?)([a-z]+)$/); return m[1]+_enOrdinalOf(m[2]); }
+/* number words by their English gloss, as the composer writes them: unit, ten, tens, hundred, thousand */
+const _AU_NUM_VAL={zero:[0,'unit'],one:[1,'unit'],two:[2,'unit'],three:[3,'unit'],four:[4,'unit'],five:[5,'unit'],six:[6,'unit'],seven:[7,'unit'],eight:[8,'unit'],nine:[9,'unit'],
+  ten:[10,'ten'],twenty:[20,'tens'],thirty:[30,'tens'],forty:[40,'tens'],fifty:[50,'tens'],sixty:[60,'tens'],seventy:[70,'tens'],eighty:[80,'tens'],ninety:[90,'tens'],
+  hundred:[100,'hundred'],thousand:[1000,'thousand'],
+  first:[1,'unit'],second:[2,'unit'],third:[3,'unit'],fourth:[4,'unit'],fifth:[5,'unit'],sixth:[6,'unit'],seventh:[7,'unit'],eighth:[8,'unit'],ninth:[9,'unit'],tenth:[10,'ten']};
+/* reads a run of number words the way Forge -> Number writes them (largest part first, a unit before Hamdekali or Numoral multiplies it).
+   Returns the value, or null if the run is not a number the composer would write. */
+function _auNumberValue(parts){
+  let i=0;
+  const at=k=>parts[i] && parts[i][1]===k;
+  function small(){
+    let val=0, took=false;
+    if(at('unit') && parts[i+1] && parts[i+1][1]==='hundred'){ val+=parts[i][0]*100; i+=2; took=true; }
+    else if(at('hundred')){ val+=100; i++; took=true; }
+    if(at('tens')){ val+=parts[i][0]; i++; took=true; if(at('unit') && parts[i][0]>0){ val+=parts[i][0]; i++; } }
+    else if(at('ten')){ val+=10; i++; took=true; if(at('unit') && parts[i][0]>0){ val+=parts[i][0]; i++; } }
+    else if(at('unit')){ val+=parts[i][0]; i++; took=true; }
+    return took?val:null;
   }
-  if(notes.includes('negated')) en = 'not '+en.replace(/^to /,'');
-  if(notes.includes('plural')||notes.includes('plural (Yi-)')) en = en+'s';
-  if(notes.includes('of-the')) en = 'of the '+en;
-  if(wasCap && en) en = en.charAt(0).toUpperCase()+en.slice(1);
-  return en;
+  const a=small(); let total;
+  if(at('thousand')){ total=(a==null?1:a)*1000; i++; const b=small(); if(b!=null) total+=b; }
+  else { if(a==null) return null; total=a; }
+  return i===parts.length ? total : null;
+}
+function _enBe(tense, subj){
+  const pl = subj && (subj.n==='p' || subj.p===2);
+  const pres = !subj ? 'is' : (subj.p===1 && subj.n==='s') ? 'am' : pl ? 'are' : 'is';
+  const past = (!subj || !pl) ? 'was' : 'were';
+  return {pres, past};
+}
+function _tenseOf(notes){ return (notes||[]).find(n=>/past|future|present|continuous/.test(n)) || null; }
+
+/* conjugate one verb token for its slot.
+   mode: finite (agrees with subj) | bare (after a modal) | inf (after a verb) | gerund (after a preposition or copula)
+   returns {text, aux} where aux is the auxiliary a leading question word may pull forward */
+function _readVerb(t, mode, subj, neg){
+  const tense=_tenseOf(t.notes);
+  const be=_enBe(tense, subj);
+  if(t.kind==='modal'){
+    const m=t.fs;
+    const text = neg ? (m==='can' ? 'cannot' : m+' not') : m;
+    return {text, aux:text};
+  }
+  if(t.kind==='cop'){
+    // Shul (is/are/am) and Assar (was/were) already carry a time; Iri / Elae (to be) take it from the prefix or the subject
+    const wasPast = /was/.test(t.en) || (tense && /past/.test(tense));
+    if(mode==='bare')   return {text: neg?'not be':'be'};
+    if(mode==='inf')    return {text: neg?'not to be':'to be'};
+    if(mode==='gerund') return {text: neg?'not being':'being'};
+    let form;
+    if(tense==='continuous')      form = be.pres+(neg?' not':'')+' being';
+    else if(tense==='far-future') form = 'will'+(neg?' not':'')+' be';
+    else if(tense==='near-future')form = 'will'+(neg?' not':'')+' soon be';
+    else if(tense==='far-past')   form = (neg?'did not use to be':'used to be');
+    else if(wasPast)              form = be.past+(neg?' not':'');
+    else                          form = be.pres+(neg?' not':'');
+    return {text:form, aux:form.split(' ')[0]+(neg?' not':'')};
+  }
+  // ordinary verb
+  const base=t.base;
+  if(t.fixed) return {text: neg?'not '+base:base};          // glossed as a participle (saddened): read as written
+  if(mode==='bare')   return {text: neg?'not '+base:base};
+  if(mode==='inf')    return {text: neg?'not to '+base:'to '+base};
+  if(mode==='gerund') return {text: neg?'not '+_enIngOf(base):_enIngOf(base)};
+  const third = subj && subj.p===3 && subj.n==='s';
+  if(tense==='continuous')  return {text: be.pres+(neg?' not ':' ')+_enIngOf(base), aux: be.pres+(neg?' not':'')};
+  if(tense==='far-future')  return {text: 'will'+(neg?' not ':' ')+base, aux:'will'+(neg?' not':'')};
+  if(tense==='near-future') return {text: 'will'+(neg?' not ':' ')+'soon '+base, aux:'will'+(neg?' not':'')};
+  if(tense==='far-past')    return {text: neg?'did not use to '+base:'used to '+base, aux: neg?'did not':'did', stripped: neg?'use to '+base:'use to '+base};
+  if(tense==='near-past')   return {text: neg?'did not '+base:_enPastOf(base), aux: neg?'did not':'did', stripped: base};
+  // plain present (bare verb, or the Zhear- prefix)
+  const doAux = third?'does':'do';
+  if(neg) return {text: doAux+' not '+base, aux: doAux+' not', stripped: base};
+  return {text: third?_enThirdOf(base):base, aux: doAux, stripped: base};
+}
+
+function readAuSentence(toks){
+  const isNom = k => k==='pron'||k==='n'||k==='name'||k==='unknown'||k==='q'||k==='num'||k==='det'||k==='poss'||k==='quant';
+  const isVerbish = k => k==='v'||k==='cop'||k==='modal';
+  const npKinds = new Set(['det','poss','quant','num','ord','adj','n','name','unknown']);
+  const content = i => { for(let j=i;j<toks.length;j++){ const t=toks[j]; if(t.kind==='punct') return null; if(!t.hidden) return t; } return null; };
+
+  // ---- 1. classify every word ----
+  toks.forEach(t=>{
+    t.hidden=false; t.read=null; t.rnotes=[];
+    if(t.punct){ t.kind='punct'; return; }
+    if(!t.rec){ t.kind='unknown'; return; }
+    const notes=t.notes||[];
+    const pos=t.rec.pos;
+    t.fs=_enFirstSense(t.rec.en);
+    if(t.rank) t.rnotes.push('rank: '+t.rank);
+    if(t.regal){ t.kind='name'; t.rnotes.push('regal / divine name, lifted from '+t.fs); return; }   // the A-circumflex marker: read as the name it makes
+    if(pos==='pron'){
+      const key=deaccent(t.norm||t.rec.au).replace(/[\u2019\u02bc]/g,"'").replace(_RANK_KEY_RE,'');
+      t.pr=_PRON_READ[key]||null;
+      t.kind = (t.pr && t.pr.det) ? 'poss' : 'pron';
+      return;
+    }
+    if(notes.includes('adverb')){ t.kind='adv'; return; }
+    if(notes.includes('ordinal')){ t.kind='ord'; return; }
+    if(pos==='v' || (pos==='q' && _EN_MODAL.has(t.fs))){
+      if(_EN_COPULA.has(t.fs)||_EN_COPULA.has(t.rec.en.trim().toLowerCase())){ t.kind='cop'; return; }
+      if(_EN_MODAL.has(t.fs)){ t.kind='modal'; return; }
+      t.kind='v';
+      if(/^to /.test(t.fs)) t.base=t.fs.slice(3); else { t.base=t.fs; t.fixed=true; }
+      return;
+    }
+    if(pos==='n'||pos==='title'||pos==='det'){
+      if(_EN_PLQUANT.has(t.fs)||_EN_SGQUANT.has(t.fs)){ t.kind='quant'; t.plq=_EN_PLQUANT.has(t.fs); return; }
+      t.kind = pos==='det' ? 'det' : 'n';
+      return;
+    }
+    if(pos==='name'){ t.kind='name'; return; }
+    t.kind=pos;   // adj adv prep conj num ord q intj
+  });
+
+  // ---- 2. homographs: pick the part of speech the slot asks for ----
+  toks.forEach((t,i)=>{
+    if(t.kind==='punct'||t.kind==='unknown'||!t.alts||t.alts.length<2) return;
+    const prev = (i>0 && toks[i-1].kind!=='punct') ? toks[i-1] : null;
+    const pk = prev ? prev.kind : null;
+    const want = _tenseOf(t.notes) ? 'v'
+      : (pk==='modal') ? 'v'
+      : (pk==='det'||pk==='poss'||pk==='quant'||pk==='num'||pk==='adj'||pk==='prep') ? 'n'
+      : (pk==='pron'||pk==='n'||pk==='name'||pk==='unknown') ? 'v'
+      : null;
+    if(!want || t.rec.pos===want) return;
+    const alt=t.alts.find(r=>r.pos===want);
+    if(!alt) return;
+    t.rec=alt; t.au=alt.au; t.pos=alt.pos; t.gloss=alt.en;
+    t.fs=_enFirstSense(alt.en);
+    if(want==='v'){
+      if(_EN_COPULA.has(t.fs)) t.kind='cop';
+      else if(_EN_MODAL.has(t.fs)) t.kind='modal';
+      else { t.kind='v'; t.fixed=false; if(/^to /.test(t.fs)) t.base=t.fs.slice(3); else { t.base=t.fs; t.fixed=true; } }
+    } else { t.kind='n'; }
+  });
+
+  // ---- 3. the adverb Num ("not") folds into the verb it precedes ----
+  toks.forEach((t,i)=>{
+    if(t.kind==='adv' && t.fs==='not'){
+      const nx=content(i+1);
+      if(nx && isVerbish(nx.kind)){ nx.negAdv=true; t.hidden=true; t.rnotes.push('negation, carried to the verb'); }
+    }
+  });
+
+  // ---- 3b. a run of number words reads as one number: Se'din Nen -> eleven, Dinasemi Viridiret -> twenty-third ----
+  for(let i=0;i<toks.length;i++){
+    const t=toks[i];
+    if(!((t.kind==='num'||t.kind==='ord') && t.fs && _AU_NUM_VAL[t.fs])) continue;
+    let j=i; while(j<toks.length && (toks[j].kind==='num'||toks[j].kind==='ord') && toks[j].fs && _AU_NUM_VAL[toks[j].fs] && !toks[j].hidden) j++;
+    const run=toks.slice(i,j);
+    const ordAt = run.findIndex(x=>x.kind==='ord');
+    if(run.length>=2 && (ordAt<0 || ordAt===run.length-1)){
+      const parts=run.map(x=>_AU_NUM_VAL[x.fs]);
+      const v=_auNumberValue(parts);
+      if(v!=null){
+        const head=run[0];
+        head.numVal=v; head.numRead = ordAt>=0 ? _enNumberOrdinal(v) : _enNumberWords(v);
+        head.kind = ordAt>=0 ? 'ord' : 'num';
+        head.rnotes.push('number: '+v+(ordAt>=0?'th':''));
+        run.slice(1).forEach(x=>{ x.hidden=true; x.rnotes.push('part of the number '+v); });
+      }
+    }
+    i=j-1;
+  }
+
+  // ---- 4. cut the line into clauses ----
+  const clauses=[]; let cur=[];
+  const closeCur=()=>{ if(cur.length) clauses.push(cur); cur=[]; };
+  toks.forEach((t,i)=>{
+    if(t.kind==='punct'){ closeCur(); return; }
+    if(t.hidden) return;
+    if(t.kind==='conj'){
+      const splitHere = t.fs!=='and'
+        || (cur.some(j=>isVerbish(toks[j].kind)) && (()=>{ for(let j=i+1;j<toks.length;j++){ const k=toks[j].kind; if(k==='punct') return false; if(isVerbish(k)) return true; } return false; })());
+      if(splitHere){ closeCur(); t.read=t.fs; return; }
+    }
+    cur.push(i);
+  });
+  closeCur();
+
+  // ---- 5. read each clause ----
+  let carriedSubj=null;
+  // features of a nominal standing as a subject (person and number, for agreement)
+  const featuresOf = i => {
+    const h=toks[i];
+    if(h.kind==='pron' && h.pr) return {p:h.pr.p,n:h.pr.n};
+    if(h.kind==='num') return {p:3,n:((h.numVal!=null ? h.numVal===1 : h.fs==='one')?'s':'p')};
+    if(h.kind==='n'){
+      let j=i-1; while(j>=0 && toks[j].hidden) j--;
+      const prev = j>=0 ? toks[j] : null;
+      const pl = (h.notes||[]).includes('plural') || !!(prev && ((prev.kind==='num' && (prev.numVal!=null ? prev.numVal!==1 : prev.fs!=='one')) || (prev.kind==='quant' && prev.plq)));
+      return {p:3,n:pl?'p':'s'};
+    }
+    return {p:3,n:'s'};
+  };
+  clauses.forEach(cl=>{
+    let fv=-1;
+    for(const i of cl){ if(isVerbish(toks[i].kind)){ fv=i; break; } }
+    // subject: the last nominal before the first verb; "X and Y" before the verb is plural
+    let subj=null, headIdx=-1, compound=false, fronted=null, frontSubj=-1;
+    if(fv>=0){
+      for(const i of cl){ if(i>=fv) break; const k=toks[i].kind; if(isNom(k)) headIdx=i; if(k==='conj' && toks[i].fs==='and') compound=true; }
+      if(headIdx>=0){
+        subj = compound ? {p:3,n:'p'} : featuresOf(headIdx);
+      } else if(fv===cl[0] && (toks[fv].kind==='modal'||toks[fv].kind==='cop')){
+        // a modal or copula opening the clause is a fronted auxiliary: Yakari Ir rekif -> could you work
+        const nx=content(fv+1);
+        if(nx && isNom(nx.kind)){ frontSubj=toks.indexOf(nx); subj=featuresOf(frontSubj); fronted=toks[fv].kind; }
+      } else if(carriedSubj){ subj=carriedSubj; }   // "In zharina dar rekif": the second verb keeps the first subject
+    }
+    if(subj) carriedSubj=subj;
+    // a question word ahead of a real subject pulls the auxiliary forward: Haru Ir zharina -> why do you like
+    const first=cl.length?toks[cl[0]]:null;
+    const invert = first && first.kind==='q' && fv>=0 && headIdx>cl[0];
+
+    // after the main verb, a nominal that leads a tensed verb, a copula or a modal is the subject of that verb
+    // (In sarek Enu shul velan: I know he/she is good); before a bare verb it is an object (In zharina Enu rekif: I like him/her to work)
+    const embedded = i => { const nx=content(i+1); return !!(fv>=0 && i>fv && nx && (nx.kind==='cop'||nx.kind==='modal'||(nx.kind==='v'&&_tenseOf(nx.notes)))); };
+
+    let prevK=null, prevT=null, embSubj=null;
+    for(const i of cl){
+      const t=toks[i];
+      const notes=t.notes||[];
+      const nx=content(i+1);
+      const neg = notes.includes('negated') || !!t.negAdv;
+      if(isNom(t.kind) && t.kind!=='q' && prevK!=='prep' && embedded(i)) embSubj=featuresOf(i);
+      switch(t.kind){
+        case 'pron': {
+          let asSubj;
+          if(prevK==='prep') asSubj=false;
+          else if(fv<0 || i<fv || i===frontSubj) asSubj=true;
+          else asSubj = embedded(i);
+          t.read = t.pr ? (asSubj?t.pr.subj:t.pr.obj) : t.fs;
+          if(t.pr) t.rnotes.push(asSubj?'subject':'object');
+          break; }
+        case 'poss': {
+          const pre = nx && npKinds.has(nx.kind);
+          t.read = t.pr ? (pre?t.pr.det:t.pr.abs) : t.fs;
+          break; }
+        case 'v': case 'cop': case 'modal': {
+          let mode, vs=subj;
+          if(i===fv) mode='finite';
+          else if(embSubj && isNom(prevK)){ mode='finite'; vs=embSubj; }
+          else if(prevK==='modal') mode='bare';
+          else if(prevK==='cop'||prevK==='prep') mode='gerund';
+          else if(prevK==='conj') mode='finite';
+          else if(fronted && isNom(prevK)){ mode = fronted==='modal' ? 'bare' : 'gerund'; fronted=null; }
+          else if(t.kind==='modal') mode='bare';
+          else mode='inf';
+          const r=_readVerb(t, mode, vs, neg);
+          if(mode==='finite' && i!==fv) embSubj=null;
+          if(invert && i===fv && r.aux){
+            // move the auxiliary onto the question word, leave the plain verb behind
+            first.read = first.fs+' '+r.aux;
+            t.read = (t.kind==='cop'||t.kind==='modal') ? '' : (r.stripped!=null ? r.stripped : r.text.slice(r.aux.length).trim());
+            if(t.read==='') t.hidden=true;
+          } else t.read=r.text;
+          if(neg) t.rnotes.push('negation');
+          break; }
+        case 'n': {
+          let w=t.fs;
+          const prevIsCount = prevT && ((prevT.kind==='num' && (prevT.numVal!=null ? prevT.numVal!==1 : prevT.fs!=='one')) || (prevT.kind==='quant' && prevT.plq));
+          const plural = notes.includes('plural') || !!prevIsCount;
+          if(plural && !/^the |^a /.test(w) && !_EN_MASS.has(w)) w=_enPluralOf(w);
+          t.plural=plural;
+          if(notes.includes('of-the')){
+            const pre = nx && npKinds.has(nx.kind) && nx.kind!=='det' && nx.kind!=='poss';
+            const animate = isPersonified(t.rec);
+            t.possPre = !!pre;
+            if(pre) w = animate ? _enPossOf(w) : w;
+            else w = 'of '+((!plural && _EN_MASS.has(w)) ? '' : 'the ')+w;
+            t.rnotes.push('possessive');
+          }
+          if(neg) w='not '+w;
+          if((t.rec.pos==='title' || t.fs==='house') && nx && (nx.kind==='unknown'||nx.kind==='name') && !plural) w=w.charAt(0).toUpperCase()+w.slice(1);
+          t.read=w;
+          break; }
+        case 'name': t.read = t.regal ? t.src.replace(/[.,!?;:]+$/,'') : t.fs; break;
+        case 'unknown': t.read=t.src; break;
+        case 'adv': t.read = notes.includes('adverb') ? _enIngOf(t.fs.replace(/^to /,''))+'ly' : t.fs; if(neg) t.read='not '+t.read; break;
+        case 'ord': t.read = t.numRead || (notes.includes('ordinal') ? _enOrdinalOf(t.fs) : t.fs); break;
+        case 'num': t.read = t.numRead || t.fs; break;
+        case 'q':   if(t.read==null) t.read=t.fs; break;
+        case 'conj': if(t.read==null) t.read=t.fs; break;
+        default:    t.read = (neg?'not ':'')+t.fs;   // adj adv det quant prep num intj
+      }
+      if(t.regal && t.read) t.read=t.read.charAt(0).toUpperCase()+t.read.slice(1);
+      if(!t.hidden){ prevK=t.kind; prevT=t; }
+    }
+
+    // ---- 6. the article: a bare singular count noun in English needs one ----
+    let run=[];
+    const flush=()=>{
+      if(run.length){
+        let head=-1;
+        run.forEach(i=>{ const t=toks[i]; if(t.kind==='n' && !((t.notes||[]).includes('of-the') && !t.possPre)) head=i; });
+        const blocked = run.some(i=>['det','poss','quant','num','name','unknown'].includes(toks[i].kind));
+        const before = toks[run[0]-1];
+        const afterQ = before && before.kind==='q' && before.read && !/ (do|does|did|are|is|am|was|were|will|can|could|would|should|shall|may|might|must)( not)?$/.test(before.read);
+        if(head>=0 && !blocked && !afterQ){
+          const h=toks[head], w=h.fs;
+          const ok = !h.plural && !h.regal && !_EN_MASS.has(w) && !/^(the|a|an|my|your|his|her|its|our|their) /.test(w) && !(h.notes||[]).includes('negated');
+          if(ok){
+            let art='the';
+            // after the copula the predicate noun is usually indefinite: In shul nadu -> I am a noble
+            let j=run[0]-1; while(j>=0 && toks[j].hidden) j--;
+            const pv = j>=0 ? toks[j] : null;
+            if(pv && (pv.kind==='cop' || (pv.kind==='q' && / (am|is|are|was|were)$/.test(pv.read||'')))) art=_enArticleFor(toks[run[0]].read);
+            const f=toks[run[0]]; f.read=art+' '+f.read;
+          }
+        }
+      }
+      run=[];
+    };
+    if(_EN_ARTICLES){
+      for(const i of cl){ const t=toks[i]; if(t.hidden) continue; if(npKinds.has(t.kind)) run.push(i); else flush(); }
+      flush();
+    }
+  });
+
+  // ---- 7. sentence case ----
+  let capNext=true;
+  toks.forEach(t=>{
+    if(t.kind==='punct'){ if(/[.!?]/.test(t.punct)) capNext=true; return; }
+    if(t.hidden || !t.read) return;
+    if(capNext){ t.read=t.read.charAt(0).toUpperCase()+t.read.slice(1); capNext=false; }
+  });
+  return toks;
+}
+
+/* kindred tongues hand their looked-up tokens through the same reader: rec + notes in, sentence reading out */
+function readKindredTokens(out){
+  readAuSentence(out);
+  out.forEach(t=>{ if(t.punct||!t.rec) return; t.gloss=t.rec.en; t.en = t.hidden ? t.rec.en : t.read; });
+  return out;
 }
 function translateAuToEn(text){
   const raw = text.replace(/\s+/g,' ').trim();
@@ -2935,14 +3394,21 @@ function translateAuToEn(text){
   words.forEach(w=>{
     if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
     const res = lookupAu(w);
-    if(res){
-      let eng = smoothEng(res.en, res.notes, /^[A-Z]/.test(w));
-      // tense
-      const t = res.notes.find(n=>/past|future|present|continuous/.test(n));
-      out.push({src:w, au:res.au, en:eng, note: t || (res.notes.includes('plural')?'plural':res.notes.includes('negated')?'negation':res.notes.includes('of-the')?'possessive':null)});
-    } else {
-      out.push({src:w, au:null, en:null});
-    }
+    if(res) out.push({src:w, au:res.au, en:res.en, gloss:res.en, pos:res.pos, rec:res.rec, alts:res.alts, notes:res.notes, rank:res.rank, regal:res.regal, norm:res.norm});
+    else out.push({src:w, au:null, en:null});
+  });
+  readAuSentence(out);
+  out.forEach(t=>{
+    if(t.punct || !t.rec) return;
+    t.gloss = t.rec.en;                        // the card keeps the dictionary form
+    t.en = t.hidden ? t.rec.en : t.read;       // the sentence line takes the reading (a folded word keeps its gloss for the card)
+    const marks=[]; const tense=_tenseOf(t.notes);
+    if(tense) marks.push(tense);
+    if((t.notes||[]).includes('plural')||(t.notes||[]).includes('plural (Yi-)')) marks.push('plural');
+    if((t.notes||[]).includes('adverb')) marks.push('adverb');
+    if((t.notes||[]).includes('ordinal')) marks.push('ordinal');
+    t.rnotes.forEach(n=>{ if(!marks.includes(n)) marks.push(n); });
+    t.note = marks.length ? marks.join(' \u00b7 ') : null;
   });
   return {tokens:out};
 }
@@ -3109,6 +3575,7 @@ function render(){
   let romanHtml='';   // display copy: unknown words get a quiet underline + tooltip
   res.tokens.forEach(t=>{
     if(t.punct){ parts.push(t.punct); romanHtml=romanHtml.replace(/\s$/,'')+escapeHtml(t.punct)+' '; return; }
+    if(!auOut && t.hidden) return;   // a word folded into its neighbour (Num into the verb, an inverted auxiliary)
     const known = auOut ? t.au!=null : t.en!=null;
     const word = known ? (auOut?t.au:t.en) : t.src;
     parts.push(word);
@@ -3163,7 +3630,7 @@ function render(){
         d.innerHTML='<div class="t-au">'+escapeHtml(t.au)+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+t.note+'</div>':'');
       } else {
         d.className='tok';
-        d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.en)+'</div>'+(t.note?'<div class="t-note">'+t.note+'</div>':'');
+        d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.gloss||t.en)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
       }
       glossEl.appendChild(d);
     });
@@ -5477,12 +5944,13 @@ function mountKindredTranslator(cfg){
     var romanHtml=''; // display: quietly mark words the dialect lexicon lacks
     res.tokens.forEach(function(t){
       if(t.punct){ romanHtml=romanHtml.replace(/\s$/,'')+escapeHtml(t.punct)+' '; return; }
+      if(!auOut && t.hidden) return;
       var known=auOut?(t.au!=null):(t.en!=null);
       var word=known?(auOut?t.au:t.en):t.src;
       romanHtml += (known?escapeHtml(word):'<span class="unk" title="Not in this tongue\u2019s lexicon yet">'+escapeHtml(word)+'</span>')+' ';
     });
     romanHtml=romanHtml.trim();
-    var parts=res.tokens.map(function(t){ return t.punct? t.punct : ((auOut?t.au:t.en)!=null?(auOut?t.au:t.en):t.src); });
+    var parts=res.tokens.filter(function(t){ return auOut || !t.hidden; }).map(function(t){ return t.punct? t.punct : ((auOut?t.au:t.en)!=null?(auOut?t.au:t.en):t.src); });
     var str=tJoinParts(parts);
     var html='<div class="roman">'+romanHtml+'</div>';
     if(auOut){
@@ -5504,7 +5972,7 @@ function mountKindredTranslator(cfg){
         d.innerHTML='<div class="t-au">'+escapeHtml(t.au)+'</div><div class="t-en">'+escapeHtml(t.src)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
       } else {
         d.className='tok';
-        d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.en)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
+        d.innerHTML='<div class="t-au">'+escapeHtml(t.src)+'</div><div class="t-en">'+escapeHtml(t.gloss||t.en)+'</div>'+(t.note?'<div class="t-note">'+escapeHtml(t.note)+'</div>':'');
       }
       glossEl.appendChild(d);
     });
@@ -5545,10 +6013,10 @@ function mountKindredTranslator(cfg){
         const extras=[]; const lab=lowNoteLabel(hit.notes);
         if(lab) extras.push('['+lab+']');
         if(u.length>1) extras.push('also: '+u.slice(1).join('; '));
-        out.push({src:w, en:en, au:hit.list[0].au, note:extras.length?extras.join(' \u00b7 '):null});
+        out.push({src:w, en:en, au:hit.list[0].au, rec:hit.list[0], alts:hit.list, notes:hit.notes, note:extras.length?extras.join(' \u00b7 '):null});
       } else out.push({src:w, en:null, au:null});
     });
-    return {tokens:out};
+    return {tokens:readKindredTokens(out)};
   }
 
   const L_FLIP={en2low:'low2en',low2en:'en2low',high2low:'low2high',low2high:'high2low'};
@@ -6065,10 +6533,10 @@ function mountKindredTranslator(cfg){
         var lab=dimNoteLabel(notes); if(court) lab=(lab?court+', '+lab:court);
         var extras=[]; if(lab) extras.push('['+lab+']');
         if(uniq.length>1) extras.push('also: '+uniq.slice(1).join('; '));
-        out.push({src:orig, en:en, au:hit.list[0].au, note:extras.length?extras.join(' \u00b7 '):null});
+        out.push({src:orig, en:en, au:hit.list[0].au, rec:hit.list[0], alts:hit.list, notes:notes, note:extras.length?extras.join(' \u00b7 '):null});
       } else { out.push({src:orig, en:null, au:null}); }
     });
-    return {tokens:out};
+    return {tokens:readKindredTokens(out)};
   }
   function translateDimToHigh(text){
     var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
@@ -6208,10 +6676,10 @@ function mountKindredTranslator(cfg){
         var lab=oldNoteLabel(notes); if(court) lab=(lab?court+', '+lab:court);
         var extras=[]; if(lab) extras.push('['+lab+']');
         if(uniq.length>1) extras.push('also: '+uniq.slice(1).join('; '));
-        out.push({src:orig, en:en, au:hit.list[0].au, note:extras.length?extras.join(' \u00b7 '):null});
+        out.push({src:orig, en:en, au:hit.list[0].au, rec:hit.list[0], alts:hit.list, notes:notes, note:extras.length?extras.join(' \u00b7 '):null});
       } else { out.push({src:orig, en:null, au:null}); }
     });
-    return {tokens:out};
+    return {tokens:readKindredTokens(out)};
   }
   function translateOldToHigh(text){
     var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
