@@ -657,6 +657,9 @@ a{color:var(--gold-soft);}
 #surdalad .l-from{color:var(--ink-faint);font-size:12px;font-style:italic;margin-top:4px;}
 #surdalad .l-from b{color:var(--iris-soft);font-style:normal;font-weight:400;}
 #surdalad .gloss .tok .t-src{color:var(--ink-faint);font-size:11px;font-style:italic;margin-top:3px;line-height:1.35;}
+#surdalad .toggle input:checked + .dot{background:var(--iris-dim);border-color:var(--iris);}
+#surdalad .toggle input:checked + .dot::after{background:var(--iris);}
+#surdalad .out .c-ipa .ipa-of{font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-faint);margin-right:8px;}
 
 /* ---------- DIMAINAD (reformed daughter) ---------- */
 #dimainad{ --patina:#6fb3a3; --patina-soft:#8fd4c2; --patina-dim:#3a665d; --oldgold:#d4af52; --oldgold-dim:#6e5a2c; --ink-faint:#6a7d7a; }
@@ -2229,10 +2232,11 @@ textarea:focus-visible,select:focus-visible,summary:focus-visible,
         </div>
       </div>
       <div class="toolbar" style="margin-top:12px;">
+        <label class="toggle" title="Show the pronunciation beneath the result: the Surdalad or Audalad written out, or the Surdalad typed when the result is English"><input type="checkbox" id="su-ipa" checked><span class="dot"></span>Pronunciation (IPA)</label>
         <button class="btn ghost mini" id="su-copy" title="Copy the translation text">Copy</button>
         <button class="btn ghost mini" id="su-png" title="Save the Surdalad native script as a PNG (for signs, books, banners)">&#8595; Script PNG</button>
       </div>
-      <div class="note"><b>How it reads.</b> Every word is looked up in the canon Surdalad lexicon first, then among words forged in this browser. Where neither has it, the toolkit builds one by law from the Audalad lexicon: the Keshir laws run over the court word, then Surdalad&rsquo;s own (every c a k, no sh or zh, a tail that answers the last sound, and kel-, ni- or kir- where the meaning calls for it). Law-built words are marked as such in the breakdown beneath, with the Audalad word they came from; the canon lexicon takes precedence over all of them. Words no tongue knows are marked in red. Punctuation is carried through as typed, in the roman line and the script line alike. With the Audalad pairing, any word typed is bent by law, known or not, and an English word the lexicon lacks is read through the court&rsquo;s own reader first, so plurals and tenses carry over. Use the swap to turn the lookup around.</div>
+      <div class="note"><b>How it reads.</b> Every word is looked up in the canon Surdalad lexicon first, then among words forged in this browser. Where neither has it, the toolkit builds one by law from the Audalad lexicon: the Keshir laws run over the court word, then Surdalad&rsquo;s own (every c a k, no sh or zh, a tail that answers the last sound, and kel-, ni- or kir- where the meaning calls for it). Law-built words are marked as such in the breakdown beneath, with the Audalad word they came from; the canon lexicon takes precedence over all of them. Words no tongue knows are marked in red. Punctuation is carried through as typed, in the roman line and the script line alike. The pronunciation line beneath the result can be switched off with the toggle below; it reads the Surdalad or Audalad written out, or the Surdalad typed when the result is English. With the Audalad pairing, any word typed is bent by law, known or not, and an English word the lexicon lacks is read through the court&rsquo;s own reader first, so plurals and tenses carry over. Use the swap to turn the lookup around.</div>
     </div>
 
     <div class="lview" id="su-lexicon">
@@ -6241,6 +6245,12 @@ function surdaladForm(au, en, pos, opts){ return suPrefix(suBend(au, opts), en, 
   var sInLbl=document.getElementById('su-inLbl');
   var sOutLbl=document.getElementById('su-outLbl');
   var sSwap=document.getElementById('su-swap');
+  var sIpa=document.getElementById('su-ipa');
+  var LS_SIPA='surdalad_ipa_v1';
+  try{ var v0=localStorage.getItem(LS_SIPA); if(sIpa && v0!==null) sIpa.checked=(v0==='1'); }catch(e){}
+  function ipaOn(){ return !sIpa || sIpa.checked; }
+  if(sIpa) sIpa.addEventListener('change',function(){ try{ localStorage.setItem(LS_SIPA, sIpa.checked?'1':'0'); }catch(e){} doTranslate(); });
+  function ipaOfText(str){ return ipaOf((str||'').replace(new RegExp('[^'+SU_LETTER+']+','g'),' ').replace(/\s+/g,' ').trim()); }   // the reading carries no punctuation
   var sCopy=document.getElementById('su-copy');
   var sPng=document.getElementById('su-png');
 
@@ -6362,8 +6372,15 @@ function surdaladForm(au, en, pos, opts){ return suPrefix(suBend(au, opts), en, 
       if(anyWord && natStr){
         suLastNative=natStr;
         html+='<div class="su-native">'+esc(natStr)+'</div>';
-        var ph=ipaOf(natStr.replace(new RegExp('[^'+SU_LETTER+']+','g'),' ').replace(/\s+/g,' ').trim());   // the reading carries no punctuation
-        if(ph) html+='<div class="c-ipa">'+esc(ph)+'</div>';
+        if(ipaOn()){ var ph=ipaOfText(natStr); if(ph) html+='<div class="c-ipa">'+esc(ph)+'</div>'; }
+      }
+    } else if(ipaOn()){
+      // out of Surdalad: read the Audalad written out, or, when the result is English, the Surdalad typed
+      if(pivot==='au'){
+        var auStr=natParts.filter(function(x){ return x!==null; }).join('');
+        var ph2=ipaOfText(auStr); if(ph2) html+='<div class="c-ipa">'+esc(ph2)+'</div>';
+      } else {
+        var ph3=ipaOfText(raw); if(ph3) html+='<div class="c-ipa"><span class="ipa-of">Surdalad typed</span>'+esc(ph3)+'</div>';
       }
     }
     sOutput.innerHTML=html;
@@ -6372,7 +6389,7 @@ function surdaladForm(au, en, pos, opts){ return suPrefix(suBend(au, opts), en, 
         if(t.sp!==undefined||t.punct!==undefined) return;
         var d=document.createElement('div');
         if(!t.sur){ d.className='tok miss'; d.innerHTML='<div class="t-su">'+esc(t.out||t.src)+'</div><div class="t-en">'+(t.out?'bent by law, no entry':'no entry')+'</div>'; glossEl.appendChild(d); return; }
-        var su=t.sur.su, mean=t.sur.en, ipa=ipaOf(su);
+        var su=t.sur.su, mean=t.sur.en, ipa=ipaOn()?ipaOf(su):'';
         d.className='tok';
         d.innerHTML='<div class="t-su">'+esc(su)+'</div>'+
                     '<div class="t-su-native">'+esc(su)+'</div>'+
