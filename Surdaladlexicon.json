@@ -1282,5 +1282,53 @@
     "en": "mountain range",
     "pos": "n",
     "by": "Sage"
+  },
+  {
+    "su": "ataskolgo",
+    "en": "academy",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "aterilden",
+    "en": "thrive",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "ateth",
+    "en": "elevator",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "afanaleph",
+    "en": "cursed",
+    "pos": "adj",
+    "by": "Sage"
+  },
+  {
+    "su": "athon",
+    "en": "faithful/believer",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "athog",
+    "en": "religion",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "atilwen",
+    "en": "raise",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "autaene",
+    "en": "comprehend",
+    "pos": "v",
+    "by": "Sage"
   }
 ]
