@@ -958,5 +958,329 @@
     "en": "until",
     "pos": "prep",
     "by": ""
+  },
+  {
+    "su": "aftarene",
+    "en": "sink",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "aftarere",
+    "en": "dip",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "agarog",
+    "en": "advance",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "agath",
+    "en": "driver",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "ageth",
+    "en": "similar",
+    "pos": "adj",
+    "by": "Sage"
+  },
+  {
+    "su": "agog",
+    "en": "movement/action",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "agumon",
+    "en": "patio",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "ahaere",
+    "en": "obtain",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "ahenaere",
+    "en": "enchant",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "ahenileth",
+    "en": "enchantment",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "akeden",
+    "en": "population/inhabitants",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "aketh",
+    "en": "chair",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "akurath",
+    "en": "collapse",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "aleden",
+    "en": "recruit/enlist",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "alemath",
+    "en": "draw/describe",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "alhulog",
+    "en": "alcohol",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "anadaere",
+    "en": "vassalize",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "anen",
+    "en": "surrounding/nearby",
+    "pos": "adj",
+    "by": "Sage"
+  },
+  {
+    "su": "fayreth",
+    "en": "stuck",
+    "pos": "adj",
+    "by": "Sage"
+  },
+  {
+    "su": "fayere",
+    "en": "trap",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "tilusaph",
+    "en": "dock",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "suthewen",
+    "en": "magazine",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "semon",
+    "en": "hallway",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "oposulere",
+    "en": "backstage",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "surathog",
+    "en": "administration",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "beson",
+    "en": "brew/mix",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "sularwen",
+    "en": "theatre",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "eskoleth",
+    "en": "staff room/scholars' room",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "sumago",
+    "en": "science",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "sumaog",
+    "en": "discipline",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "ereswen",
+    "en": "biology",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "sulaphen",
+    "en": "psychology",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "pathasog",
+    "en": "geology",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "awrreth",
+    "en": "bird's blood",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "adesath",
+    "en": "deserve",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "adosog",
+    "en": "privilege",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "adosgo",
+    "en": "grant",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "afasaron",
+    "en": "rebel/resist",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "afaserog",
+    "en": "rebellion/revolution/coup d'etat",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "anelmath",
+    "en": "bore (someone)",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "anhasgo",
+    "en": "pickaxe",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "anileth",
+    "en": "turn",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "anlene",
+    "en": "ball",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "anlog",
+    "en": "ring",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "sularmeth",
+    "en": "track",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "ankigo",
+    "en": "hill",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "anraph",
+    "en": "entrance/breach",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "ansaene",
+    "en": "return",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "arataog",
+    "en": "clock",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "arketh",
+    "en": "bowman/crossbowman",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "astrakog",
+    "en": "meteor",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "tameth",
+    "en": "aristocratic",
+    "pos": "adj",
+    "by": "Sage"
+  },
+  {
+    "su": "atarasig",
+    "en": "imperial",
+    "pos": "adj",
+    "by": "Sage"
+  },
+  {
+    "su": "ataphen",
+    "en": "mountain range",
+    "pos": "n",
+    "by": "Sage"
   }
 ]
