@@ -2232,7 +2232,7 @@ textarea:focus-visible,select:focus-visible,summary:focus-visible,
         <button class="btn ghost mini" id="su-copy" title="Copy the translation text">Copy</button>
         <button class="btn ghost mini" id="su-png" title="Save the Surdalad native script as a PNG (for signs, books, banners)">&#8595; Script PNG</button>
       </div>
-      <div class="note"><b>How it reads.</b> Every word is looked up in the canon Surdalad lexicon first, then among words forged in this browser. Where neither has it, the toolkit builds one by law from the Audalad lexicon: the Keshir laws run over the court word, then Surdalad&rsquo;s own (every c a k, no sh or zh, a tail that answers the last sound, and kel-, ni- or kir- where the meaning calls for it). Law-built words are marked as such in the breakdown beneath, with the Audalad word they came from; the canon lexicon takes precedence over all of them. Words no tongue knows are marked in red. With the Audalad pairing, any word typed is bent by law, known or not, and an English word the lexicon lacks is read through the court&rsquo;s own reader first, so plurals and tenses carry over. Use the swap to turn the lookup around.</div>
+      <div class="note"><b>How it reads.</b> Every word is looked up in the canon Surdalad lexicon first, then among words forged in this browser. Where neither has it, the toolkit builds one by law from the Audalad lexicon: the Keshir laws run over the court word, then Surdalad&rsquo;s own (every c a k, no sh or zh, a tail that answers the last sound, and kel-, ni- or kir- where the meaning calls for it). Law-built words are marked as such in the breakdown beneath, with the Audalad word they came from; the canon lexicon takes precedence over all of them. Words no tongue knows are marked in red. Punctuation is carried through as typed, in the roman line and the script line alike. With the Audalad pairing, any word typed is bent by law, known or not, and an English word the lexicon lacks is read through the court&rsquo;s own reader first, so plurals and tenses carry over. Use the swap to turn the lookup around.</div>
     </div>
 
     <div class="lview" id="su-lexicon">
@@ -6297,6 +6297,39 @@ function surdaladForm(au, en, pos, opts){ return suPrefix(suBend(au, opts), en, 
     }
   }
 
+  /* tokens: whitespace, words (letters, digits, apostrophes) and runs of punctuation. Hyphens, dashes, quotation marks,
+     brackets and the sentence marks are all punctuation; they are carried through to the output in place. An apostrophe
+     belongs to the word first (Sene', Yimozh', Ka'akar) and is read as a quotation mark only when the word is not found with it. */
+  var SU_LETTER='0-9A-Za-z\u00c0-\u024f\u0268\'\u2019\u02bc';
+  var SU_TOKEN_RE=new RegExp('(\\s+)|(['+SU_LETTER+']+)|([^\\s'+SU_LETTER+']+)','g');
+  function suTokens(raw){
+    var out=[], m; SU_TOKEN_RE.lastIndex=0;
+    while((m=SU_TOKEN_RE.exec(raw))){
+      if(m[1]!==undefined) out.push({sp:m[1]});
+      else if(m[2]!==undefined) out.push({word:m[2]});
+      else out.push({punct:m[3]});
+    }
+    return out;
+  }
+  /* read one word: as typed first, then without its outer apostrophes (quotation marks), then without an owner's mark */
+  function readWord(word){
+    var r=trToken(word), pre='', post='', core=word;
+    if(!r.out || !r.sur){
+      var mq=word.match(/^(['\u2019\u02bc]*)([\s\S]*?)(['\u2019\u02bc]*)$/);
+      if(mq && (mq[1]||mq[3]) && mq[2]){
+        var r2=trToken(mq[2]);
+        if(r2.out && (r2.sur || !r.sur)){ r=r2; pre=mq[1]; post=mq[3]; core=mq[2]; }
+      }
+    }
+    if((!r.out || !r.sur) && toSurd && pivot==='en'){
+      var mp=core.match(/^(.+?)(?:['\u2019]s|s['\u2019])$/i);
+      if(mp){ var r3=trToken(mp[1]); if(r3.out){ r=r3; r.note=(r.note?(r.note+', '):'')+'owner\u2019s mark not yet fixed'; core=mp[1]; } }
+    }
+    // the output takes the case of the word typed, as the court translator does: headwords carry a capital, sentences should not
+    var out=(r.out && typeof _mirrorCap==='function') ? _mirrorCap(core, r.out, r.sur?r.sur.pos:'') : r.out;
+    return {pre:pre, post:post, src:core, out:out, sur:r.sur, note:r.note||null};
+  }
+
   function doTranslate(){
     if(!sInput||!sOutput) return;
     suLastNative='';
@@ -6304,40 +6337,39 @@ function surdaladForm(au, en, pos, opts){ return suPrefix(suBend(au, opts), en, 
     if(glossEl) glossEl.innerHTML='';
     var raw=sInput.value||'';
     if(!raw.trim()){ sOutput.innerHTML='<div class="placeholder">Translation appears here&hellip;</div>'; return; }
-    var parts=raw.split(/(\s+)/);
-    var toks=[];
-    parts.forEach(function(p){
-      if(p===''||/^\s+$/.test(p)){ toks.push({sp:p}); return; }
-      var m=p.match(/^([^0-9A-Za-z\u00c0-\u024f]*)([\s\S]*?)([^0-9A-Za-z\u00c0-\u024f]*)$/);
-      var pre=m?m[1]:'', core=m?m[2]:p, post=m?m[3]:'';
-      var r=trToken(core);
-      // the output takes the case of the word typed, as the court translator does: headwords carry a capital, sentences should not
-      var out=(r.out && typeof _mirrorCap==='function') ? _mirrorCap(core, r.out, r.sur?r.sur.pos:'') : r.out;
-      toks.push({pre:pre,post:post,src:core,out:out,sur:r.sur,note:r.note||null});
-    });
-    var romanParts=[], natWords=[];
+    var toks=suTokens(raw).map(function(t){ return t.word!==undefined ? readWord(t.word) : t; });
+    var romanParts=[], natParts=[];
     toks.forEach(function(t){
-      if(t.sp!==undefined){ romanParts.push(esc(t.sp)); return; }
+      if(t.sp!==undefined){ romanParts.push(esc(t.sp)); natParts.push(t.sp); return; }
+      if(t.punct!==undefined){ romanParts.push(esc(t.punct)); natParts.push(t.punct); return; }   // punctuation passes through untouched
       if(t.out){
         romanParts.push(esc(t.pre)+esc(t.out)+esc(t.post));
-        if(toSurd) natWords.push(t.out);
+        natParts.push(t.pre+t.out+t.post);
       } else {
         romanParts.push(esc(t.pre)+'<span class="miss">'+esc(t.src)+'</span>'+esc(t.post));
+        natParts.push(null);                                                                        // an untranslated word never reaches the script line
       }
     });
     var html='<div class="roman">'+romanParts.join('')+'</div>';
     if(toSurd){
-      var natStr=natWords.join(' ');
-      if(natStr){
+      // the script line keeps the sentence's punctuation, attached tight, with any untranslated word left out
+      var natStr=natParts.filter(function(x){ return x!==null; }).join('')
+        .replace(/\s+/g,' ')
+        .replace(/\s+([.,!?;:)\]}\u201d\u00bb\u2026])/g,'$1')
+        .replace(/([(\[{\u201c\u00ab])\s+/g,'$1')
+        .trim();
+      var anyWord=toks.some(function(t){ return t.out; });
+      if(anyWord && natStr){
         suLastNative=natStr;
         html+='<div class="su-native">'+esc(natStr)+'</div>';
-        var ph=ipaOf(natStr); if(ph) html+='<div class="c-ipa">'+esc(ph)+'</div>';
+        var ph=ipaOf(natStr.replace(new RegExp('[^'+SU_LETTER+']+','g'),' ').replace(/\s+/g,' ').trim());   // the reading carries no punctuation
+        if(ph) html+='<div class="c-ipa">'+esc(ph)+'</div>';
       }
     }
     sOutput.innerHTML=html;
     if(glossEl){
       toks.forEach(function(t){
-        if(t.sp!==undefined) return;
+        if(t.sp!==undefined||t.punct!==undefined) return;
         var d=document.createElement('div');
         if(!t.sur){ d.className='tok miss'; d.innerHTML='<div class="t-su">'+esc(t.out||t.src)+'</div><div class="t-en">'+(t.out?'bent by law, no entry':'no entry')+'</div>'; glossEl.appendChild(d); return; }
         var su=t.sur.su, mean=t.sur.en, ipa=ipaOf(su);
