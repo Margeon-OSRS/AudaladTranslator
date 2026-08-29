@@ -6311,7 +6311,9 @@ function surdaladForm(au, en, pos, opts){ return suPrefix(suBend(au, opts), en, 
       var m=p.match(/^([^0-9A-Za-z\u00c0-\u024f]*)([\s\S]*?)([^0-9A-Za-z\u00c0-\u024f]*)$/);
       var pre=m?m[1]:'', core=m?m[2]:p, post=m?m[3]:'';
       var r=trToken(core);
-      toks.push({pre:pre,post:post,src:core,out:r.out,sur:r.sur,note:r.note||null});
+      // the output takes the case of the word typed, as the court translator does: headwords carry a capital, sentences should not
+      var out=(r.out && typeof _mirrorCap==='function') ? _mirrorCap(core, r.out, r.sur?r.sur.pos:'') : r.out;
+      toks.push({pre:pre,post:post,src:core,out:out,sur:r.sur,note:r.note||null});
     });
     var romanParts=[], natWords=[];
     toks.forEach(function(t){
