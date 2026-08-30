@@ -1330,5 +1330,215 @@
     "en": "comprehend",
     "pos": "v",
     "by": "Sage"
+  },
+  {
+    "su": "atorswen",
+    "en": "lighthouse",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "ayeth",
+    "en": "owner",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "bakuraph",
+    "en": "landslide",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "bakog",
+    "en": "cliff",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "baladog",
+    "en": "notice",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "balaph",
+    "en": "difference",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "balugo",
+    "en": "alternative/option",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "banawen",
+    "en": "inhabit/populate/settle",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "abarth",
+    "en": "ignite",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "baralgo",
+    "en": "noisy",
+    "pos": "adj",
+    "by": "Sage"
+  },
+  {
+    "su": "barath",
+    "en": "fiery",
+    "pos": "adj",
+    "by": "Sage"
+  },
+  {
+    "su": "bardath",
+    "en": "discussion/negotiation",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "bardaseth",
+    "en": "negotiate",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "khadeth",
+    "en": "speaker",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "bareth",
+    "en": "noise",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "bareden",
+    "en": "preacher",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "bastigo",
+    "en": "bastion",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "batayeth",
+    "en": "battalion",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "bateraph",
+    "en": "obedience/submission",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "besene",
+    "en": "brewer",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "bereth",
+    "en": "beer",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "hitheth",
+    "en": "toilet",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "beth",
+    "en": "runner",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "betegaph",
+    "en": "chase/pursue",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "beteare",
+    "en": "seek/search",
+    "pos": "v",
+    "by": "Sage"
+  },
+  {
+    "su": "beterathog",
+    "en": "race/chase",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "beulog",
+    "en": "birch",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "bidog",
+    "en": "bottle/flask",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "birego",
+    "en": "flame",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "biraseth",
+    "en": "pyre",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "biritug",
+    "en": "pyromancy",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "birgo",
+    "en": "lava",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "birtuth",
+    "en": "pyromancer",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "bitraph",
+    "en": "glass",
+    "pos": "n",
+    "by": "Sage"
+  },
+  {
+    "su": "lasethene",
+    "en": "did",
+    "pos": "v",
+    "by": "Sage"
   }
 ]
