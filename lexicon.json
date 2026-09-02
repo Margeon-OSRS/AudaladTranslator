@@ -151,7 +151,7 @@
   },
   {
     "au": "Inunagurgu",
-    "en": "dumb/retarded/unintelligent",
+    "en": "dumb, unintelligent",
     "pos": "adj",
     "by": "Sage"
   },
@@ -277,7 +277,13 @@
   },
   {
     "au": "Shenaar",
-    "en": "tongue, dialect",
+    "en": "tongue",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Karashenaar'",
+    "en": "dialect",
     "pos": "n",
     "by": "Jonas L. Castellan"
   },
@@ -343,7 +349,7 @@
   },
   {
     "au": "Kelum'",
-    "en": "(iron) armor, chestplate",
+    "en": "iron chestplate",
     "pos": "n",
     "by": "Jonas L. Castellan"
   },
@@ -373,7 +379,19 @@
   },
   {
     "au": "Neruke'",
-    "en": "trunk, mast, flagpole",
+    "en": "trunk (of tree)",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Zhavuneru'",
+    "en": "mast",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Veshneru'",
+    "en": "flagpole",
     "pos": "n",
     "by": "Jonas L. Castellan"
   },
@@ -386,12 +404,18 @@
   {
     "au": "Vaar",
     "en": "strange, unknown",
-    "pos": "n",
+    "pos": "adj",
     "by": "Jonas L. Castellan"
   },
   {
     "au": "Sheel",
-    "en": "source, spring, origin",
+    "en": "source, origin",
+    "pos": "n",
+    "by": "Jonas L. Castellan"
+  },
+  {
+    "au": "Ausheel'",
+    "en": "spring (of water)",
     "pos": "n",
     "by": "Jonas L. Castellan"
   },
@@ -547,7 +571,7 @@
   },
   {
     "au": "Shyrtaral'",
-    "en": "paragraph, article",
+    "en": "section of text (paragraph, article)",
     "pos": "n",
     "by": "MegaMasterBloc"
   },
@@ -757,7 +781,7 @@
   },
   {
     "au": "Baemthas'",
-    "en": "louse/vermin",
+    "en": "louse",
     "pos": "n",
     "by": "Filurdu U. Dimaina"
   },
@@ -2028,12 +2052,6 @@
     "by": "Filurdu U. Dimaina"
   },
   {
-    "au": "Utasolank",
-    "en": "neighbour",
-    "pos": "n",
-    "by": "Sage"
-  },
-  {
     "au": "Fesurezhtasu",
     "en": "Rat",
     "pos": "n",
@@ -2388,7 +2406,7 @@
     "by": "MegaMasterBloc"
   },
   {
-    "au": "Addavi",
+    "au": "Addavai",
     "en": "air",
     "pos": "n",
     "by": "MegaMasterBloc"
@@ -2431,18 +2449,12 @@
   },
   {
     "au": "Gabu",
-    "en": "form",
-    "pos": "n",
-    "by": "MegaMasterBloc"
-  },
-  {
-    "au": "Gabu",
     "en": "to form",
     "pos": "v",
     "by": "MegaMasterBloc"
   },
   {
-    "au": "alinshurd",
+    "au": "alinshurdai",
     "en": "plan",
     "pos": "n",
     "by": "MegaMasterBloc"
@@ -2460,7 +2472,7 @@
     "by": "MegaMasterBloc"
   },
   {
-    "au": "alshyimektu",
+    "au": "alshyimektai",
     "en": "list",
     "pos": "n",
     "by": "MegaMasterBloc"
@@ -2484,8 +2496,8 @@
     "by": "MegaMasterBloc"
   },
   {
-    "au": "Addarvu",
-    "en": "clear",
+    "au": "Addarvai",
+    "en": "clearness, a clearing",
     "pos": "n",
     "by": "MegaMasterBloc"
   },
@@ -2508,7 +2520,7 @@
     "by": "MegaMasterBloc"
   },
   {
-    "au": "Zhiriguk",
+    "au": "Zhirigukai",
     "en": "force",
     "pos": "n",
     "by": "MegaMasterBloc"
@@ -2520,19 +2532,19 @@
     "by": "MegaMasterBloc"
   },
   {
-    "au": "evanirɨ",
-    "en": "miss/fail",
+    "au": "evanirai",
+    "en": "a miss, failure",
     "pos": "n",
     "by": "MegaMasterBloc"
   },
   {
     "au": "evanirɨ",
-    "en": "to miss/fail",
+    "en": "to miss, fail",
     "pos": "v",
     "by": "MegaMasterBloc"
   },
   {
-    "au": "Taru",
+    "au": "Tarai",
     "en": "record",
     "pos": "n",
     "by": "MegaMasterBloc"
@@ -3211,7 +3223,7 @@
   },
   {
     "au": "Gabai",
-    "en": "shape",
+    "en": "shape, form",
     "pos": "n",
     "by": "Filurdu U. Dimaina"
   },
@@ -3419,7 +3431,8 @@
     "pos": "n",
     "by": "Fenwik Rochelle"
   },
-  {"au": "Aurdipla'",
+  {
+    "au": "Aurdipla'",
     "en": "sailor",
     "pos": "n",
     "by": "Fenwik Rochelle"
@@ -3496,5 +3509,4 @@
     "pos": "v",
     "by": "Fenwik Rochelle"
   }
-  
 ]
