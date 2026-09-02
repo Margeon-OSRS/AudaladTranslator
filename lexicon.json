@@ -85,19 +85,19 @@
   },
   {
     "au": "Arashu",
-    "en": "to gain/earn",
+    "en": "to earn",
     "pos": "v",
     "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Hashru",
-    "en": "to defend/protect",
+    "en": "to defend",
     "pos": "v",
     "by": "Filurdu U. Dimaina"
   },
   {
     "au": "Marshuveshu",
-    "en": "to wear/clothe",
+    "en": "to wear",
     "pos": "v",
     "by": "Filurdu U. Dimaina"
   },
@@ -139,7 +139,7 @@
   },
   {
     "au": "Itoa",
-    "en": "to rejoice/be glad",
+    "en": "to rejoice",
     "pos": "v",
     "by": "Filurdu U. Dimaina"
   },
@@ -151,7 +151,7 @@
   },
   {
     "au": "Inunagurgu",
-    "en": "dumb, unintelligent",
+    "en": "dumb",
     "pos": "adj",
     "by": "Sage"
   },
@@ -199,7 +199,7 @@
   },
   {
     "au": "Soraplae",
-    "en": "spouse/partner",
+    "en": "spouse",
     "pos": "n",
     "by": "Fox & Sage"
   },
@@ -229,7 +229,7 @@
   },
   {
     "au": "Kenishi",
-    "en": "baby/infant",
+    "en": "baby",
     "pos": "n",
     "by": "Fox & Sage"
   },
@@ -241,7 +241,7 @@
   },
   {
     "au": "Urnagurgu",
-    "en": "intelligent/smart",
+    "en": "intelligent",
     "pos": "adj",
     "by": "Fox & Sage"
   },
@@ -265,7 +265,7 @@
   },
   {
     "au": "Shuai",
-    "en": "power, might",
+    "en": "power",
     "pos": "n",
     "by": "Jonas L. Castellan"
   },
@@ -319,7 +319,7 @@
   },
   {
     "au": "Shurkel'",
-    "en": "coin, money",
+    "en": "money",
     "pos": "n",
     "by": "Jonas L. Castellan"
   },
@@ -403,13 +403,13 @@
   },
   {
     "au": "Vaar",
-    "en": "strange, unknown",
+    "en": "strange",
     "pos": "adj",
     "by": "Jonas L. Castellan"
   },
   {
     "au": "Sheel",
-    "en": "source, origin",
+    "en": "source",
     "pos": "n",
     "by": "Jonas L. Castellan"
   },
@@ -421,7 +421,7 @@
   },
   {
     "au": "Ornu",
-    "en": "heir, successor",
+    "en": "heir",
     "pos": "n",
     "by": "Filurdu U. Dimaina"
   },
@@ -571,7 +571,7 @@
   },
   {
     "au": "Shyrtaral'",
-    "en": "section of text (paragraph, article)",
+    "en": "paragraph",
     "pos": "n",
     "by": "MegaMasterBloc"
   },
@@ -2214,12 +2214,6 @@
     "by": "MegaMasterBloc"
   },
   {
-    "au": "anavai",
-    "en": "state",
-    "pos": "n",
-    "by": "MegaMasterBloc"
-  },
-  {
     "au": "shyrai",
     "en": "little",
     "pos": "adj",
@@ -2384,12 +2378,6 @@
   {
     "au": "shyim",
     "en": "several",
-    "pos": "adj",
-    "by": "MegaMasterBloc"
-  },
-  {
-    "au": "shyim",
-    "en": "several",
     "pos": "det",
     "by": "MegaMasterBloc"
   },
@@ -2427,12 +2415,6 @@
     "au": "Ormir",
     "en": "special",
     "pos": "adj",
-    "by": "MegaMasterBloc"
-  },
-  {
-    "au": "Ormir",
-    "en": "special",
-    "pos": "n",
     "by": "MegaMasterBloc"
   },
   {
@@ -2497,7 +2479,7 @@
   },
   {
     "au": "Addarvai",
-    "en": "clearness, a clearing",
+    "en": "clearness",
     "pos": "n",
     "by": "MegaMasterBloc"
   },
@@ -2533,13 +2515,13 @@
   },
   {
     "au": "evanirai",
-    "en": "a miss, failure",
+    "en": "failure",
     "pos": "n",
     "by": "MegaMasterBloc"
   },
   {
     "au": "evanirɨ",
-    "en": "to miss, fail",
+    "en": "to fail",
     "pos": "v",
     "by": "MegaMasterBloc"
   },
@@ -3223,7 +3205,7 @@
   },
   {
     "au": "Gabai",
-    "en": "shape, form",
+    "en": "shape",
     "pos": "n",
     "by": "Filurdu U. Dimaina"
   },
@@ -3421,7 +3403,7 @@
   },
   {
     "au": "Yizhurak",
-    "en": "fires/flames",
+    "en": "fires",
     "pos": "n",
     "by": "Fenwik Rochelle"
   },

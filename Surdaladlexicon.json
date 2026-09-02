@@ -756,12 +756,6 @@
     "by": ""
   },
   {
-    "su": "ôg",
-    "en": "country",
-    "pos": "n",
-    "by": ""
-  },
-  {
     "su": "rêdu",
     "en": "metal",
     "pos": "n",
@@ -824,12 +818,6 @@
   {
     "su": "anitere",
     "en": "wound",
-    "pos": "n",
-    "by": ""
-  },
-  {
-    "su": "nog",
-    "en": "territory",
     "pos": "n",
     "by": ""
   },
@@ -991,7 +979,7 @@
   },
   {
     "su": "agog",
-    "en": "movement/action",
+    "en": "movement",
     "pos": "n",
     "by": "Sage"
   },
@@ -1021,7 +1009,7 @@
   },
   {
     "su": "akeden",
-    "en": "population/inhabitants",
+    "en": "population",
     "pos": "n",
     "by": "Sage"
   },
@@ -1039,13 +1027,13 @@
   },
   {
     "su": "aleden",
-    "en": "recruit/enlist",
+    "en": "to recruit",
     "pos": "v",
     "by": "Sage"
   },
   {
     "su": "alemath",
-    "en": "draw/describe",
+    "en": "to draw",
     "pos": "v",
     "by": "Sage"
   },
@@ -1063,7 +1051,7 @@
   },
   {
     "su": "anen",
-    "en": "surrounding/nearby",
+    "en": "nearby",
     "pos": "adj",
     "by": "Sage"
   },
@@ -1111,7 +1099,7 @@
   },
   {
     "su": "beson",
-    "en": "brew/mix",
+    "en": "to brew",
     "pos": "v",
     "by": "Sage"
   },
@@ -1123,7 +1111,7 @@
   },
   {
     "su": "eskoleth",
-    "en": "staff room/scholars' room",
+    "en": "scholars' room",
     "pos": "n",
     "by": "Sage"
   },
@@ -1183,13 +1171,13 @@
   },
   {
     "su": "afasaron",
-    "en": "rebel/resist",
+    "en": "to rebel",
     "pos": "v",
     "by": "Sage"
   },
   {
     "su": "afaserog",
-    "en": "rebellion/revolution/coup d'etat",
+    "en": "rebellion",
     "pos": "n",
     "by": "Sage"
   },
@@ -1237,7 +1225,7 @@
   },
   {
     "su": "anraph",
-    "en": "entrance/breach",
+    "en": "entrance",
     "pos": "n",
     "by": "Sage"
   },
@@ -1255,7 +1243,7 @@
   },
   {
     "su": "arketh",
-    "en": "bowman/crossbowman",
+    "en": "bowman",
     "pos": "n",
     "by": "Sage"
   },
@@ -1309,7 +1297,7 @@
   },
   {
     "su": "athon",
-    "en": "faithful/believer",
+    "en": "believer",
     "pos": "n",
     "by": "Sage"
   },
@@ -1369,13 +1357,13 @@
   },
   {
     "su": "balugo",
-    "en": "alternative/option",
+    "en": "option",
     "pos": "n",
     "by": "Sage"
   },
   {
     "su": "banawen",
-    "en": "inhabit/populate/settle",
+    "en": "to settle",
     "pos": "v",
     "by": "Sage"
   },
@@ -1399,7 +1387,7 @@
   },
   {
     "su": "bardath",
-    "en": "discussion/negotiation",
+    "en": "negotiation",
     "pos": "n",
     "by": "Sage"
   },
@@ -1441,7 +1429,7 @@
   },
   {
     "su": "bateraph",
-    "en": "obedience/submission",
+    "en": "obedience",
     "pos": "n",
     "by": "Sage"
   },
@@ -1471,19 +1459,19 @@
   },
   {
     "su": "betegaph",
-    "en": "chase/pursue",
+    "en": "to chase",
     "pos": "v",
     "by": "Sage"
   },
   {
     "su": "beteare",
-    "en": "seek/search",
+    "en": "to seek",
     "pos": "v",
     "by": "Sage"
   },
   {
     "su": "beterathog",
-    "en": "race/chase",
+    "en": "race",
     "pos": "n",
     "by": "Sage"
   },
@@ -1495,7 +1483,7 @@
   },
   {
     "su": "bidog",
-    "en": "bottle/flask",
+    "en": "bottle",
     "pos": "n",
     "by": "Sage"
   },
