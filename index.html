@@ -2236,7 +2236,7 @@ textarea:focus-visible,select:focus-visible,summary:focus-visible,
         <button class="btn ghost mini" id="su-copy" title="Copy the translation text">Copy</button>
         <button class="btn ghost mini" id="su-png" title="Save the Surdalad native script as a PNG (for signs, books, banners)">&#8595; Script PNG</button>
       </div>
-      <div class="note"><b>How it reads.</b> Every word is looked up in the canon Surdalad lexicon first, then among words forged in this browser. Where neither has it, the toolkit builds one by law from the Audalad lexicon: the Keshir laws run over the court word, then Surdalad&rsquo;s own (every c a k, no sh or zh, a tail that answers the last sound, and kel-, ni- or kir- where the meaning calls for it). Law-built words are marked as such in the breakdown beneath, with the Audalad word they came from; the canon lexicon takes precedence over all of them. Words no tongue knows are marked in red. Punctuation is carried through as typed, in the roman line and the script line alike. The pronunciation line beneath the result can be switched off with the toggle below; it reads the Surdalad or Audalad written out, or the Surdalad typed when the result is English. With the Audalad pairing, any word typed is bent by law, known or not, and an English word the lexicon lacks is read through the court&rsquo;s own reader first, so plurals and tenses carry over. Use the swap to turn the lookup around.</div>
+      <div class="note"><b>How it reads.</b> Every word is looked up in the canon Surdalad lexicon first, then among words forged in this browser. Where neither has it, the toolkit builds one by law from the Audalad lexicon: the Keshir laws run over the court word, then Surdalad&rsquo;s own (every c a k, no sh or zh, a tail that answers the last sound, and kel-, ni- or kir- where the meaning calls for it). Law-built words are marked as such in the breakdown beneath, with the Audalad word they came from; the canon lexicon takes precedence over all of them. Words no tongue knows are marked in red. Punctuation is carried through as typed, in the roman line and the script line alike. The pronunciation line beneath the result can be switched off with the toggle below; it reads the Surdalad or Audalad written out, or the Surdalad typed when the result is English. With the Audalad pairing, any word typed is bent by law, known or not, and an English word the lexicon lacks is read through the court&rsquo;s own reader first, so plurals and tenses carry over. Use the swap to turn the lookup around: read out of Surdalad, each word is traced back to the court form it was built from, tense and plural marks included, and with the English pairing the whole line is read by the court&rsquo;s own sentence reader. Where the laws have worn two court words down to one shape, the slot decides the reading (a verb after a pronoun, a noun after the article) and the breakdown lists the rivals.</div>
     </div>
 
     <div class="lview" id="su-lexicon">
@@ -6265,12 +6265,6 @@ function surdaladForm(au, en, pos, opts){ return suPrefix(suBend(au, opts), en, 
     for(var i=0;i<ks.length;i++){ var h=enMap[ks[i]]; if(h&&h.length) return h[0]; }
     return null;
   }
-  function auByGloss(en){
-    if(typeof enToAu==='undefined') return null;
-    var ks=glossKeys(en);
-    for(var i=0;i<ks.length;i++){ var h=enToAu[ks[i]]; if(h&&h.length) return h[0].au; }
-    return null;
-  }
   function auRec(core){
     if(typeof auToEn==='undefined') return null;
     return auToEn[core.toLowerCase()] || auToEn[deacc(core)] || null;
@@ -6280,33 +6274,26 @@ function surdaladForm(au, en, pos, opts){ return suPrefix(suBend(au, opts), en, 
      Lookup order is the precedence order: canon lexicon, then words forged here, then words built by law from Audalad. */
   function lawEntry(au, en, pos){ return {su:surdaladForm(au,en,pos), en:en, pos:pos||'n', by:'', src:'derived', au:au, low:harborForm(au)}; }
   function trToken(core){
-    if(toSurd){
-      if(pivot==='en'){
-        var e=(enMap[norm(core)]||[])[0];
-        if(e) return {out:e.su, sur:e};
-        // nothing under that English: let the court lexicon read it (plurals, tenses, irregulars), then bend the Audalad by law
-        var rr=(typeof resolveEng==='function') ? resolveEng(core) : null;
-        if(!rr||!rr.au) return {out:null, sur:null};
-        var se=surByGloss(rr.en);
-        if(se && se.src!=='derived') return {out:se.su, sur:se, note:rr.note||null};
-        var le=lawEntry(rr.au, rr.en, rr.pos);
-        return {out:le.su, sur:le, note:rr.note||null};
-      } else {
-        var rec=auRec(core);
-        if(rec){
-          var se2=surByGloss(rec.en);
-          if(se2 && se2.src!=='derived') return {out:se2.su, sur:se2};
-        }
-        // read by law straight from the word as typed: a known word keeps its gloss, an unknown one is bent all the same
-        var le2=lawEntry(core, rec?rec.en:'', rec?rec.pos:'');
-        return {out:le2.su, sur:rec?le2:null};
-      }
+    // into Surdalad only: the way back out is readBack below
+    if(pivot==='en'){
+      var e=(enMap[norm(core)]||[])[0];
+      if(e) return {out:e.su, sur:e};
+      // nothing under that English: let the court lexicon read it (plurals, tenses, irregulars), then bend the Audalad by law
+      var rr=(typeof resolveEng==='function') ? resolveEng(core) : null;
+      if(!rr||!rr.au) return {out:null, sur:null};
+      var se=surByGloss(rr.en);
+      if(se && se.src!=='derived') return {out:se.su, sur:se, note:rr.note||null};
+      var le=lawEntry(rr.au, rr.en, rr.pos);
+      return {out:le.su, sur:le, note:rr.note||null};
     } else {
-      var s0=(suMap[deacc(core)]||[])[0];
-      if(!s0) return {out:null, sur:null};
-      if(pivot==='en') return {out:s0.en, sur:s0};
-      var au=s0.au||auByGloss(s0.en);
-      return {out:au||null, sur:s0};
+      var rec=auRec(core);
+      if(rec){
+        var se2=surByGloss(rec.en);
+        if(se2 && se2.src!=='derived') return {out:se2.su, sur:se2};
+      }
+      // read by law straight from the word as typed: a known word keeps its gloss, an unknown one is bent all the same
+      var le2=lawEntry(core, rec?rec.en:'', rec?rec.pos:'');
+      return {out:le2.su, sur:rec?le2:null};
     }
   }
 
@@ -6343,6 +6330,280 @@ function surdaladForm(au, en, pos, opts){ return suPrefix(suBend(au, opts), en, 
     return {pre:pre, post:post, src:core, out:out, sur:r.sur, note:r.note||null};
   }
 
+  /* ===== out of Surdalad: tracing a word back to the court word it was built from =====
+     The laws are lossy: many court words wear down to one Surdalad shape, and the forward direction bends the
+     inflected court form (Ásarlashi, Yilormus), not the headword. So the way back is not a lookup but a reading:
+     1. every canon and forged word answers to its own shape;
+     2. a map built on first use holds the shape of every court headword AND of every inflected form the forward
+        direction can write (the six tense prefixes on verbs, plural, negation and owner's marks on nouns, negation
+        and owner's marks on adjectives and adverbs, plural and owner's marks on pronouns), each remembering the
+        court form and the marks it carries, so Asarlaseth reads as Ásarlashi [near-past] and not as a word no
+        tongue knows;
+     3. where several readings reach one shape, the pick goes by source (canon before forged before by-law), by
+        plainness (a whole headword before a stripped one) and by the slot, chosen over the whole line at once so a
+        word is read by what follows it as well as by what stood before (a verb after a pronoun, a noun after the
+        article, the article after a preposition). The rivals are listed in the breakdown so nothing is hidden.
+     With the English pairing the chosen court forms then go through the court's own sentence reader (readAuSentence),
+     so tense, plural, copula, do-support, negation and the article all read as they do on the Audalad tab. */
+  var REV=null;   // deacc(surdalad shape) -> [candidate], built on first use and dropped whenever either lexicon changes
+  var SU_REV_TENSES=['near-past','near-future','present','continuous','far-future','far-past'];
+  /* the canon word stands first, a forged one next; a by-law word only outranks them when the slot plainly asks for
+     another part of speech (canon arog "black" after "will not" reads as the by-law arog, to follow) */
+  var SU_SRC_BONUS={canon:4,forged:3,derived:0};
+  /* the small words are far commoner than any one content word: where a shape merges the two, lean to the small word */
+  var SU_PRIOR={det:2,pron:2,conj:2,prep:2,cop:2,modal:2,q:1,'do':1};
+  /* how likely each part of speech is in the slot after the previous word's kind (higher = likelier).
+     "to" is the preposition El before a verb: an infinitive marker, so a verb is welcome after it */
+  var SU_SLOT={
+    start:{pron:3,det:3,q:3,'do':3,intj:2,n:2,name:2,num:1,adj:1,prep:1,adv:1,v:1},
+    pron: {v:4,cop:4,modal:4,'do':4,adv:2,prep:1,n:-2,det:-2,adj:-2,pron:-1},
+    det:  {n:4,name:3,adj:2,num:2,v:-3,cop:-3,modal:-3,det:-2,pron:-3,prep:-2,adv:-1},
+    adj:  {n:4,name:2,adj:1,conj:1,v:-2,cop:-2,det:-2,pron:-2,prep:-1},
+    num:  {n:4,adj:2,v:-2,det:-2,pron:-2},
+    n:    {v:3,cop:3,modal:3,'do':3,prep:2,conj:2,det:1,adv:1,n:-1,adj:-1,pron:-1,q:-1},
+    v:    {det:3,pron:3,n:2,name:2,prep:2,adv:2,'do':2,adj:1,num:1,conj:1,v:-1,cop:-1},
+    'do': {pron:4,det:3,n:3,name:3,v:3,adv:2,adj:1,cop:-1,modal:-1},
+    cop:  {adj:3,det:3,n:2,name:2,pron:1,prep:1,adv:1,num:1,v:-1,cop:-2,modal:-2},
+    modal:{v:4,cop:4,'do':3,adv:1,n:-2,det:-2,pron:-2,adj:-2,prep:-2,modal:-2},
+    prep: {det:3,pron:2,n:2,name:2,adj:1,num:1,v:-3,cop:-3,prep:-2,adv:-1},
+    to:   {v:3,cop:3,det:3,pron:2,n:2,name:2,adj:1,num:1,prep:-2,adv:-1},
+    not:  {v:4,cop:4,adj:2,det:1,modal:1,adv:1,'do':1},
+    adv:  {v:2,cop:2,adj:2,'do':2,det:1,modal:1},
+    q:    {v:2,cop:2,modal:2,'do':4,pron:2,det:1,n:1,adv:1},
+    intj: {pron:2,det:1,n:1,v:1,name:1},
+    conj: {pron:3,det:3,'do':2,n:1,v:1,q:1,adj:1}
+  };
+  /* the score for `kind` in the slot after `slot`; "do" (Lashi) falls back to what a verb would score */
+  function slotScore(slot, kind){
+    var row=SU_SLOT[slot]||SU_SLOT.start;
+    if(kind in row) return row[kind];
+    if(kind==='do' && ('v' in row)) return row.v;
+    return 0;
+  }
+  function revCand(src, rec, notes, au, su){ return {src:src, rec:rec, notes:notes, au:au, en:rec.en, pos:rec.pos||'n', su:su}; }
+  function auKeyOf(au){ return (typeof deaccent==='function' ? deaccent(au||'') : deacc(au)).replace(/[\u2019\u02bc]/g,"'"); }
+  function buildRev(){
+    var map={}, baseShape={}, seen={};
+    if(typeof lex!=='function' || typeof buildHighForm!=='function') return map;
+    function put(k, c){ (map[k]=map[k]||[]).push(c); var bare=k.replace(/['\u2019\u02bc]/g,''); if(bare!==k) (map[bare]=map[bare]||[]).push(c); }
+    function add(d, notes){
+      var au = notes.length ? buildHighForm(d.au, notes) : d.au;
+      var shape=auKeyOf(au), pos=d.pos||'n';
+      if(notes.length){
+        if(baseShape[shape+'|'+pos]) return;                                   // a headword already owns this court shape
+        var id=shape+'|'+pos+'|'+norm(d.en); if(seen[id]!==undefined && seen[id]<=notes.length) return; seen[id]=notes.length;
+      }
+      var su=surdaladForm(au, d.en, d.pos); if(!su) return;
+      put(deacc(su), revCand('derived', d, notes, au, su));
+    }
+    var recs=lex().concat(typeof pronounParadigm==='function' ? pronounParadigm() : []), keep=[], dup={};
+    recs.forEach(function(d){
+      if(!d||!d.au) return;
+      var id=auKeyOf(d.au)+'|'+(d.pos||'n')+'|'+norm(d.en); if(dup[id]) return; dup[id]=1;
+      keep.push(d); baseShape[auKeyOf(d.au)+'|'+(d.pos||'n')]=1;
+    });
+    keep.forEach(function(d){ add(d, []); });                                   // every headword first: whole words own their shapes
+    keep.forEach(function(d){
+      var pos=d.pos||'n';
+      if(pos==='v'){
+        add(d,['negated']);
+        SU_REV_TENSES.forEach(function(t){ add(d,[t]); add(d,[t,'negated']); });
+      } else if(pos==='n'||pos==='title'||pos==='name'){
+        ['','plural','plural (Yi-)'].forEach(function(pl){ [false,true].forEach(function(ng){ [false,true].forEach(function(ps){
+          var notes=[]; if(pl) notes.push(pl); if(ng) notes.push('negated'); if(ps) notes.push('of-the');
+          if(notes.length) add(d, notes);
+        }); }); });
+      } else if(pos==='adj'||pos==='adv'){
+        add(d,['negated']); add(d,['of-the']); add(d,['negated','of-the']);
+      } else if(pos==='pron'){
+        if(!/ae$/i.test(d.au)) add(d,['plural']);                              // a plural pronoun takes no second plural
+        if(!/(ae|ad)$/i.test(d.au)) add(d,['of-the']);                          // owner's mark on the bare pronoun only (Inad, not Inaead)
+      }
+    });
+    return map;
+  }
+  /* the court record behind a canon or forged gloss, when the court has that meaning */
+  function auRecFor(en){
+    if(typeof enToAu==='undefined') return null;
+    var ks=glossKeys(en);
+    for(var i=0;i<ks.length;i++){ var h=enToAu[ks[i]]; if(h&&h.length){ var r=(typeof auToEn!=='undefined')?auToEn[h[0].au.toLowerCase()]:null; return r||{au:h[0].au,en:h[0].full||en,pos:h[0].pos||'n'}; } }
+    return null;
+  }
+  var SU_DO={'do':['to do',null],'does':['to do',null],'did':['to do','near-past'],'done':['to do','near-past']};
+  function canonCand(w){
+    var ar=auRecFor(w.en), pos=w.pos||'n', en=w.en, notes=[];
+    if(pos==='v'){
+      // canon verbs are mostly glossed bare (give, love, run): the reader conjugates a "to" gloss and reads a bare one as written
+      var fs=(typeof _enFirstSense==='function') ? _enFirstSense(en).toLowerCase() : norm(en);
+      var MOD=(typeof _EN_MODAL!=='undefined')?_EN_MODAL:null, COP=(typeof _EN_COPULA!=='undefined')?_EN_COPULA:null;
+      if(SU_DO[fs]){ en=SU_DO[fs][0]; if(SU_DO[fs][1]) notes.push(SU_DO[fs][1]); }
+      else if(!/^to /i.test(en) && !inSet(MOD,fs) && !inSet(COP,fs) && !/^(is|are|am|was|were|be)\b/.test(fs)) en='to '+en;
+    }
+    var rec={au:(ar?ar.au:w.su), en:en, pos:pos};
+    var c=revCand(w.src||'canon', rec, notes, rec.au, w.su); c.en=w.en; c.auKnown=!!ar; return c;
+  }
+  function candsFor(key){
+    var out=[];
+    (suMap[key]||[]).forEach(function(w){ if(w.src!=='derived') out.push(canonCand(w)); });
+    if(!REV) REV=buildRev();
+    (REV[key]||[]).forEach(function(c){ out.push(c); });
+    return out;
+  }
+  /* one word: as typed, then without its outer apostrophes (quotation marks), then without any apostrophe at all */
+  function surCandidates(word){
+    var core=word, pre='', post='', cands=candsFor(deacc(word));
+    if(!cands.length){
+      var mq=word.match(/^(['\u2019\u02bc]*)([\s\S]*?)(['\u2019\u02bc]*)$/);
+      if(mq && (mq[1]||mq[3]) && mq[2]){ var c2=candsFor(deacc(mq[2])); if(c2.length){ cands=c2; pre=mq[1]; post=mq[3]; core=mq[2]; } }
+    }
+    if(!cands.length && /['\u2019\u02bc]/.test(core)){ var c3=candsFor(deacc(core).replace(/['\u2019\u02bc]/g,'')); if(c3.length) cands=c3; }
+    return {pre:pre, post:post, core:core, cands:cands};
+  }
+  function inSet(set, k){ return !!(set && typeof set.has==='function' && set.has(k)); }
+  /* the kind a reading would take in the sentence, as the court reader classes it */
+  function kindOf(c){
+    var pos=c.pos||'n', gl=(c.rec&&c.rec.en)||c.en, fs=(typeof _enFirstSense==='function') ? _enFirstSense(gl).toLowerCase() : norm(gl);
+    var COP=(typeof _EN_COPULA!=='undefined')?_EN_COPULA:null, MOD=(typeof _EN_MODAL!=='undefined')?_EN_MODAL:null;
+    var PLQ=(typeof _EN_PLQUANT!=='undefined')?_EN_PLQUANT:null, SGQ=(typeof _EN_SGQUANT!=='undefined')?_EN_SGQUANT:null;
+    if(pos==='v'){ if(inSet(COP,fs)||inSet(COP,norm(gl))) return 'cop'; if(inSet(MOD,fs)) return 'modal'; return fs==='to do' ? 'do' : 'v'; }
+    if(pos==='q' && inSet(MOD,fs)) return 'modal';
+    if(pos==='pron'){ var PR=(typeof _PRON_READ!=='undefined')?_PRON_READ:null; var k=auKeyOf(c.au).replace(/^(ori|itu|ke)'/,''); var pr=PR?PR[k]:null; return (pr&&pr.det)?'det':'pron'; }
+    if(pos==='n'||pos==='det'||pos==='title'){ if(inSet(PLQ,fs)||inSet(SGQ,fs)) return 'det'; return pos==='det'?'det':'n'; }
+    if(pos==='name') return 'name';
+    if(pos==='postp') return 'prep';
+    if(pos==='ord') return 'adj';
+    return pos;
+  }
+  /* the slot key a chosen reading opens for the word after it */
+  function slotOf(c){
+    var k=c.kind||kindOf(c);
+    if(k==='name') return 'n';
+    if(k==='prep' && c.fs==='to') return 'to';
+    if(k==='adv' && c.fs==='not') return 'not';
+    return (k in SU_SLOT) ? k : 'start';
+  }
+  function emit(c){
+    var k=c.kind, sc=(SU_SRC_BONUS[c.src]||0)+(SU_PRIOR[k]||0)-c.notes.length;
+    if((k==='v'||k==='do') && c.tensed) sc+=1;   // only a verb wears a tense prefix: the mark is evidence, not noise
+    return sc;
+  }
+  /* choose one reading per word for the whole line at once (best total score over the slots, Viterbi), so a word can
+     be read by what follows it as well as by what stood before: Laseth Irere Zarene is do-you-love, not all-next-loves.
+     After a conjunction the kind that stood before it is welcome again (old and beautiful). */
+  function pickReadings(items){
+    var rk=function(p){ return (typeof _POSRANK!=='undefined' && (p in _POSRANK)) ? _POSRANK[p] : 8; };
+    items.forEach(function(it){
+      (it.cands||[]).forEach(function(c){
+        var gl=(c.rec&&c.rec.en)||c.en;
+        c.kind=kindOf(c); c.fs=(typeof _enFirstSense==='function') ? _enFirstSense(gl).toLowerCase() : norm(gl);
+        c.tensed=c.notes.some(function(n){ return /past|future|present|continuous/.test(n); });
+      });
+    });
+    var cols=[];   // one column per item: [{c, kind, slot, score, back}]
+    items.forEach(function(it, i){
+      var states=(it.cands&&it.cands.length) ? it.cands.map(function(c){ return {c:c, kind:c.kind, slot:slotOf(c), score:emit(c), back:-1}; })
+                                            : [{c:null, kind:'n', slot:'n', score:0, back:-1}];
+      if(it.punct) states=[{c:null, kind:'punct', slot:'start', score:0, back:-1}];
+      var prevCol=i>0?cols[i-1]:null;
+      if(prevCol){
+        states.forEach(function(st){
+          var best=-Infinity, bi=-1;
+          prevCol.forEach(function(ps, j){
+            var tr=slotScore(ps.slot, st.kind);
+            if(ps.kind==='conj' && ps.back>=0 && i>=2){ var pp=cols[i-2][ps.back]; if(pp && pp.kind===st.kind && st.kind!=='punct') tr+=2; }
+            var tot=ps.score+tr;
+            if(tot>best || (tot===best && bi>=0 && rk(prevCol[bi].c?prevCol[bi].c.pos:'n')>rk(ps.c?ps.c.pos:'n'))){ best=tot; bi=j; }
+          });
+          st.score+=best; st.back=bi;
+        });
+      } else states.forEach(function(st){ st.score+=slotScore('start', st.kind); });
+      cols.push(states);
+    });
+    // trace back from the best final state; ties fall to the plainer part of speech, then to lexicon order
+    var pickIdx=new Array(cols.length);
+    var last=cols[cols.length-1], bi=0;
+    last.forEach(function(st,j){ if(st.score>last[bi].score || (st.score===last[bi].score && rk(st.c?st.c.pos:'n')<rk(last[bi].c?last[bi].c.pos:'n'))) bi=j; });
+    for(var i=cols.length-1;i>=0;i--){ pickIdx[i]=bi; bi=cols[i][bi].back; if(bi<0) bi=0; }
+    return items.map(function(it,i){ return it.punct||!it.cands||!it.cands.length ? null : it.cands[pickIdx[i]]; });
+  }
+  /* the small carriers the court folds into the verb and the Surdalad line writes out: hide them and pass the mark on.
+     - Lashi standing before a subject and a bare verb is do-support (Laseth Irere zarene: do you love); its tense goes to the verb
+     - El "to" straight before a verb is the infinitive marker (aderere elden sarog: want to learn) */
+  function foldCarriers(rt){
+    var NP={pron:1,det:1,n:1,name:1,adj:1,num:1};
+    function kindAt(x){ return x.pick ? (x.pick.kind||kindOf(x.pick)) : (x.punct?'punct':'n'); }
+    for(var i=0;i<rt.length;i++){
+      var x=rt[i]; if(!x.pick || x.punct) continue;
+      var k=kindAt(x), fs=x.pick.fs||'';
+      if(k==='do'){
+        var j=i+1, seen=0, target=-1;
+        while(j<rt.length && !rt[j].punct){
+          var kj=kindAt(rt[j]);
+          if(kj==='v'||kj==='cop'||kj==='modal'||kj==='do'){ target=j; break; }
+          if(!(NP[kj] || (kj==='adv' && (rt[j].pick.fs||'')==='not'))) break;
+          seen++; j++;
+        }
+        if(target>=0 && kindAt(rt[target])==='v' && !rt[target].pick.tensed){
+          var before = seen>0 ? kindAt(rt[target-1]) : 'carrier';   // Laseth zarene: the emphatic do, straight before its verb
+          if(before==='pron'||before==='n'||before==='name'||before==='adv'||before==='carrier'){
+            var tense=x.pick.notes.filter(function(n){ return /past|future|present|continuous/.test(n); })[0];
+            if(tense) rt[target].notes.push(tense);
+            x.folded='do-support, carried to '+(rt[target].src)+(tense?(' ('+tense+')'):'');
+          }
+        }
+      } else if(k==='prep' && fs==='to' && i+1<rt.length && !rt[i+1].punct && rt[i+1].pick){
+        var kn=kindAt(rt[i+1]);
+        if(kn==='v' && !rt[i+1].pick.tensed) x.folded='infinitive marker, carried to '+rt[i+1].src;
+      }
+    }
+    return rt.filter(function(x){ return !x.folded; });
+  }
+  /* read the whole line back: candidates for every word, one reading per word picked over the whole line, then
+     (English pairing) the carriers folded and the court forms handed to the court's sentence reader.
+     Fills pre/post/src/pick/alts/out/hidden/rt on the word tokens. */
+  function readBack(toks){
+    var items=[], link=[];
+    toks.forEach(function(t, idx){
+      if(t.sp!==undefined) return;
+      if(t.punct!==undefined){ items.push({punct:t.punct}); link.push(idx); return; }
+      var r=surCandidates(t.word);
+      t.pre=r.pre; t.post=r.post; t.src=r.core; t.hidden=false;
+      items.push({cands:r.cands}); link.push(idx);
+    });
+    var picks=pickReadings(items);
+    var rt=[];
+    items.forEach(function(it, i){
+      var t=toks[link[i]];
+      if(it.punct){ rt.push({punct:it.punct, tok:t}); return; }
+      var c=picks[i]||null;
+      t.pick=c;
+      t.alts=(it.cands||[]).filter(function(a){ return a!==c; }).sort(function(a,b){ return (a.notes.length-b.notes.length)||(a.src==='derived'?1:0)-(b.src==='derived'?1:0); });
+      if(c) rt.push({tok:t, pick:c, src:t.src, au:c.au, en:c.en, gloss:c.en, pos:c.pos, rec:c.rec, alts:[c.rec],
+                     notes:c.notes.map(function(n){ return n==='plural (Yi-)'?'plural':n; }), norm:auKeyOf(c.au)});
+      else rt.push({tok:t, pick:null, src:t.src, au:null, en:null});
+    });
+    var read=false;
+    if(pivot==='en' && typeof readKindredTokens==='function'){
+      try{ var kept=foldCarriers(rt); readKindredTokens(kept); read=true; }catch(e){ read=false; }
+    }
+    rt.forEach(function(x){
+      var t=x.tok; if(x.punct!==undefined) return;
+      t.rt=x;
+      var c=t.pick;
+      if(!c){ t.out=null; return; }
+      if(pivot==='au'){ t.out = (c.auKnown===false) ? null : ((typeof _mirrorCap==='function') ? _mirrorCap(t.src, c.au, c.pos) : c.au); return; }
+      if(x.folded){ t.hidden=true; t.out=null; x.rnotes=[x.folded]; return; }
+      if(read){ t.hidden=!!x.hidden; t.out = x.hidden ? null : (x.en!=null ? x.en : null); }
+      else { t.out = (typeof _mirrorCap==='function') ? _mirrorCap(t.src, c.en.replace(/^to /,''), c.pos) : c.en; }
+    });
+  }
+  function revMarks(t){
+    var c=t.pick, x=t.rt||{}, marks=[];
+    if(c && typeof lowNoteLabel==='function'){ var lab=lowNoteLabel(c.notes); if(lab) marks.push(lab); }
+    (x.rnotes||[]).forEach(function(n){ if(marks.indexOf(n)<0) marks.push(n); });
+    return marks;
+  }
+
   function doTranslate(){
     if(!sInput||!sOutput) return;
     suLastNative='';
@@ -6350,11 +6611,14 @@ function surdaladForm(au, en, pos, opts){ return suPrefix(suBend(au, opts), en, 
     if(glossEl) glossEl.innerHTML='';
     var raw=sInput.value||'';
     if(!raw.trim()){ sOutput.innerHTML='<div class="placeholder">Translation appears here&hellip;</div>'; return; }
-    var toks=suTokens(raw).map(function(t){ return t.word!==undefined ? readWord(t.word) : t; });
-    var romanParts=[], natParts=[];
+    var toks=suTokens(raw);
+    if(toSurd) toks=toks.map(function(t){ return t.word!==undefined ? readWord(t.word) : t; });
+    else readBack(toks);
+    var romanParts=[], natParts=[], skipSp=false;
     toks.forEach(function(t){
-      if(t.sp!==undefined){ romanParts.push(esc(t.sp)); natParts.push(t.sp); return; }
-      if(t.punct!==undefined){ romanParts.push(esc(t.punct)); natParts.push(t.punct); return; }   // punctuation passes through untouched
+      if(t.sp!==undefined){ if(skipSp){ skipSp=false; return; } romanParts.push(esc(t.sp)); natParts.push(t.sp); return; }
+      if(t.punct!==undefined){ skipSp=false; romanParts.push(esc(t.punct)); natParts.push(t.punct); return; }   // punctuation passes through untouched
+      if(t.hidden){ skipSp=true; natParts.push(null); return; }                                    // folded into a neighbour by the reader (not, the parts of a number)
       if(t.out){
         romanParts.push(esc(t.pre)+esc(t.out)+esc(t.post));
         natParts.push(t.pre+t.out+t.post);
@@ -6387,7 +6651,31 @@ function surdaladForm(au, en, pos, opts){ return suPrefix(suBend(au, opts), en, 
       }
     }
     sOutput.innerHTML=html;
-    if(glossEl){
+    if(glossEl && !toSurd){
+      toks.forEach(function(t){
+        if(t.sp!==undefined||t.punct!==undefined) return;
+        var d=document.createElement('div'), c=t.pick;
+        if(!c){ d.className='tok miss'; d.innerHTML='<div class="t-su">'+esc(t.src)+'</div><div class="t-su-native">'+esc(t.src)+'</div><div class="t-en">no entry</div>'; glossEl.appendChild(d); return; }
+        var x=t.rt||{}, ipa=ipaOn()?ipaOf(t.src):'';
+        var reading = (pivot==='en') ? ((x.en!=null) ? x.en : c.en) : (t.out||c.au);
+        var marks=revMarks(t);
+        var plain=t.alts.filter(function(a){ return a.notes.length<2; });
+        var also=(plain.length?plain:t.alts).slice(0,4).map(function(a){ return esc(a.en)+' ('+esc(a.au)+(a.notes.length?(', '+esc(lowNoteLabel(a.notes))):'')+')'; }).join(', ');
+        var low=(c.src==='derived' && typeof harborForm==='function') ? harborForm(c.au) : '';
+        var from = c.src==='derived' ? ('by law from '+esc(c.au)+((low&&deacc(low)!==deacc(c.au))?(' via '+esc(low)):''))
+                 : c.src==='forged' ? 'forged here' : ('canon'+(c.auKnown?'':(pivot==='au'?', no court word for it':'')));
+        d.className='tok';
+        d.innerHTML='<div class="t-su">'+esc(t.src)+'</div>'+
+                    '<div class="t-su-native">'+esc(t.src)+'</div>'+
+                    '<div class="t-en">'+esc(reading)+(marks.length?(' <span class="t-src">('+esc(marks.join(', '))+')</span>'):'')+'</div>'+
+                    ((pivot==='en' && norm(reading)!==norm(c.en)) ? '<div class="t-src">'+esc(c.en)+'</div>' : '')+
+                    (ipa?'<div class="t-ipa">'+esc(ipa)+'</div>':'')+
+                    '<div class="t-src">'+from+'</div>'+
+                    (also?('<div class="t-src">also: '+also+'</div>'):'');
+        glossEl.appendChild(d);
+      });
+    }
+    if(glossEl && toSurd){
       toks.forEach(function(t){
         if(t.sp!==undefined||t.punct!==undefined) return;
         var d=document.createElement('div');
@@ -6503,7 +6791,7 @@ function surdaladForm(au, en, pos, opts){ return suPrefix(suBend(au, opts), en, 
       DERIVED.push({su:su, en:d.en, pos:d.pos||'n', by:'', src:'derived', au:d.au, low:harborForm(d.au)});
     });
   }
-  function recompose(){ deriveSurdalad(); WORDS=SU_BASE.concat(FORGED, DERIVED); buildMaps(); renderLex(); doTranslate(); }
+  function recompose(){ deriveSurdalad(); WORDS=SU_BASE.concat(FORGED, DERIVED); buildMaps(); REV=null; renderLex(); doTranslate(); }
 
   function isVowelCh(c){ return /[aeiouy\u00e0\u00e1\u00e2\u00e4\u00e3\u00e9\u00e8\u00ea\u00eb\u00ed\u00ec\u00ee\u00ef\u00f3\u00f2\u00f4\u00f6\u00f5\u00fa\u00f9\u00fb\u00fc]/i.test(c||''); }
   function capLike(model, str){ return /^[A-Z]/.test(model||'') ? (str.charAt(0).toUpperCase()+str.slice(1)) : str; }
