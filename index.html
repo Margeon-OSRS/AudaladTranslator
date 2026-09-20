@@ -2774,44 +2774,82 @@ function _mirrorCap(model, s, pos){
   return s.charAt(0).toLowerCase()+s.slice(1);
 }
 
+/* ---------- source tokeniser (shared by every translate direction) ----------
+   Splits a line into word tokens and punctuation tokens, recording for each
+   whether the input had a space before it, so reassembly can restore the
+   original spacing exactly. A word is a run of letters with internal
+   apostrophes (don't, king's, Ori'Autai) plus a trailing possessive
+   apostrophe (kings'); every other visible character - quotes, brackets,
+   hyphens, dashes, ellipses, digits - becomes a punctuation token that
+   passes through the translation untouched. */
+const _SRC_LETTER='A-Za-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02AF';
+const _SRC_TOK_RE=new RegExp(
+  '['+_SRC_LETTER+']+(?:[\'\\u2019]['+_SRC_LETTER+']+)*(?:(?<=[sS])[\'\\u2019](?!['+_SRC_LETTER+']))?'+
+  '|[^\\s'+_SRC_LETTER+']+','g');
+const _SRC_HASLETTER=new RegExp('['+_SRC_LETTER+']');
+function _srcTokens(text){
+  const raw=(text||'').replace(/\s+/g,' ').trim();
+  const toks=[];
+  if(!raw) return toks;
+  _SRC_TOK_RE.lastIndex=0;
+  let m, last=0;
+  while((m=_SRC_TOK_RE.exec(raw))){ toks.push({w:m[0], sp:m.index>last}); last=m.index+m[0].length; }
+  return toks;
+}
+function _isPunctTok(w){ return !_SRC_HASLETTER.test(w); }
+/* Join word/punct pieces ({txt, sp}) back into a line. sp===false glues the
+   piece to the previous one; pieces without an sp flag fall back to the old
+   rule (sentence punctuation glues left, everything else takes a space). */
+function _joinTokens(pieces){
+  let s='';
+  pieces.forEach((p,idx)=>{
+    if(idx>0 && (p.sp!==undefined ? p.sp : !/^[.,!?;:]+$/.test(p.txt))) s+=' ';
+    s+=p.txt;
+  });
+  return s;
+}
+
 function translateEnToAu(text){
-  const raw = text.replace(/\s+/g,' ').trim();
-  if(!raw) return {tokens:[]};
-  // split keeping punctuation
-  const words = raw.match(/[A-Za-z']+|[.,!?;:]/g) || [];
+  // split keeping punctuation (and each token's original spacing)
+  const toks = _srcTokens(text);
+  if(!toks.length) return {tokens:[]};
+  const words = toks.map(t=>t.w);
+  const spB = toks.map(t=>t.sp);
   const out = [];
   let i = 0;
   let prevWasNumber = false;
   // modifiers waiting to fold into the next content word
-  let pend = {neg:false, poss:false, tense:null, carriedSrc:[]};
+  let pend = {neg:false, poss:false, tense:null, carriedSrc:[], sp:undefined};
+  function carry(word, idx){ if(pend.sp===undefined) pend.sp=spB[idx]; pend.carriedSrc.push(word); }
   function flushOrphans(){
     // any pending markers that never found a host: surface their plain words
-    pend.carriedSrc.forEach(o=>{
+    pend.carriedSrc.forEach((o,k)=>{
+      const sp = k===0 ? (pend.sp===undefined?true:pend.sp) : true;
       const r = resolveEng(o.toLowerCase(), {});
-      if(r) out.push({src:o, au:_mirrorCap(o, r.au, r.pos), en:r.en, note:r.note});
-      else out.push({src:o, au:null});
+      if(r) out.push({src:o, au:_mirrorCap(o, r.au, r.pos), en:r.en, note:r.note, sp:sp});
+      else out.push({src:o, au:null, sp:sp});
     });
-    pend = {neg:false, poss:false, tense:null, carriedSrc:[]};
+    pend = {neg:false, poss:false, tense:null, carriedSrc:[], sp:undefined};
   }
 
   while(i < words.length){
     const w = words[i];
-    if(/^[.,!?;:]$/.test(w)){ flushOrphans(); out.push({punct:w}); i++; continue; }
+    if(_isPunctTok(w)){ flushOrphans(); out.push({punct:w, sp:spB[i]}); i++; continue; }
     const lw = w.toLowerCase();
 
     // ---- function words that become pending affixes (consumed, not emitted) ----
-    if(_ARTICLES.has(lw)){ pend.carriedSrc.push(w); i++; continue; }              // a / an / the -> absorbed
-    if(lw==='not'){ pend.neg=true; pend.carriedSrc.push(w); i++; continue; }       // negation -> -ir
+    if(_ARTICLES.has(lw)){ carry(w,i); i++; continue; }              // a / an / the -> absorbed
+    if(lw==='not'){ pend.neg=true; carry(w,i); i++; continue; }       // negation -> -ir
     // do-support contraction: didn't / doesn't / don't
     let mNt = lw.match(/^(did|does|do|is|are|was|were|has|have|had|will|wo|ca|could|would|should)n['\u2019]t$/);
-    if(mNt){ pend.neg=true; const aux=mNt[1]; if(_AUX_TENSE[aux]!==undefined && _AUX_TENSE[aux]) pend.tense=_AUX_TENSE[aux]; pend.carriedSrc.push(w); i++; continue; }
-    if(_AUX_TENSE[lw]!==undefined){ if(_AUX_TENSE[lw]) pend.tense=_AUX_TENSE[lw]; pend.carriedSrc.push(w); i++; continue; } // did/does/do as tense carrier
+    if(mNt){ pend.neg=true; const aux=mNt[1]; if(_AUX_TENSE[aux]!==undefined && _AUX_TENSE[aux]) pend.tense=_AUX_TENSE[aux]; carry(w,i); i++; continue; }
+    if(_AUX_TENSE[lw]!==undefined){ if(_AUX_TENSE[lw]) pend.tense=_AUX_TENSE[lw]; carry(w,i); i++; continue; } // did/does/do as tense carrier
     // possessive "of [the/a] NOUN": consume "of" (+ optional article) only if a content word follows
     if(lw==='of'){
       let j=i+1; const eaten=[w];
       while(j<words.length && _ARTICLES.has(words[j].toLowerCase())){ eaten.push(words[j]); j++; }
-      const nextR = (j<words.length && !/^[.,!?;:]$/.test(words[j])) ? resolveEng(words[j].toLowerCase(), {}) : null;
-      if(nextR){ pend.poss=true; pend.carriedSrc.push(...eaten); i=j; continue; } // fold into the noun ahead
+      const nextR = (j<words.length && !_isPunctTok(words[j])) ? resolveEng(words[j].toLowerCase(), {}) : null;
+      if(nextR){ pend.poss=true; eaten.forEach((e,k)=>carry(e,i+k)); i=j; continue; } // fold into the noun ahead
       // otherwise fall through and treat "of" as an ordinary word
     }
 
@@ -2821,10 +2859,12 @@ function translateEnToAu(text){
     if(mClit && mClit[1]){ baseTok=mClit[1]; possHere=true; }
 
     // ---- greedy phrase up to 3 words (content lookup) ----
+    // a phrase never reaches across punctuation, and never swallows it
+    let runEnd = i;
+    while(runEnd < words.length && !_isPunctTok(words[runEnd])) runEnd++;
     let matched = null, span = 1;
-    for(let n=Math.min(3, words.length-i); n>=1; n--){
-      const slice = words.slice(i,i+n).filter(x=>!/^[.,!?;:]$/.test(x));
-      const phrase = (n===1 ? baseTok : slice.join(' ')).toLowerCase();
+    for(let n=Math.min(3, runEnd-i); n>=1; n--){
+      const phrase = (n===1 ? baseTok : words.slice(i,i+n).join(' ')).toLowerCase();
       if(enToAu[phrase]){ matched = enToAu[phrase][0]; span = n; break; }
     }
     const srcCore = (span===1 && possHere) ? baseTok : words.slice(i,i+span).join(' ');
@@ -2840,9 +2880,9 @@ function translateEnToAu(text){
       if(pend.neg && (matched.pos==='v'||matched.pos==='adj')){ auForm=_attachNeg(auForm); notes.push('negated'); }
       if((pend.poss||possHere) && (matched.pos==='n'||matched.pos==='title'||matched.pos==='pron')){ auForm=_attachPoss(auForm); notes.push('possessive'); }
       const noteStr=[rnote].concat(notes).filter(Boolean).join(' \u00b7 ') || null;
-      out.push({src:srcFull, au:_mirrorCap(srcFull, auForm, matched.pos), en:matched.full, note:noteStr});
+      out.push({src:srcFull, au:_mirrorCap(srcFull, auForm, matched.pos), en:matched.full, note:noteStr, sp:(pend.sp===undefined?spB[i]:pend.sp)});
       prevWasNumber = (matched.pos==='num' || matched.pos==='ord');
-      pend = {neg:false, poss:false, tense:null, carriedSrc:[]};
+      pend = {neg:false, poss:false, tense:null, carriedSrc:[], sp:undefined};
     } else {
       const r = resolveEng(baseTok, {afterNumber: prevWasNumber});
       if(r){
@@ -2850,13 +2890,13 @@ function translateEnToAu(text){
         if(pend.neg){ auForm=_attachNeg(auForm); notes.push('negated'); }
         if(pend.poss||possHere){ auForm=_attachPoss(auForm); notes.push('possessive'); }
         const noteStr=[r.note].concat(notes).filter(Boolean).join(' \u00b7 ') || null;
-        out.push({src:srcFull, au:_mirrorCap(srcFull, auForm, r.pos), en:r.en, note:noteStr});
+        out.push({src:srcFull, au:_mirrorCap(srcFull, auForm, r.pos), en:r.en, note:noteStr, sp:(pend.sp===undefined?spB[i]:pend.sp)});
       } else {
         flushOrphans();
-        out.push({src:srcCore, au:null});
+        out.push({src:srcCore, au:null, sp:spB[i]});
       }
       prevWasNumber = false;
-      pend = {neg:false, poss:false, tense:null, carriedSrc:[]};
+      pend = {neg:false, poss:false, tense:null, carriedSrc:[], sp:undefined};
     }
     i += span;
   }
@@ -3434,7 +3474,7 @@ function readAuSentence(toks){
   // ---- 7. sentence case ----
   let capNext=true;
   toks.forEach(t=>{
-    if(t.kind==='punct'){ if(/[.!?]/.test(t.punct)) capNext=true; return; }
+    if(t.kind==='punct'){ if(/[.!?…]/.test(t.punct)) capNext=true; return; }
     if(t.hidden || !t.read) return;
     if(capNext){ t.read=t.read.charAt(0).toUpperCase()+t.read.slice(1); capNext=false; }
   });
@@ -3448,15 +3488,15 @@ function readKindredTokens(out){
   return out;
 }
 function translateAuToEn(text){
-  const raw = text.replace(/\s+/g,' ').trim();
-  if(!raw) return {tokens:[]};
-  const words = raw.match(/[^\s.,!?;:]+|[.,!?;:]/g) || [];
+  const toks = _srcTokens(text);
+  if(!toks.length) return {tokens:[]};
   const out = [];
-  words.forEach(w=>{
-    if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
+  toks.forEach(tk=>{
+    const w=tk.w;
+    if(_isPunctTok(w)){ out.push({punct:w, sp:tk.sp}); return; }
     const res = lookupAu(w);
-    if(res) out.push({src:w, au:res.au, en:res.en, gloss:res.en, pos:res.pos, rec:res.rec, alts:res.alts, notes:res.notes, rank:res.rank, regal:res.regal, norm:res.norm});
-    else out.push({src:w, au:null, en:null});
+    if(res) out.push({src:w, sp:tk.sp, au:res.au, en:res.en, gloss:res.en, pos:res.pos, rec:res.rec, alts:res.alts, notes:res.notes, rank:res.rank, regal:res.regal, norm:res.norm});
+    else out.push({src:w, au:null, en:null, sp:tk.sp});
   });
   readAuSentence(out);
   out.forEach(t=>{
@@ -3572,29 +3612,29 @@ function stripRankPrefix(word){
   return {base:word, hadRank:false};
 }
 function translateHighToLow(text){
-  const raw=text.replace(/\s+/g,' ').trim();
-  if(!raw) return {tokens:[]};
-  const words=raw.match(/[^\s.,!?;:]+|[.,!?;:]/g)||[];
+  const toks=_srcTokens(text);
+  if(!toks.length) return {tokens:[]};
   const out=[];
-  words.forEach(w=>{
-    if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
+  toks.forEach(tk=>{
+    const w=tk.w;
+    if(_isPunctTok(w)){ out.push({punct:w, sp:tk.sp}); return; }
     const {base,hadRank}=stripRankPrefix(w);   // harbor tongue drops the rank marker
     const low=harborForm(base);
     const m=lookupAu(base)||lookupAu(w);
     let en=m?m.en:null;
     if(en&&hadRank){ PR_RANKS.forEach(r=>{ if(r.flavor) en=en.split(r.flavor).join(''); }); }
-    out.push({src:w, au:low, en:en, note:en});
+    out.push({src:w, au:low, en:en, note:en, sp:tk.sp});
   });
   return {tokens:out};
 }
 function translateLowToHigh(text){
-  const raw=text.replace(/\s+/g,' ').trim();
-  if(!raw) return {tokens:[]};
+  const toks=_srcTokens(text);
+  if(!toks.length) return {tokens:[]};
   const map=lowToHighMap();
-  const words=raw.match(/[^\s.,!?;:]+|[.,!?;:]/g)||[];
   const out=[];
-  words.forEach(w=>{
-    if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); return; }
+  toks.forEach(tk=>{
+    const w=tk.w;
+    if(_isPunctTok(w)){ out.push({punct:w, sp:tk.sp}); return; }
     const hit=resolveLow(w,map);
     if(hit && hit.list && hit.list.length){
       const main=hit.list[0];
@@ -3603,8 +3643,8 @@ function translateLowToHigh(text){
       let note=en; const lab=lowNoteLabel(hit.notes);
       if(lab) note=en+' \u00b7 ['+lab+']';
       if(hit.list.length>1) note=note+' \u00b7 also: '+hit.list.slice(1).map(x=>x.au+' ('+x.en+')').join(', ');
-      out.push({src:w, au:au, en:en, note:note});
-    } else { out.push({src:w, au:null, en:null}); }
+      out.push({src:w, au:au, en:en, note:note, sp:tk.sp});
+    } else { out.push({src:w, au:null, en:null, sp:tk.sp}); }
   });
   return {tokens:out};
 }
@@ -3631,38 +3671,30 @@ function render(){
     outputEl.innerHTML='<div class="placeholder">Translation appears here&hellip;</div>';
     return;
   }
-  // build output strings
-  let parts=[];
-  let romanHtml='';   // display copy: unknown words get a quiet underline + tooltip
+  // build output strings, replaying each token's original spacing
+  let parts=[];       // plain text pieces (for the copy button)
+  let hparts=[];      // display copy: unknown words get a quiet underline + tooltip
   res.tokens.forEach(t=>{
-    if(t.punct){ parts.push(t.punct); romanHtml=romanHtml.replace(/\s$/,'')+escapeHtml(t.punct)+' '; return; }
+    if(t.punct){ parts.push({txt:t.punct, sp:t.sp}); hparts.push({txt:escapeHtml(t.punct), sp:t.sp}); return; }
     if(!auOut && t.hidden) return;   // a word folded into its neighbour (Num into the verb, an inverted auxiliary)
     const known = auOut ? t.au!=null : t.en!=null;
     const word = known ? (auOut?t.au:t.en) : t.src;
-    parts.push(word);
-    romanHtml += (known
+    parts.push({txt:word, sp:t.sp});
+    hparts.push({txt:(known
       ? escapeHtml(word)
-      : '<span class="unk" title="Not in the lexicon yet — forge it below">'+escapeHtml(word)+'</span>') + ' ';
+      : '<span class="unk" title="Not in the lexicon yet — forge it below">'+escapeHtml(word)+'</span>'), sp:t.sp});
   });
-  romanHtml=romanHtml.trim();
-  // join, attach punctuation tight
-  let str='';
-  parts.forEach(p=>{
-    if(/^[.,!?;:]$/.test(p)) str=str.replace(/\s$/,'')+p+' ';
-    else str+=p+' ';
-  });
-  str=str.trim();
+  const romanHtml=_joinTokens(hparts);
+  let str=_joinTokens(parts);
 
   if(auOut){
     // native line shows ONLY translated Audalad words, never untranslated English fallback
     let nparts=[];
     res.tokens.forEach(t=>{
-      if(t.punct){ nparts.push(t.punct); return; }
-      if(t.au!=null) nparts.push(t.au);
+      if(t.punct){ nparts.push({txt:t.punct, sp:t.sp}); return; }
+      if(t.au!=null) nparts.push({txt:t.au, sp:t.sp});
     });
-    let nstr='';
-    nparts.forEach(p=>{ if(/^[.,!?;:]$/.test(p)) nstr=nstr.replace(/\s$/,'')+p+' '; else nstr+=p+' '; });
-    nstr=nstr.trim();
+    let nstr=_joinTokens(nparts);
     lastOutText=str; lastNativeText=nstr;
     const ipa=ipaText(nstr);
     outputEl.innerHTML =
@@ -5975,24 +6007,27 @@ function mountKindredLexicon(cfg){
 
 /* ===== shared kindred-register translator: forward EN->register + the translate UI (render, direction, wiring) ===== */
 function translateEnToReg(text, tf){
-  var raw=text.replace(/\s+/g,' ').trim(); if(!raw) return {tokens:[]};
-  var words=raw.match(/[A-Za-z']+|[.,!?;:]/g)||[]; var out=[]; var i=0, prevNum=false;
+  var toks=_srcTokens(text); if(!toks.length) return {tokens:[]};
+  var words=toks.map(function(t){return t.w;});
+  var out=[]; var i=0, prevNum=false;
   while(i<words.length){
-    var w=words[i];
-    if(/^[.,!?;:]$/.test(w)){ out.push({punct:w}); i++; continue; }
+    var w=words[i], sp=toks[i].sp;
+    if(_isPunctTok(w)){ out.push({punct:w, sp:sp}); i++; continue; }
+    // a phrase never reaches across punctuation, and never swallows it
+    var runEnd=i; while(runEnd<words.length && !_isPunctTok(words[runEnd])) runEnd++;
     var matched=null, span=1;
-    for(var n=Math.min(3,words.length-i);n>=1;n--){
-      var phrase=words.slice(i,i+n).filter(function(x){return !/^[.,!?;:]$/.test(x);}).join(' ').toLowerCase();
+    for(var n=Math.min(3,runEnd-i);n>=1;n--){
+      var phrase=words.slice(i,i+n).join(' ').toLowerCase();
       if(enToAu[phrase]){ matched=enToAu[phrase][0]; span=n; break; }
     }
     var srcText=words.slice(i,i+span).join(' ');
-    if(matched){ out.push({src:srcText, au:_mirrorCap(srcText, tf(matched.au), matched.pos), en:matched.full, note:matched.full}); prevNum=(matched.pos==='num'||matched.pos==='ord'); }
-    else { var rr=resolveEng(w,{afterNumber:prevNum}); if(rr){ out.push({src:srcText, au:_mirrorCap(srcText, tf(rr.au), rr.pos), en:rr.en, note:rr.en}); } else out.push({src:srcText, au:null}); prevNum=false; }
+    if(matched){ out.push({src:srcText, sp:sp, au:_mirrorCap(srcText, tf(matched.au), matched.pos), en:matched.full, note:matched.full}); prevNum=(matched.pos==='num'||matched.pos==='ord'); }
+    else { var rr=resolveEng(w,{afterNumber:prevNum}); if(rr){ out.push({src:srcText, sp:sp, au:_mirrorCap(srcText, tf(rr.au), rr.pos), en:rr.en, note:rr.en}); } else out.push({src:srcText, au:null, sp:sp}); prevNum=false; }
     i+=span;
   }
   return {tokens:out};
 }
-function tJoinParts(parts){ var s=''; parts.forEach(function(p){ if(/^[.,!?;:]$/.test(p)) s=s.replace(/\s$/,'')+p+' '; else s+=p+' '; }); return s.trim(); }
+function tJoinParts(parts){ return _joinTokens(parts.map(function(p){ return (typeof p==='string')?{txt:p}:p; })); }
 function mountKindredTranslator(cfg){
   var p=cfg.prefix, mode=cfg.initMode, lastText='', lastNative='';
   var inEl=document.getElementById(p+'-input'), outEl=document.getElementById(p+'-output'), glossEl=document.getElementById(p+'-gloss');
@@ -6002,20 +6037,20 @@ function mountKindredTranslator(cfg){
     var res=cfg.translators[mode](text);
     glossEl.innerHTML='';
     if(!res.tokens.length){ lastText='';lastNative=''; outEl.innerHTML='<div class="placeholder">Translation appears here\u2026</div>'; return; }
-    var romanHtml=''; // display: quietly mark words the dialect lexicon lacks
+    var rparts=[]; // display: quietly mark words the dialect lexicon lacks
     res.tokens.forEach(function(t){
-      if(t.punct){ romanHtml=romanHtml.replace(/\s$/,'')+escapeHtml(t.punct)+' '; return; }
+      if(t.punct){ rparts.push({txt:escapeHtml(t.punct), sp:t.sp}); return; }
       if(!auOut && t.hidden) return;
       var known=auOut?(t.au!=null):(t.en!=null);
       var word=known?(auOut?t.au:t.en):t.src;
-      romanHtml += (known?escapeHtml(word):'<span class="unk" title="Not in this tongue\u2019s lexicon yet">'+escapeHtml(word)+'</span>')+' ';
+      rparts.push({txt:(known?escapeHtml(word):'<span class="unk" title="Not in this tongue\u2019s lexicon yet">'+escapeHtml(word)+'</span>'), sp:t.sp});
     });
-    romanHtml=romanHtml.trim();
-    var parts=res.tokens.filter(function(t){ return auOut || !t.hidden; }).map(function(t){ return t.punct? t.punct : ((auOut?t.au:t.en)!=null?(auOut?t.au:t.en):t.src); });
+    var romanHtml=_joinTokens(rparts);
+    var parts=res.tokens.filter(function(t){ return auOut || !t.hidden; }).map(function(t){ return {txt:(t.punct? t.punct : ((auOut?t.au:t.en)!=null?(auOut?t.au:t.en):t.src)), sp:t.sp}; });
     var str=tJoinParts(parts);
     var html='<div class="roman">'+romanHtml+'</div>';
     if(auOut){
-      var np=[]; res.tokens.forEach(function(t){ if(t.punct){np.push(t.punct);return;} if(t.au!=null) np.push(t.au); });
+      var np=[]; res.tokens.forEach(function(t){ if(t.punct){np.push({txt:t.punct, sp:t.sp});return;} if(t.au!=null) np.push({txt:t.au, sp:t.sp}); });
       var ns=tJoinParts(np); lastText=str; lastNative=exportFn(ns);
       var ipa=ipaFn(ns);
       html+='<div class="native">'+escapeHtml(nativeFn(ns))+'</div>'+(ipa?'<div class="c-ipa">'+escapeHtml(ipa)+'</div>':'');
