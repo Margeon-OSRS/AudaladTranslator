@@ -3502,5 +3502,29 @@
     "en": "Doctor",
     "pos": "n",
     "by": "Sage"
+  },
+  {
+    "au": "Kinshuromus",
+    "en": "Sulphur",
+    "pos": "n",
+    "by": "Marli"
+  },
+  {
+    "au": "Dulvurathasai",
+    "en": "Tortoise",
+    "pos": "n",
+    "by": "Marli"
+  },
+  {
+    "au": "Audulvurathasa",
+    "en": "Turtle",
+    "pos": "n",
+    "by": "Marli"
+  },
+  {
+    "au": "Haznashus",
+    "en": "Warrior",
+    "pos": "n",
+    "by": "Marli"
   }
 ]
